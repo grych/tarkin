@@ -1,6 +1,20 @@
+# == Schema Information
+#
+# Table name: group_meta_keys
+#
+#  id                :integer          not null, primary key
+#  group_key_crypted :binary           not null
+#  group_iv_crypted  :binary           not null
+#  user_id           :integer
+#  group_id          :integer
+#  item_id           :integer
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+
 require 'rails_helper'
 
-RSpec.describe GroupMetaKey, type: :model do
+RSpec.describe MetaKey, type: :model do
   it { should respond_to :group_key_crypted }
   it { should respond_to :group_iv_crypted }
   describe "valid user" do

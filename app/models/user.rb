@@ -13,10 +13,11 @@
 
 class WrongPasswordException < Exception; end
 class GroupNotAccessibleException < Exception; end
+class ItemNotAccessibleException < Exception; end
 
 class User < ActiveRecord::Base
-  has_many :group_meta_keys
-  has_many :groups, through: :group_meta_keys
+  has_many :meta_keys
+  has_many :groups, through: :meta_keys
 
   validates :name, presence: true, length: { maximum: 256 }
   validates :email, presence: true, length: { maximum: 256 }
@@ -87,7 +88,7 @@ class User < ActiveRecord::Base
       group.private_key_pem_crypted = @cipher.update(group.private_key_pem) + @cipher.final
       if group.save
         # store key and iv ciphered with my public key in association table
-        meta = GroupMetaKey.new(user_id: self.id, group_id: group.id,
+        meta = MetaKey.new(user_id: self.id, group_id: group.id,
                                 group_key_crypted: self.public_key.public_encrypt(new_group_key),
                                 group_iv_crypted: self.public_key.public_encrypt(new_group_iv))
         meta.save!
@@ -101,13 +102,13 @@ class User < ActiveRecord::Base
   # add the other user to existing group
   # using his public key to store group key and iv
   def add_other_user_to_group(other, group)
-    meta = self.group_meta_keys.find_by(group: group)
+    meta = self.meta_keys.find_by(group: group)
     if meta
       # decipher the group key and iv using my private key
       group_key = self.private_key.private_decrypt meta.group_key_crypted
       group_iv = self.private_key.private_decrypt meta.group_iv_crypted
       # save it with other user public key 
-      meta = GroupMetaKey.new(user_id: other.id, group_id: group.id,
+      meta = MetaKey.new(user_id: other.id, group_id: group.id,
                               group_key_crypted: other.public_key.public_encrypt(group_key),
                               group_iv_crypted: other.public_key.public_encrypt(group_iv))
       meta.save!
@@ -118,7 +119,7 @@ class User < ActiveRecord::Base
 
   # find the given group private key
   def group_private_key_pem(group)
-    meta = self.group_meta_keys.find_by(group: group)
+    meta = self.meta_keys.find_by(group: group)
     if meta
       @cipher.decrypt
       @cipher.key = self.private_key.private_decrypt meta.group_key_crypted
@@ -132,6 +133,34 @@ class User < ActiveRecord::Base
     OpenSSL::PKey::RSA.new self.group_private_key_pem(group)
   end
 
+  ###
+  # Manipulate items
+  
+  # add new item (password) to the group in context of user (self)
+  def add_new_item(group, item)
+    if item.new_record? and authenticated?
+      @cipher.encrypt
+      # generate key and iv to be used to encrypt the item password
+      @cipher.key = new_item_key = @cipher.random_key
+      @cipher.iv = new_item_iv = @cipher.random_iv
+      # cipher the password with a new key and iv
+      item.password_crypted = @cipher.update(item.password) + @cipher.final
+      if item.save
+        # store key and iv ciphered with my public key in association table
+        meta = MetaKey.new(item_id: item.id, group_id: group.id,
+                                group_key_crypted: self.public_key.public_encrypt(new_item_key),
+                                group_iv_crypted: self.public_key.public_encrypt(new_item_iv))
+        meta.save!
+      end
+      item
+    else
+      raise GroupNotAccessibleException, "Group #{group.name} can't be accessed by #{self.name}"
+    end
+  end
+
+  # get item 
+  def decrypt_password_from_item(item)
+  end
 
   private
   def generate_keys

@@ -13,11 +13,13 @@
 class PrivateKeyNotAccessibleException < Exception; end
 
 class Group < ActiveRecord::Base
-  has_many :group_meta_keys
-  has_many :users, through: :group_meta_keys
+  has_many :meta_keys
+  has_many :users, through: :meta_keys
+  has_many :items, through: :meta_keys
 
   validates :name, presence: true, length: { maximum: 256 }, uniqueness: { case_sensitive: false }
-
+  validates :public_key_pem, presence: true
+  validates :private_key_pem_crypted, presence: true
   after_initialize :generate_keys
 
   def public_key

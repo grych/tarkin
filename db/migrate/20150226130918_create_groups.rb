@@ -8,6 +8,6 @@ class CreateGroups < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_index :groups, :name, unique: true
-    add_foreign_key :group_meta_keys, :groups
+    add_foreign_key :meta_keys, :groups
   end
 end

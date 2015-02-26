@@ -11,20 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150226130918) do
-
-  create_table "group_meta_keys", force: :cascade do |t|
-    t.binary   "group_key_crypted", null: false
-    t.binary   "group_iv_crypted",  null: false
-    t.integer  "user_id"
-    t.integer  "group_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-  end
-
-  add_index "group_meta_keys", ["group_id"], name: "index_group_meta_keys_on_group_id"
-  add_index "group_meta_keys", ["user_id", "group_id"], name: "index_group_meta_keys_on_user_id_and_group_id"
-  add_index "group_meta_keys", ["user_id"], name: "index_group_meta_keys_on_user_id"
+ActiveRecord::Schema.define(version: 20150226170039) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",                    limit: 256,  null: false
@@ -35,6 +22,28 @@ ActiveRecord::Schema.define(version: 20150226130918) do
   end
 
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true
+
+  create_table "items", force: :cascade do |t|
+    t.binary   "password_crypted"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "meta_keys", force: :cascade do |t|
+    t.binary   "group_key_crypted", null: false
+    t.binary   "group_iv_crypted",  null: false
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.integer  "item_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "meta_keys", ["group_id", "item_id"], name: "index_meta_keys_on_group_id_and_item_id"
+  add_index "meta_keys", ["group_id"], name: "index_meta_keys_on_group_id"
+  add_index "meta_keys", ["item_id"], name: "index_meta_keys_on_item_id"
+  add_index "meta_keys", ["user_id", "group_id"], name: "index_meta_keys_on_user_id_and_group_id"
+  add_index "meta_keys", ["user_id"], name: "index_meta_keys_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "name",                    limit: 256,  null: false
