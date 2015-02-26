@@ -12,7 +12,7 @@
 #  updated_at              :datetime         not null
 #
 
-class PasswordNotExistsException < Exception; end
+class WrongPasswordException < Exception; end
 
 class User < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 256 }
@@ -45,6 +45,8 @@ class User < ActiveRecord::Base
     @cipher.iv = self.iv
     @cipher.key = password_hash
     @cipher.update(self.private_key_pem_crypted) + @cipher.final
+  rescue OpenSSL::Cipher::CipherError
+    raise WrongPasswordException, "can't decrypt #{self.name} private key"
   end
 
   def private_key
@@ -62,8 +64,8 @@ class User < ActiveRecord::Base
 
   def authenticated?
     begin
-      !self.private_key_pem.nil?
-    rescue OpenSSL::Cipher::CipherError, PasswordNotExistsException
+      !self.private_key_pem.nil? && !new_record?
+    rescue OpenSSL::Cipher::CipherError, WrongPasswordException
       false
     end
   end
@@ -84,7 +86,7 @@ class User < ActiveRecord::Base
   end
 
   def password_hash
-    raise PasswordNotExistsException, "Please specify a password for #{self.name}" unless @password
+    raise WrongPasswordException, "Please specify a password for #{self.name}" unless @password
     OpenSSL::Digest::SHA256.digest @password
   end
 end
