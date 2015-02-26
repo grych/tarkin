@@ -3,7 +3,7 @@
 # Table name: users
 #
 #  id                      :integer          not null, primary key
-#  name                    :string           not null
+#  name                    :string(256)      not null
 #  email                   :string(256)      not null
 #  public_key_pem          :string(4096)     not null
 #  private_key_pem_crypted :binary           not null
