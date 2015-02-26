@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(version: 20150225153512) do
     t.string   "email",                   limit: 256,  null: false
     t.string   "public_key_pem",          limit: 4096, null: false
     t.binary   "private_key_pem_crypted",              null: false
-    t.binary   "iv",                                   null: false
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
   end

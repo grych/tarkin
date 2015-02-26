@@ -7,7 +7,6 @@
 #  email                   :string(256)      not null
 #  public_key_pem          :string(4096)     not null
 #  private_key_pem_crypted :binary           not null
-#  iv                      :binary           not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #
@@ -22,7 +21,6 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 8, maximum: 32}
 
   before_save { email.downcase! }
-  #after_initialize { @cipher ||= OpenSSL::Cipher::AES256.new(:CBC) }
   after_initialize :generate_keys
 
   def password
@@ -41,12 +39,12 @@ class User < ActiveRecord::Base
   end
 
   def private_key_pem
-    @cipher.decrypt
-    @cipher.iv = self.iv
-    @cipher.key = password_hash
-    @cipher.update(self.private_key_pem_crypted) + @cipher.final
-  rescue OpenSSL::Cipher::CipherError
-    raise WrongPasswordException, "can't decrypt #{self.name} private key"
+    raise WrongPasswordException, "no password for #{self.name}" if @password.nil?
+    begin
+      OpenSSL::PKey::RSA.new(self.private_key_pem_crypted, @password).to_pem
+    rescue OpenSSL::PKey::RSAError, TypeError
+      raise WrongPasswordException, "can't decrypt #{self.name} private key"
+    end
   end
 
   def private_key
@@ -54,12 +52,9 @@ class User < ActiveRecord::Base
   end
 
   def change_password(new_password)
-    old_private_key_pem = self.private_key_pem
-    @cipher.encrypt
-    @cipher.iv = self.iv
+    old_private_key = self.private_key
     @password = new_password
-    @cipher.key = password_hash
-    self.private_key_pem_crypted = @cipher.update(old_private_key_pem) + @cipher.final
+    self.private_key_pem_crypted = old_private_key.to_pem @cipher, @password
   end
 
   def authenticated?
@@ -76,12 +71,7 @@ class User < ActiveRecord::Base
     if new_record? && @password # generate new keys only with new record with given password
       key = OpenSSL::PKey::RSA.new 2048 # key keeps the both keys
       self.public_key_pem = key.public_key.to_pem
-
-      @cipher.encrypt
-      self.iv = @cipher.random_iv   # iv is well known for this user, but random
-      @cipher.iv = self.iv
-      @cipher.key = password_hash
-      self.private_key_pem_crypted = @cipher.update(key.to_pem) + @cipher.final   # store PEM for the generated key
+      self.private_key_pem_crypted = key.to_pem @cipher, @password
     end
   end
 
