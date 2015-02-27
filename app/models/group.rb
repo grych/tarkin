@@ -13,7 +13,7 @@
 class PrivateKeyNotAccessibleException < Exception; end
 
 class Group < ActiveRecord::Base
-  has_many :meta_keys
+  has_many :meta_keys, dependent: :destroy
   has_many :users, through: :meta_keys
   has_many :items, through: :meta_keys
 

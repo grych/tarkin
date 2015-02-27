@@ -10,7 +10,7 @@
 
 class PasswordNotAccessibleException < Exception; end
 class Item < ActiveRecord::Base
-  has_many :meta_keys
+  has_many :meta_keys, dependent: :destroy
   has_many :groups, through: :meta_keys
   validates :password_crypted, presence: true
 
