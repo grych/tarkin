@@ -88,13 +88,12 @@ class User < ActiveRecord::Base
       cipher.iv = new_group_iv = cipher.random_iv
       # cipher the group private key PEM with a new key and iv
       group.private_key_pem_crypted = cipher.update(group.private_key_pem) + cipher.final
-      if group.save
-        # store key and iv ciphered with my public key in association table
-        meta = MetaKey.new(user_id: self.id, group_id: group.id,
-                                key_crypted: self.public_key.public_encrypt(new_group_key),
-                                iv_crypted: self.public_key.public_encrypt(new_group_iv))
-        meta.save!
-      end
+      group.users << self # add user to the group
+      meta = group.meta_keys.find {|x| x.user == self}  # can't use find_by or where, as it is not saved yet
+                                                        # it should be a new record, so contains just one meta_key
+      meta.key_crypted = self.public_key.public_encrypt(new_group_key)
+      meta.iv_crypted = self.public_key.public_encrypt(new_group_iv)
+      group.save
       group
     else
       raise GroupNotAccessibleException, "Group #{group.name} can't be accessed by #{self.name}"
@@ -150,13 +149,11 @@ class User < ActiveRecord::Base
       cipher.iv = new_item_iv = cipher.random_iv
       # cipher the password with a new key and iv
       item.password_crypted = cipher.update(item.password) + cipher.final
-      if item.save
-        # store key and iv ciphered with group public key in association table
-        meta = MetaKey.new(item: item, group: group,
-                           key_crypted: group.public_key.public_encrypt(new_item_key),
-                           iv_crypted: group.public_key.public_encrypt(new_item_iv))
-        meta.save!
-      end
+      item.groups << group
+      meta = item.meta_keys.find {|x| x.group == group}
+      meta.key_crypted = group.public_key.public_encrypt(new_item_key)
+      meta.iv_crypted = group.public_key.public_encrypt(new_item_iv)
+      item.save
       item
     else
       raise GroupNotAccessibleException, "Group #{group.name} can't be accessed by #{self.name}"

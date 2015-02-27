@@ -13,6 +13,7 @@ class Item < ActiveRecord::Base
   has_many :meta_keys, dependent: :destroy
   has_many :groups, through: :meta_keys
   validates :password_crypted, presence: true
+  validate  :have_groups
 
   def password=(pwd)
     @password = pwd if new_record?
@@ -25,5 +26,10 @@ class Item < ActiveRecord::Base
     else
       user.item_password(self)
     end
+  end
+
+  private
+  def have_groups
+    errors.add :item, "must belong at least to one group" if self.groups.empty?
   end
 end

@@ -20,7 +20,10 @@ class Group < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 256 }, uniqueness: { case_sensitive: false }
   validates :public_key_pem, presence: true
   validates :private_key_pem_crypted, presence: true
+  validate  :have_users
+
   after_initialize :generate_keys
+  before_destroy   :can_be_deleted
 
   def public_key
     OpenSSL::PKey::RSA.new self.public_key_pem
@@ -48,4 +51,14 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def have_users
+    errors.add :group, "'#{self.name}' must contain at least one user" if self.users.empty?
+  end
+
+  def can_be_deleted
+    # group can't be deleted if contains a link to at least one user or one item
+    errors.add :group, "'#{self.name}' contains users" unless self.users.empty?
+    errors.add :group, "'#{self.name}' contains items" unless self.items.empty?
+    !(self.users.empty? || self.items.empty?)
+  end
 end
