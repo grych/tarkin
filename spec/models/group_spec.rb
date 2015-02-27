@@ -15,6 +15,8 @@ require 'rails_helper'
 RSpec.describe Group, type: :model do
   it { should respond_to :public_key_pem }
   it { should respond_to :private_key_pem }
+  it { should respond_to :public_key }
+  it { should respond_to :private_key }
   describe "blank" do
     before do
       @group = Group.new
@@ -27,6 +29,9 @@ RSpec.describe Group, type: :model do
       @group = @user.add_new_group Group.new(name: 'group')
     end
     it { expect(@group).to be_valid }
+    it "should not be able to read the private_key_pem without valid user" do
+      expect{@group.private_key_pem}.to raise_error PrivateKeyNotAccessibleException 
+    end
     describe "but not duplicated name" do
       before do
         @new_group = @user.add_new_group Group.new(name: 'group')

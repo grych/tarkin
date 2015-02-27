@@ -26,12 +26,17 @@ class Group < ActiveRecord::Base
     OpenSSL::PKey::RSA.new self.public_key_pem
   end
 
-  def private_key
-    OpenSSL::PKey::RSA.new self.private_key_pem
+  def private_key(user=nil)
+    OpenSSL::PKey::RSA.new self.private_key_pem(user)
   end
 
-  def private_key_pem
-    @private_key_pem || (raise PrivateKeyNotAccessibleException, "Private key can't be accessed at this moment")
+  def private_key_pem(user=nil)
+    raise PrivateKeyNotAccessibleException, "Private key can't be accessed at this moment" if !new_record? && user.nil? 
+    if new_record?
+      @private_key_pem
+    else
+      user.group_private_key_pem(self)
+    end
   end
 
   private

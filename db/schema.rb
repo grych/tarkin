@@ -30,19 +30,19 @@ ActiveRecord::Schema.define(version: 20150226170039) do
   end
 
   create_table "meta_keys", force: :cascade do |t|
-    t.binary   "group_key_crypted", null: false
-    t.binary   "group_iv_crypted",  null: false
+    t.binary   "key_crypted", null: false
+    t.binary   "iv_crypted",  null: false
     t.integer  "user_id"
     t.integer  "group_id"
     t.integer  "item_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
-  add_index "meta_keys", ["group_id", "item_id"], name: "index_meta_keys_on_group_id_and_item_id"
+  add_index "meta_keys", ["group_id", "item_id"], name: "index_meta_keys_on_group_id_and_item_id", unique: true
   add_index "meta_keys", ["group_id"], name: "index_meta_keys_on_group_id"
   add_index "meta_keys", ["item_id"], name: "index_meta_keys_on_item_id"
-  add_index "meta_keys", ["user_id", "group_id"], name: "index_meta_keys_on_user_id_and_group_id"
+  add_index "meta_keys", ["user_id", "group_id"], name: "index_meta_keys_on_user_id_and_group_id", unique: true
   add_index "meta_keys", ["user_id"], name: "index_meta_keys_on_user_id"
 
   create_table "users", force: :cascade do |t|

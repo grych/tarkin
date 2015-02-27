@@ -11,13 +11,19 @@
 class PasswordNotAccessibleException < Exception; end
 class Item < ActiveRecord::Base
   has_many :meta_keys
+  has_many :groups, through: :meta_keys
   validates :password_crypted, presence: true
 
   def password=(pwd)
     @password = pwd if new_record?
   end
 
-  def password
-    @password || (raise PasswordNotAccessibleException, "Password can't be accessed at this moment")
+  def password(user=nil)
+   raise PasswordNotAccessibleException, "Password can't be accessed at this moment" if !new_record? && user.nil? 
+    if new_record?
+      @password
+    else
+      user.item_password(self)
+    end
   end
 end

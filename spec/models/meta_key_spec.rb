@@ -1,22 +1,22 @@
 # == Schema Information
 #
-# Table name: group_meta_keys
+# Table name: meta_keys
 #
-#  id                :integer          not null, primary key
-#  group_key_crypted :binary           not null
-#  group_iv_crypted  :binary           not null
-#  user_id           :integer
-#  group_id          :integer
-#  item_id           :integer
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id          :integer          not null, primary key
+#  key_crypted :binary           not null
+#  iv_crypted  :binary           not null
+#  user_id     :integer
+#  group_id    :integer
+#  item_id     :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #
 
 require 'rails_helper'
 
 RSpec.describe MetaKey, type: :model do
-  it { should respond_to :group_key_crypted }
-  it { should respond_to :group_iv_crypted }
+  it { should respond_to :key_crypted }
+  it { should respond_to :iv_crypted }
   describe "valid user" do
     before do
       @user = User.create(name: 'name', email: 'email@email.com', password: 'password')
@@ -28,6 +28,9 @@ RSpec.describe MetaKey, type: :model do
     it "should be able to read the groups private_key" do
       expect(@user.group_private_key_pem(@group)).not_to be_nil
       expect(@user.group_private_key_pem(@group).length).to be > 0
+    end
+    it "key should be readable from both user and group context" do
+      expect(@user.group_private_key_pem(@group)).to eq @group.private_key_pem(@user)
     end
     describe "adding other user to the group" do
       before do
