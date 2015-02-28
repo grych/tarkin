@@ -23,20 +23,78 @@ RSpec.describe Group, type: :model do
     end
     it { expect(@group).not_to be_valid }
   end
-  describe "good" do
+
+  describe "with user associated" do
     before do
       @user = User.create(name: 'name', email: 'email@email.com', password: 'password')
-      @group = @user.add_new_group Group.new(name: 'group')
     end
-    it { expect(@group).to be_valid }
-    it "should not be able to read the private_key_pem without valid user" do
-      expect{@group.private_key_pem}.to raise_error PrivateKeyNotAccessibleException 
-    end
-    describe "but not duplicated name" do
+    describe "to new group" do
       before do
-        @new_group = @user.add_new_group Group.new(name: 'group')
+        @group = Group.new(name: 'group')
+        @group.add(@user)
       end
-      it { expect(@new_group).not_to be_valid }
+      it { expect(@group).to be_valid }
+      it "group should be saved" do 
+        expect(@group.new_record?).to eq false
+      end
+      it "should not be able to read the private_key_pem without valid user" do
+        expect{@group.private_key_pem}.to raise_error Tarkin::PrivateKeyNotAccessibleException 
+      end
+      describe "and duplicated name" do
+        before do
+          @new_group = Group.new(name: 'group')
+        end
+        it { expect(@new_group).not_to be_valid }
+      end
     end
+
+    describe "to existing group" do
+      before do
+        Group.new(name: 'group').add @user
+        @group = Group.find_by(name: 'group')
+      end
+      it "private key should be readable" do 
+        expect(@group.private_key(authorization_user: @user).class).to eq OpenSSL::PKey::RSA 
+      end
+      describe "but other user" do
+        before do
+          @user2 = User.create(name: 'name2', email: 'email2@email.com', password: 'password2')
+        end
+        it "should not be able to read the private_key" do
+          expect{@group.private_key(authorization_user: @user2)}.to raise_error Tarkin::GroupNotAccessibleException
+        end
+        describe "added to the group" do
+          describe "with authorization" do
+            before do
+              @group.add @user2, authorization_user: @user
+            end
+            it "should be able to read the private key" do
+              expect(@group.private_key(authorization_user: @user2).class).to eq OpenSSL::PKey::RSA
+            end
+            it "group should be associated with two users" do
+              expect(@group.users.count).to eq 2
+            end
+          end
+          describe "without authorization" do
+            it {expect{@group.add @user2}.to raise_error Tarkin::NotAuthorized}            
+          end
+        end
+      end
+    end
+
+    describe "add existing item to the group" do
+      before do
+        Group.new(name: 'g1').add @user
+        Group.new(name: 'g2').add @user
+        @g1 = Group.find_by(name: 'g1')
+        @g2 = Group.find_by(name: 'g2')
+        @i1 = @g1.add Item.new(password: 'i1'), authorization_user: @user
+        @i2 = @g2.add Item.new(password: 'i2'), authorization_user: @user
+        @g1.add @i2, authorization_user: @user
+      end
+      it { expect(@g1.items.count).to eq 2 }
+      it { expect(@g2.items.count).to eq 1 }
+    end
+
   end
 end
