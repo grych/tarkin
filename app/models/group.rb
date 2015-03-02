@@ -9,19 +9,20 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #
-require 'exceptions'
-#
+# == Group
 # <tt>Group</tt> associates <tt>User</tt> with <tt>Item</tt>. Must contain unique name and 
-#  at least one user connected.
+# at least one user connected.
 #  
 #   group = Group.new name: 'group 1'
 #   group.valid?  #=> false
 #   group.errors.messages
-#   => {:private_key_pem_crypted=>["can't be blank"], :group=>["'group 1' must contain at least one user"]}
+#   #=> {:private_key_pem_crypted=>["can't be blank"], :group=>["'group 1' must contain at least one user"]}
 #
 # Key pair of the group generates during initialize. The private key of the group is saved 
 # in <tt>MetaKey</tt> which belongs to the group and existing user.
 class Group < ActiveRecord::Base
+  before_destroy   :is_empty
+
   has_many :meta_keys, dependent: :destroy
   has_many :users, through: :meta_keys
   has_many :items, through: :meta_keys
@@ -32,7 +33,6 @@ class Group < ActiveRecord::Base
   validate  :have_users
 
   after_initialize :generate_keys
-  before_destroy   :can_be_deleted
 
   # Public key and its PEM is always visible and accessible to any 
   def public_key
@@ -94,7 +94,7 @@ class Group < ActiveRecord::Base
   #
   #   group.add Item.new(password: 'secret'), authorization_user: user
   def add(other, **options)
-    authenticator = options[:authorization_user]
+    authenticator = options[:authorization_user] || @authorization_user
     cipher = OpenSSL::Cipher::AES256.new(:CBC)
     case other
     when User
@@ -122,9 +122,10 @@ class Group < ActiveRecord::Base
           group_key, group_iv = authenticator.private_key.private_decrypt(meta.key_crypted),
                                 authenticator.private_key.private_decrypt(meta.iv_crypted)
           # save it with other user public key 
-          meta = MetaKey.new(user: other, group: self,
-                             key_crypted: other.public_key.public_encrypt(group_key),
-                             iv_crypted: other.public_key.public_encrypt(group_iv)).save!
+          self.meta_keys.create! user: other, key_crypted: other.public_key.public_encrypt(group_key),
+                                              iv_crypted: other.public_key.public_encrypt(group_iv)
+          self.users(true)     # reload the users after creating MetaKey manually
+          other.groups(true)   # reload the groups for user after adding it
         else
           raise Tarkin::GroupNotAccessibleException, "Group #{self.name} does not belongs to #{authenticator.name}"
         end
@@ -133,20 +134,41 @@ class Group < ActiveRecord::Base
     when Item
       raise Tarkin::NotAuthorized, "This operation must be autorized by valid user" unless authenticator.authenticated?
       # generate key and iv to be used to encrypt the item password
-      new_item_key, new_item_iv = cipher.random_key, cipher.random_iv
-      other.password_crypted = encrypt(other.password(authorization_user: authenticator), new_item_key, new_item_iv)
-      key_crypted, iv_crypted = self.public_key.public_encrypt(new_item_key), self.public_key.public_encrypt(new_item_iv)
       if other.new_record?
+        new_item_key, new_item_iv = cipher.random_key, cipher.random_iv
+        key_crypted, iv_crypted = self.public_key.public_encrypt(new_item_key), self.public_key.public_encrypt(new_item_iv)
+        other.password_crypted = encrypt(other.password, new_item_key, new_item_iv)
         other.groups << self
         meta = other.meta_keys.find {|x| x.group == self}
+        raise "Couldn't find the corresponding meta" unless meta
         meta.key_crypted, meta.iv_crypted = key_crypted, iv_crypted
         other.save!
       else
-        meta = MetaKey.new(group: self, item: other, key_crypted: key_crypted, iv_crypted:  iv_crypted)
-        meta.save!
+        authenticator_meta, authenticator_group = meta_and_group_for_user_and_item authenticator, other
+        authenticator_group_private_key = authenticator_group.private_key(authorization_user: authenticator)
+        item_key, item_iv = authenticator_group_private_key.private_decrypt(authenticator_meta.key_crypted),
+                            authenticator_group_private_key.private_decrypt(authenticator_meta.iv_crypted)
+        key_crypted, iv_crypted = self.public_key.public_encrypt(item_key), self.public_key.public_encrypt(item_iv)
+        self.meta_keys.create! item: other, key_crypted: key_crypted, iv_crypted: iv_crypted
+        self.items(true)
+        other.groups(true)
       end
       other
     end
+  end
+
+  # Set up user to perform next action with. See +<<+ operator
+  def authorize(authorizor)
+    @authorization_user = authorizor
+  end
+
+  # Operator similar to +add+ method. Requires +authenticate+ before:
+  #
+  #   group.authorize user
+  #   group << item
+  def <<(other)
+    raise Tarkin::NotAuthorized, "This operation must be autorized by valid user" unless @authorization_user
+    add(other, authorization_user: @authorization_user)
   end
 
   private
@@ -162,10 +184,19 @@ class Group < ActiveRecord::Base
     errors.add :group, "'#{self.name}' must contain at least one user" if self.users.empty?
   end
 
-  def can_be_deleted
+  def is_empty
     # group can't be deleted if contains a link to at least one user or one item
-    errors.add :group, "'#{self.name}' contains users" unless self.users.empty?
-    errors.add :group, "'#{self.name}' contains items" unless self.items.empty?
-    !(self.users.empty? || self.items.empty?)
+    errors[:base] <<  "'#{self.name}' contains users" unless users.empty?
+    errors.add :base, "'#{self.name}' contains items" unless items.empty?
+    users.empty? && items.empty?
+  end
+
+  def meta_and_group_for_user_and_item(user, item)
+    groups = user.groups & item.groups
+    raise Tarkin::ItemNotAccessibleException, "Group association not found for item #{item.id} and user #{user.id}" if groups.nil? || groups.empty? || groups.length != 1
+    group = groups.first
+    meta = item.meta_keys.find_by(group: group)
+    raise Tarkin::ItemNotAccessibleException, "Item #{self.id} does not belong to #{group.name}" unless meta
+    [meta, group]
   end
 end

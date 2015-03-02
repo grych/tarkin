@@ -18,7 +18,7 @@
 
 /config/database.yml
 #/config/*_app.yml
-#doc/
+doc/
 *.swp
 *~
 .project

@@ -66,7 +66,8 @@ RSpec.describe Group, type: :model do
         describe "added to the group" do
           describe "with authorization" do
             before do
-              @group.add @user2, authorization_user: @user
+              @group.authorize @user
+              @group << @user2
             end
             it "should be able to read the private key" do
               expect(@group.private_key(authorization_user: @user2).class).to eq OpenSSL::PKey::RSA
@@ -84,16 +85,32 @@ RSpec.describe Group, type: :model do
 
     describe "add existing item to the group" do
       before do
-        Group.new(name: 'g1').add @user
-        Group.new(name: 'g2').add @user
+        @u1 = User.create(name: 'name', email: 'email1@email.com', password: 'password1')
+        @u2 = User.create(name: 'name', email: 'email2@email.com', password: 'password2')
+        Group.new(name: 'g1').add @u1
+        Group.new(name: 'g2').add @u2
         @g1 = Group.find_by(name: 'g1')
         @g2 = Group.find_by(name: 'g2')
-        @i1 = @g1.add Item.new(password: 'i1'), authorization_user: @user
-        @i2 = @g2.add Item.new(password: 'i2'), authorization_user: @user
-        @g1.add @i2, authorization_user: @user
+        @i1 = @g1.add Item.new(password: 'i1'), authorization_user: @u1
+        @i2 = @g2.add Item.new(password: 'i2'), authorization_user: @u2
+        @g1.add @i2, authorization_user: @u2
       end
       it { expect(@g1.items.count).to eq 2 }
+      it { expect(@g1.items).to eq [@i1, @i2]}
       it { expect(@g2.items.count).to eq 1 }
+      it { expect(@i1.password  authorization_user: @u1).to eq 'i1' }
+      it { expect(@i2.password  authorization_user: @u1).to eq 'i2' }
+      describe "loaded from database" do
+        before do
+          @u = User.find_by(email: 'email1@email.com'); @u.password = 'password1'
+          @user2 = User.find_by(email: 'email2@email.com'); @user2.password = 'password2'
+          @item1 = Item.first
+          @item2 = Item.second
+        end
+        it { expect(@item1.password  authorization_user: @u).to eq 'i1' }
+        it { expect(@item2.password  authorization_user: @u).to eq 'i2'}
+        it { expect{@item1.password  authorization_user: @user2}.to raise_error Tarkin::ItemNotAccessibleException }
+      end
     end
 
   end

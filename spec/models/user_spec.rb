@@ -116,7 +116,7 @@ RSpec.describe User, type: :model do
         before do
           @other_user = User.create(name: 'name2', email: 'email2@email.com', password: 'password2')
         end
-        describe "with authorization" do 
+        describe "authorization" do 
           before do 
             @other_user.add @group, authorization_user: @user
           end
@@ -126,6 +126,22 @@ RSpec.describe User, type: :model do
           it { expect{@user.add @group, authorization_user: @other_user}.to raise_error Tarkin::GroupNotAccessibleException }
         end
       end
+      describe "with item" do
+        before do 
+          @group.authorize @user
+          @group2 = @user << Group.new(name: 'group2')
+          @group2.authorize @user
+          @items = [@group << Item.create(password:'item1'), @group2 << Item.new(password:'item2')]
+        end
+        it { expect(@user.items.count).to eq 2 }
+        it { expect(@user.items).to eq @items }
+        describe "should have the item" do
+          before do
+            #@user.add @items[0] 
+          end
+        end
+      end
+
     end
   end
 end
