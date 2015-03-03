@@ -1,15 +1,3 @@
-# == Schema Information
-#
-# Table name: groups
-#
-#  id                      :integer          not null, primary key
-#  name                    :string(256)      not null
-#  public_key_pem          :string(4096)     not null
-#  private_key_pem_crypted :binary           not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#
-
 require 'rails_helper'
 
 RSpec.describe Group, type: :model do
