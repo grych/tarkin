@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150226170039) do
+ActiveRecord::Schema.define(version: 20150303101145) do
+
+  create_table "directories", force: :cascade do |t|
+    t.string   "name",         limit: 256, null: false
+    t.text     "description"
+    t.integer  "directory_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "directories", ["directory_id"], name: "index_directories_on_directory_id"
+  add_index "directories", ["name"], name: "index_directories_on_name"
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",                    limit: 256,  null: false
@@ -24,10 +35,16 @@ ActiveRecord::Schema.define(version: 20150226170039) do
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true
 
   create_table "items", force: :cascade do |t|
+    t.string   "username",         limit: 256
     t.binary   "password_crypted"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.integer  "directory_id"
+    t.text     "description"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
+
+  add_index "items", ["directory_id"], name: "index_items_on_directory_id"
+  add_index "items", ["username"], name: "index_items_on_username"
 
   create_table "meta_keys", force: :cascade do |t|
     t.binary   "key_crypted", null: false

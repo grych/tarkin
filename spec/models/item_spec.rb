@@ -4,6 +4,8 @@
 #
 #  id               :integer          not null, primary key
 #  password_crypted :binary
+#  directory_id     :integer
+#  description      :text
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

@@ -42,7 +42,6 @@ group :development, :test do
   gem 'highline'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'annotate'
   gem 'meta_request'
   gem 'guard'
   gem 'guard-rspec'

@@ -1,16 +1,5 @@
-# == Schema Information
-#
-# Table name: groups
-#
-#  id                      :integer          not null, primary key
-#  name                    :string(256)      not null
-#  public_key_pem          :string(4096)     not null
-#  private_key_pem_crypted :binary           not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#
 # == Group
-# <tt>Group</tt> associates <tt>User</tt> with <tt>Item</tt>. Must contain unique name and 
+# Group associates User with Item. Must contain unique name and 
 # at least one user connected.
 #  
 #   group = Group.new name: 'group 1'
@@ -19,7 +8,7 @@
 #   #=> {:private_key_pem_crypted=>["can't be blank"], :group=>["'group 1' must contain at least one user"]}
 #
 # Key pair of the group generates during initialize. The private key of the group is saved 
-# in <tt>MetaKey</tt> which belongs to the group and existing user.
+# in MetaKey which belongs to the group and existing user.
 class Group < ActiveRecord::Base
   before_destroy   :is_empty
 
@@ -54,7 +43,7 @@ class Group < ActiveRecord::Base
     OpenSSL::PKey::RSA.new self.private_key_pem(**options)
   end
 
-  # The private key PEM
+  # The private key PEM. Like #private_key, but returns the PEM string
   def private_key_pem(**options)
     authenticator = options[:authorization_user]
     raise Tarkin::PrivateKeyNotAccessibleException, 
@@ -77,7 +66,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-  # Associate +other+ object (<tt>User</tt> or <tt>Item</tt>) to group. 
+  # Associate +other+ object (User or Item) to the group. 
   # Option <tt>authorized_by</tt> must be given unless adding the existing  
   # user to new group:
   #   
@@ -157,12 +146,12 @@ class Group < ActiveRecord::Base
     end
   end
 
-  # Set up user to perform next action with. See +<<+ operator
+  # Set up user to perform next action with. See #<< operator
   def authorize(authorizor)
     @authorization_user = authorizor
   end
 
-  # Operator similar to +add+ method. Requires +authenticate+ before:
+  # Operator similar to #add method. Requires #authorize before:
   #
   #   group.authorize user
   #   group << item

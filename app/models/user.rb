@@ -1,18 +1,6 @@
-# == Schema Information
-#
-# Table name: users
-#
-#  id                      :integer          not null, primary key
-#  name                    :string(256)      not null
-#  email                   :string(256)      not null
-#  public_key_pem          :string(4096)     not null
-#  private_key_pem_crypted :binary           not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#
 # == User
-# <tt>User</tt> represents the human operator. User have the RSA key pair, which is stored 
-# in the database crypted by the users password. +Password is not recoverable!+ - in case of 
+# User represents the human operator. User have the RSA key pair, which is stored 
+# in the database crypted by the users password. Password is not recoverable! - in case of 
 # lost the only way is to regenerate the users keys and rejoin the user to groups.
 #
 # All operations on private keys, groups, items requires authorization - the given password. 
@@ -30,19 +18,20 @@
 #   user.authenticated?      #=> true
 #   user.private_key.class   #=> OpenSSL::PKey::RSA
 class User < ActiveRecord::Base
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+
   has_many :meta_keys, dependent: :destroy
   has_many :groups, through: :meta_keys
 
   validates :name, presence: true, length: { maximum: 256 }
   validates :email, presence: true, length: { maximum: 256 }
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 8, maximum: 32}
 
   before_save { email.downcase! }
   after_initialize :generate_keys
 
-  # This is only for validators, password should not be readable
+  # This is only for validators, password should never be readable
   def password
     '*' * @password.length if @password 
   end
@@ -55,12 +44,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Public key and its PEM is visible to all 
+  # Returns user public key
   def public_key
     OpenSSL::PKey::RSA.new self.public_key_pem
   end
 
-  # private key can be retrieved only when user is authenticated
+  # Returns user private key. It can be retrieved only when user is authenticated
   #   
   #   user = User.first
   #   user.password = 'password'
@@ -78,7 +67,7 @@ class User < ActiveRecord::Base
     OpenSSL::PKey::RSA.new self.private_key_pem
   end
 
-  # Change user password. Re-crypt the private key using new password. After this,
+  # Change User password. Re-crypt the private key using new password. After this,
   # user is still authenticated and can retrieve a private key
   #
   #   user = User.first
@@ -92,7 +81,7 @@ class User < ActiveRecord::Base
     self.private_key_pem_crypted = old_private_key.to_pem cipher, @password
   end
 
-  # True if password is given and can decrypt the private key
+  # Returns true when user is authenticated (correct password given)
   def authenticated?
     begin
       !self.private_key_pem.nil? && !new_record?
@@ -101,9 +90,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Creates an association between +other+ object (<tt>Group</tt>, <tt>Item</tt>) and the current user.
+  # Creates an association between +other+ object (Group or Item) and the current user.
   # In case of adding the group to the user, it could be either new group, or existing one - in the
-  # second case there is a need to authorize this operation with the user, which already belongs
+  # second case there is a need to #authorize this operation with the user, which already belongs
   # to the group, as the group key must be read.
   #   
   #   User.first.add Group.new(name: 'new group')   # adding new group doesn't require authorization
@@ -123,18 +112,15 @@ class User < ActiveRecord::Base
 				other.add self, authorization_user: authenticator
 				other
 			end
-		# when Item
-		# 	meta, group = meta_and_group_for_item(other)
-		# 	group.add other, authorization_user: self
 		end
 	end
 
-  # Set up user to perform next action with. See +<<+ operator
+  # Set up user to perform next action with. See #<< operator
   def authorize(authorizor)
     @authorization_user = authorizor
   end
 
-  # Operator similar to +add+ method. Requires +authenticate+ before:
+  # Operator similar to #add method. Requires #authorize before:
   #
   #   user.authorize other_user
   #   other << item
@@ -142,7 +128,7 @@ class User < ActiveRecord::Base
     add(other, authorization_user: @authorization_user)
   end
 
-  # Returns array of items which belongs to this user, with intersection by +Group+
+  # Returns array of items which belongs to this user, with intersection by Group
   def items
   	self.groups.map{|group| group.items}.flatten.uniq
   end

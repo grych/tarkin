@@ -1,18 +1,10 @@
-# == Schema Information
-#
-# Table name: items
-#
-#  id               :integer          not null, primary key
-#  password_crypted :binary
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#
 # == Item
-# <tt>Item</tt> is the value encrypted and stored in the database. It contain password (I don't 
+# Item is the value encrypted and stored in the database. It contain password (I don't 
 # want to call the class Password to avoid confusion between users password). 
 class Item < ActiveRecord::Base
   has_many :meta_keys, dependent: :destroy
   has_many :groups, through: :meta_keys
+  belongs_to :directory
   validates :password_crypted, presence: true
   validate  :have_groups
 
@@ -48,7 +40,7 @@ class Item < ActiveRecord::Base
       group.private_key(authorization_user: authenticator).private_decrypt(meta.iv_crypted)
   end
 
-  # Returns the opentext password. Must be authorized by +User+ which have the same group like +Item+
+  # Returns the opentext password. Must be authorized by User which have the same group like Item
   #
   #   plaintext = item.password(authorization_user: user)
   def password(**options)
