@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150303101145) do
+ActiveRecord::Schema.define(version: 20150304144806) do
 
   create_table "directories", force: :cascade do |t|
     t.string   "name",         limit: 256, null: false
@@ -23,6 +23,14 @@ ActiveRecord::Schema.define(version: 20150303101145) do
 
   add_index "directories", ["directory_id"], name: "index_directories_on_directory_id"
   add_index "directories", ["name"], name: "index_directories_on_name"
+
+  create_table "directories_groups", force: :cascade do |t|
+    t.integer "directory_id"
+    t.integer "group_id"
+  end
+
+  add_index "directories_groups", ["directory_id"], name: "index_directories_groups_on_directory_id"
+  add_index "directories_groups", ["group_id"], name: "index_directories_groups_on_group_id"
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",                    limit: 256,  null: false

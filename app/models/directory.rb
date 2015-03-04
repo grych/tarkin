@@ -7,13 +7,16 @@ class Directory < ActiveRecord::Base
   include ActiveModel::Validations
 
   VALID_DIRECTORY_REGEX = /\A[^\/\*\n]+\z/    # directory name can't contain slash and asterisk and newline
-  has_many :items
-  has_many :directories
+  has_many   :items
+  has_many   :directories
   belongs_to :directory
+  has_and_belongs_to_many :groups
 
   after_initialize -> { self.name.strip! }
   validates_with DirectoryValidator
   validates :name, presence: true, format: { with: VALID_DIRECTORY_REGEX }
+
+  # default_scope { order('name ASC') }
 
   # The root of all directories is the one without the parent
   # 

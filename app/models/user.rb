@@ -17,11 +17,15 @@
 #   user.password = 'password'
 #   user.authenticated?      #=> true
 #   user.private_key.class   #=> OpenSSL::PKey::RSA
+#
+# Users directories are the ones which belongs to the groups to which user belongs as well,
+# #directories method will list them all, regardless of level (the flat list).
 class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
   has_many :meta_keys, dependent: :destroy
   has_many :groups, through: :meta_keys
+  has_many :directories, through: :groups
 
   validates :name, presence: true, length: { maximum: 256 }
   validates :email, presence: true, length: { maximum: 256 }
@@ -132,6 +136,13 @@ class User < ActiveRecord::Base
   def items
   	self.groups.map{|group| group.items}.flatten.uniq
   end
+
+  # Returns the content (directory and items) of the given directory. Default is a root directory
+  # (to which everyone has access). Directory must belong to one of the users group. Returns all
+  # items and only the directories to which user has access.
+  def ls(dir = Directory.root)
+  	(self.directories & dir.directories) + dir.items
+	end
 
   private
   def generate_keys

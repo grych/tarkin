@@ -9,5 +9,6 @@ class CreateDirectories < ActiveRecord::Migration
     end
     add_index       :directories, :name, unique: false
     add_foreign_key :items, :directories
+    add_foreign_key :directories_groups, :directories
   end
 end

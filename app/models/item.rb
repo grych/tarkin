@@ -5,8 +5,11 @@ class Item < ActiveRecord::Base
   has_many :meta_keys, dependent: :destroy
   has_many :groups, through: :meta_keys
   belongs_to :directory
+
   validates :password_crypted, presence: true
   validate  :have_groups
+
+  # default_scope { order('username ASC') }
 
   # Set up user to perform next action with. See +<<+ operator
   def authorize(authorizor)

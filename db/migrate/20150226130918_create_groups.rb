@@ -9,5 +9,6 @@ class CreateGroups < ActiveRecord::Migration
     end
     add_index :groups, :name, unique: true
     add_foreign_key :meta_keys, :groups
+    add_foreign_key :directories_groups, :groups
   end
 end
