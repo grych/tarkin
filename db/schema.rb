@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20150304144806) do
     t.integer "group_id"
   end
 
+  add_index "directories_groups", ["directory_id", "group_id"], name: "index_directories_groups_on_directory_id_and_group_id", unique: true
   add_index "directories_groups", ["directory_id"], name: "index_directories_groups_on_directory_id"
   add_index "directories_groups", ["group_id"], name: "index_directories_groups_on_group_id"
 

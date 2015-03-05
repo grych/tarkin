@@ -10,7 +10,7 @@ class Directory < ActiveRecord::Base
   has_many   :items
   has_many   :directories
   belongs_to :directory
-  has_and_belongs_to_many :groups
+  has_and_belongs_to_many :groups, -> { uniq }
 
   after_initialize -> { self.name.strip! }
   validates_with DirectoryValidator
@@ -87,15 +87,43 @@ class Directory < ActiveRecord::Base
     Directory.root.cd(path)
   end
 
-  # # Childred of current directories is the collection of directories 
+  # Children of current directories is the collection of directories 
   # def children
   #   self.directories
   # end
 
-  # # Siblings are all directories in the same level except self
-  # def siblings
-  #   self.parent.children - [self]
-  # end
+  # Siblings are all directories in the same level except self
+  def siblings
+    self.parent.directories.where.not(directory: self)
+  end
+
+  # See #list
+  def _list(depth=0)
+    ret = "  " * depth + self.name + "/" + " [" + self.groups.map{|g| g.name}.join(', ') + "]\n"
+    self.directories.each {|child| ret += child._list(depth + 1)} 
+    self.items.each { |item| ret += "  " * depth + "  " + item.username + "\n" }
+    ret
+  end
+
+  # Prints all items and directories belongs to the current directory
+  #
+  #   d.list
+  #   #=>  dir0/ [group 0, group 1]
+  #   #=>    subdir/ []
+  #   #=>    username 0
+  def list
+    puts _list 0
+  end
+
+  # Line #list, but lists everything starting from root.
+  def self.list
+    puts Directory.root.list
+  end
+
+  # Short view
+  def inspect
+    "#{self.name}/  [id: #{self.id}, parent: #{self.directory_id}]"
+  end
 
   private
   def root_not_exists?

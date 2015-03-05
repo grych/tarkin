@@ -5,7 +5,9 @@ class DirectoryValidator < ActiveModel::Validator
       record.errors[:root] << 'duplicated'
     end
     # trying to add directory with the same name in the same parent directory
-    if !record.root? && record.parent.directories.find_by(name: record.name)
+    #if !record.root? && record.parent.directories.find_by(name: record.name)  ####
+    if !record.root? && record.siblings.find_by(name: record.name) 
+    #if !record.root? && record.siblings.any? { |x| x.name == record.name }
       record.errors[:directory] << 'name not unique'
     end
   end

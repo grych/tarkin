@@ -15,7 +15,7 @@ class Group < ActiveRecord::Base
   has_many :meta_keys, dependent: :destroy
   has_many :users, through: :meta_keys
   has_many :items, through: :meta_keys
-  has_and_belongs_to_many :directories
+  has_and_belongs_to_many :directories, -> { uniq }
 
   validates :name, presence: true, length: { maximum: 256 }, uniqueness: { case_sensitive: false }
   validates :public_key_pem, presence: true

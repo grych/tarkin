@@ -39,6 +39,7 @@ group :development, :test do
   gem 'rspec-expectations'
   gem 'sqlite3'
   gem 'pry-rails'
+  gem 'awesome_print'
   gem 'highline'
   gem 'better_errors'
   gem 'binding_of_caller'
