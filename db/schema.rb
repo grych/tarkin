@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150304144806) do
+ActiveRecord::Schema.define(version: 20150303101145) do
 
   create_table "directories", force: :cascade do |t|
     t.string   "name",         limit: 256, null: false
