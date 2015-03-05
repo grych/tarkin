@@ -59,6 +59,11 @@ class Item < ActiveRecord::Base
     end
   end
 
+  # Shorter view - to prevent rails console to show all the encrypted data
+  def inspect
+    "#<Item> '#{self.username}'  [id: #{self.id}, directory_id: #{self.directory_id}]"
+  end
+
   private
   # Validator: item must be associated with at least one group
   def have_groups

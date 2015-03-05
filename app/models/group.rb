@@ -161,6 +161,11 @@ class Group < ActiveRecord::Base
     add(other, authorization_user: @authorization_user)
   end
 
+  # Shorter view - to prevent rails console to show all the encrypted data
+  def inspect
+    "#<Group> '#{self.name}'  [id: #{self.id}]"
+  end
+
   private
   def generate_keys
     if new_record? 

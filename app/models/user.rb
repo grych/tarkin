@@ -144,6 +144,11 @@ class User < ActiveRecord::Base
   	(self.directories & dir.directories) + dir.items
 	end
 
+  # Shorter view
+  def inspect
+    "#<User> '#{self.name}'  [id: #{self.id}, email: #{self.email}]"
+  end
+
   private
   def generate_keys
     cipher = OpenSSL::Cipher::AES256.new(:CBC)

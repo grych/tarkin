@@ -10,4 +10,8 @@ class MetaKey < ActiveRecord::Base
   belongs_to :user 
   belongs_to :group
   belongs_to :item
+  # Shorter view - to prevent rails console to show all the encrypted data
+  def inspect
+    "#<MetaKey> id: #{self.id}  [user_id: #{self.user_id}, group_id: #{self.group_id}, item_id: #{self.item_id}]"
+  end
 end

@@ -120,9 +120,9 @@ class Directory < ActiveRecord::Base
     puts Directory.root.list
   end
 
-  # Short view
+  # Shorter view
   def inspect
-    "#{self.name}/  [id: #{self.id}, parent: #{self.directory_id}]"
+    "#<Directory> '#{self.name}''  [id: #{self.id}, parent: #{self.directory_id}]"
   end
 
   private
