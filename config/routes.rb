@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
   get '*path' => 'directories#show'
   #resources :directories, path: "", only: [:index, :new, :show, :create, :destroy]
-  root 'directories#index'
+  root 'directories#show'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

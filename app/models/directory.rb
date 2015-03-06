@@ -72,6 +72,7 @@ class Directory < ActiveRecord::Base
   #   directory.cd('path/user')   #=> #<Directory:0x007f8ba57c9ce id: 15, name: "user">
   #   directory.cd('/path/user')  #=> #<Directory:0x007f8ba57c9ce id: 15, name: "user">
   def cd(path)
+    return Directory.root if path.nil? || path.empty?
     r = if path.strip.starts_with?('/') then Directory.root else self end
     path.split('/').reject(&:empty?).each do |dir|
       r = r.directories.find_by(name: dir)
