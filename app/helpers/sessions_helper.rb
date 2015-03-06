@@ -65,7 +65,9 @@ module SessionsHelper
   end
 
   def valid_token?(token)
-    token && current_user.authenticate(get_token(token)[:password]) 
+    t = get_token(token)
+    # token must exists, user must authenticate with it and user agent must not be changed
+    token && current_user.authenticate(t[:password]) && t[:agent] == request.env['HTTP_USER_AGENT']
     rescue OpenSSL::Cipher::CipherError
       return false
     rescue ArgumentError # bad base64 encode

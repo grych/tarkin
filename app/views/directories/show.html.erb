@@ -1,5 +1,3 @@
-<% @directory.pwd_r.each do |d| %>
-  / <%= link_to_directory d %>
-<% end %>
+<% @directory.pwd_r.each do |d| %>/<%= if d==@directory then d.name else link_to_directory d end %><% end %>
 <br><br>Contents:<br>
 <%= render 'directory_content' %>
