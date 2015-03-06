@@ -7,7 +7,9 @@ Rails.application.routes.draw do
 
   namespace :api, path: "_api", defaults: {format: :json} do
     namespace :v1 do
-      resources :items, only: [:show]
+      #resources :sessions, only: [:new]
+      resources :items, only: [:show]  #/items/item_id
+      match 'authorize', to: 'sessions#create', via: ['get', 'post']
     end
   end
 

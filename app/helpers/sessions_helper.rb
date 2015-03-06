@@ -49,18 +49,22 @@ module SessionsHelper
     #redirect_to(root_url, notice: "You must have admin rights to do this.") unless current_user.admin?
   end
 
+  def salt
+    SecureRandom.hex(if Rails.env == 'production' then 128 else 8 end)
+  end
+
   def token_from_password(password)
     token = {created_at: Time.now, 
                password: password, 
                   agent: request.env['HTTP_USER_AGENT'],
                 user_id: current_user.id }
-    Base64.urlsafe_encode64 encrypt(SecureRandom.hex(128) + token.to_yaml, Rails.application.secrets.token_secret_key, Rails.application.secrets.token_secret_iv)
+    Base64.urlsafe_encode64 encrypt(salt + token.to_yaml, Rails.application.secrets.token_secret_key, Rails.application.secrets.token_secret_iv)
   end
 
   # decrypts password from given token 
   def get_token(token)
     t = decrypt(Base64.urlsafe_decode64(token), Rails.application.secrets.token_secret_key, Rails.application.secrets.token_secret_iv)
-    y = t[256..-1]
+    y = t[(salt.length * 2)..-1]
     YAML.load(y)
   end
 
