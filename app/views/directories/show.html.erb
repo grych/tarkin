@@ -1,0 +1,5 @@
+<% @directory.pwd_r.each do |d| %>
+  / <%= link_to_directory d %>
+<% end %>
+<br><br>Contents:<br>
+<%= render 'directory_content' %>

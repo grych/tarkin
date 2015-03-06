@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'directories/index'
-
   scope '_sessions' do
     resources :sessions, only: [:new, :create, :destroy]
     #match '/signin',  to: 'sessions#new',         via: 'get'
@@ -13,6 +11,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get '*path' => 'directories#show'
+  #resources :directories, path: "", only: [:index, :new, :show, :create, :destroy]
   root 'directories#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

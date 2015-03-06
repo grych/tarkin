@@ -1,0 +1,8 @@
+<% current_user.ls_dirs(@directory).each do |directory| %>
+  DIR: <%= relative_link_to_directory directory %> <br>
+<% end %>
+<% current_user.ls_items(@directory).each do |item| %>
+  ITEM: <%= item.username %> <%= item.password authorization_user: current_user %><br>
+<% end %>
+
+<%=console%>

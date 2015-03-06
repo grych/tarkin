@@ -120,9 +120,23 @@ class Directory < ActiveRecord::Base
     puts Directory.root.list
   end
 
+  # Returns a list of ancestrors of current directory, without root
+  def pwd_r(array=[])
+    if self.parent.nil?
+      array.reverse
+    else
+      self.parent.pwd_r(array + [self])
+    end
+  end
+
+  # Like #pwd_r, but including root
+  def pwd
+    [Directory.root] + pwd_r
+  end
+
   # Shorter view
   def inspect
-    "#<Directory> '#{self.name}''  [id: #{self.id}, parent: #{self.directory_id}]"
+    "#<Directory> '#{self.name}'  [id: #{self.id}, parent: #{self.directory_id}]"
   end
 
   private

@@ -150,6 +150,16 @@ class User < ActiveRecord::Base
   	(self.directories & dir.directories) + dir.items
 	end
 
+	# Like #ls, but returns only directories
+  def ls_dirs(dir = Directory.root)
+		self.directories & dir.directories
+	end
+
+	# Like #ls, but returns only items
+  def ls_items(dir = Directory.root)
+		dir.items
+	end
+
   # Shorter view
   def inspect
     "#<User> '#{self.name}'  [id: #{self.id}, email: #{self.email}]"

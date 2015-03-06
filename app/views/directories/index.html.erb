@@ -1,3 +1,8 @@
 <h1>Directories#index</h1>
 <p>Find me in app/views/directories/index.html.erb</p>
 <%=Item.first.password authorization_user: current_user %>
+<br>
+<%=@directory.name%>
+<br>
+<br>
+<%= render 'directory_content' %>
