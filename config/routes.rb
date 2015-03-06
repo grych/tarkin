@@ -1,4 +1,20 @@
 Rails.application.routes.draw do
+  get 'directories/index'
+
+  scope '_sessions' do
+    resources :sessions, only: [:new, :create, :destroy]
+    #match '/signin',  to: 'sessions#new',         via: 'get'
+    #match '/signout', to: 'sessions#destroy',     via: 'delete'
+  end
+
+  namespace :api, path: "_api", defaults: {format: :json} do
+    namespace :v1 do
+      resources :items, only: [:show]
+    end
+  end
+
+  root 'directories#index'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

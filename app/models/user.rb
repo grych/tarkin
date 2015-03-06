@@ -94,6 +94,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Returns user if password is OK or nil in other case
+  def authenticate(passwd)
+  	self.password = passwd
+  	if authenticated? then self else nil end
+  end
+
   # Creates an association between +other+ object (Group or Item) and the current user.
   # In case of adding the group to the user, it could be either new group, or existing one - in the
   # second case there is a need to #authorize this operation with the user, which already belongs
