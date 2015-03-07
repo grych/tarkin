@@ -50,7 +50,9 @@ module SessionsHelper
   end
 
   def salt
-    SecureRandom.hex(if Rails.env == 'production' then 128 else 8 end)
+    #len = if Rails.env == 'production' then 128 else 32 end
+    #@salt ||= SecureRandom.hex(rand(16..128))
+    @salt ||= SecureRandom.hex(128)
   end
 
   def token_from_password(password)
@@ -64,13 +66,13 @@ module SessionsHelper
   # decrypts password from given token 
   def get_token(token)
     t = decrypt(Base64.urlsafe_decode64(token), Rails.application.secrets.token_secret_key, Rails.application.secrets.token_secret_iv)
-    y = t[(salt.length * 2)..-1]
+    y = t[salt.length..-1]
     logger.debug "****************** #{t} ***********"
     YAML.load(y)
   end
 
   def valid_token?(token)
-    t = get_token(token)
+    t = get_token(token) if token
     # token must exists, user must authenticate with it and user agent must not be changed
     token && current_user.authenticate(t[:password]) && t[:agent] == request.env['HTTP_USER_AGENT']
     rescue OpenSSL::Cipher::CipherError
