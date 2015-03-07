@@ -65,6 +65,7 @@ module SessionsHelper
   def get_token(token)
     t = decrypt(Base64.urlsafe_decode64(token), Rails.application.secrets.token_secret_key, Rails.application.secrets.token_secret_iv)
     y = t[(salt.length * 2)..-1]
+    logger.debug "****************** #{t} ***********"
     YAML.load(y)
   end
 
