@@ -27,6 +27,7 @@ describe "API Authorization" do
   end
   it "get a password with username and password with GET" do
     #get "/_api/v1/dir0/#{URI::escape("username for group for name0")}?email=email0@example.com&password=password0"
+    # or ERB::Util.html_escape
     get "/_api/v1/items/1?email=email0@example.com&password=password0"
     expect(response).to be_success
     password = response.body
