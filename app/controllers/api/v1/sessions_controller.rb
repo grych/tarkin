@@ -5,7 +5,7 @@ class API::V1::SessionsController < Api::ApiController
   #
   # <tt>GET|POST /_api/v1/_authorize[.xml|.json]</tt>
   #
-  # [parameters:]
+  # parameters::
   # * User email and password
   # * basic http authentication in header
   #
