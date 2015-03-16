@@ -14,10 +14,10 @@ class API::V1::DirectoriesController < Api::ApiController
 
   private
   def directory_children_text(d)
-    d.directories.map{|dir| "#{dir.name}/"}.join("\n") + "\n" + d.items.map{|item| item.username}.join("\n")
+    current_user.ls_dirs(d).map{|dir| "#{dir.name}/"}.join("\n") + "\n" + current_user.ls_items(d).map{|item| item.username}.join("\n")
   end
 
   def directory_children(d)    
-    {directories: d.directories.map {|dir| {name: dir.name, id: dir.id}}, items: d.items.map {|item| {username: item.username}}}
+    {directories: current_user.ls_dirs(d).map {|dir| {name: dir.name, id: dir.id}}, items: current_user.ls_items(d).map {|item| {username: item.username}}}
   end
 end
