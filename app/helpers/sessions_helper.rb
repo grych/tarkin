@@ -1,5 +1,6 @@
 module SessionsHelper
   def sign_in(user)
+    # I don't want to keep the whole user object in session, because password is a property of it
     session[:current_user_id] = user.id
     self.current_user = user
   end
@@ -11,6 +12,7 @@ module SessionsHelper
 
   def current_user=(user)
     @current_user_id = user.id
+    @current_user = user
   end
 
   def current_user

@@ -66,11 +66,6 @@ GEM
     diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.3.0)
-    factory_girl (4.5.0)
-      activesupport (>= 3.0.0)
-    factory_girl_rails (4.5.0)
-      factory_girl (~> 4.5.0)
-      railties (>= 3.0.0)
     ffi (1.9.6)
     formatador (0.2.5)
     foundation-icons-sass-rails (3.0.0)
@@ -247,7 +242,6 @@ DEPENDENCIES
   binding_of_caller
   byebug
   coffee-rails (~> 4.1.0)
-  factory_girl_rails
   foundation-icons-sass-rails
   foundation-rails
   growl

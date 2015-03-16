@@ -8,8 +8,12 @@ Rails.application.routes.draw do
   namespace :api, path: "_api", defaults: {format: :json} do
     namespace :v1 do
       #resources :sessions, only: [:new]
-      resources :items, only: [:show]  #/items/item_id
-      match 'authorize', to: 'sessions#create', via: ['get', 'post']
+      #resources :items, only: [:show], defaults: {format: :text}, via: ['get', 'post']  #/items/item_id
+      match '_authorize',    to: 'sessions#create',  defaults: {format: :text}, via: ['get', 'post']
+      match '_password/:id', to: 'items#show',       defaults: {format: :text}, via: ['get', 'post']
+      match '_dir',          to: 'directories#index',defaults: {format: :text}, via: ['get', 'post']
+      match '_dir/*path',    to: 'directories#index',defaults: {format: :text}, via: ['get', 'post']
+      match '*path',         to: 'items#show',       defaults: {format: :text}, via: ['get', 'post']
     end
   end
 

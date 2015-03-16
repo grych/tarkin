@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "API Authorization" do
+describe "API Passwords" do
   # TODO: DRY with some factory_girl
   before do
     @users = 3.times.map{|i| User.create(name: "name#{i}", email: "email#{i}@example.com", password: "password#{i}")}
@@ -28,8 +28,48 @@ describe "API Authorization" do
   it "get a password with username and password with GET" do
     #get "/_api/v1/dir0/#{URI::escape("username for group for name0")}?email=email0@example.com&password=password0"
     # or ERB::Util.html_escape
-    get "/_api/v1/items/1?email=email0@example.com&password=password0"
+    get "/_api/v1/_password/1?email=email0@example.com&password=password0"
     expect(response).to be_success
-    password = response.body
+    expect(response.body).to eq 'password for group for name0'
+  end
+  it "get a password with username and password with POST" do
+    post "/_api/v1/_password/1", email: 'email0@example.com', password: 'password0'
+    expect(response).to be_success
+    expect(response.body).to eq 'password for group for name0'
+  end
+  it "get a password with http authentication" do
+    e = env.merge({'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("email0@example.com", "password0") })
+    get "/_api/v1/_password/1", {}, e
+    expect(response).to be_success
+    expect(response.body).to eq 'password for group for name0'
+  end
+  it "get a password with token" do
+    post '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
+    token = response.body
+    e = env.merge({"AUTHORIZATION" => "Token token=#{token}"})
+    post "/_api/v1/_password/1", {}, e
+    expect(response).to be_success
+    expect(response.body).to eq 'password for group for name0'
+  end
+  it "but not with a bad token" do
+    e = env.merge({"AUTHORIZATION" => "Token token=badtoken"})
+    post "/_api/v1/_password/1", {}, e
+    expect(response).not_to be_success
+  end
+  it "get a password with given path" do
+    post '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
+    token = response.body
+    e = env.merge({"AUTHORIZATION" => "Token token=#{token}"})
+    post "/_api/v1/dir0/#{URI::escape('username for group for name0')}", {}, e
+    expect(response).to be_success
+    expect(response.body).to eq 'password for group for name0'
+  end
+
+  private
+  def env
+    {
+      'Accept' => 'text/plain',
+      'Content-Type' => 'text/plain'
+    }
   end
 end

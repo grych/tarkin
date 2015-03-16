@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-describe "API Authorization" do
+describe "API Passwords" do
+  # TODO: DRY with some factory_girl
   before do
     @users = 3.times.map{|i| User.create(name: "name#{i}", email: "email#{i}@example.com", password: "password#{i}")}
     @groups = @users.map{|user| user.add Group.new(name: "group for #{user.name}")}
@@ -24,24 +25,23 @@ describe "API Authorization" do
     @items[2].directory = @directories[2]
     @items.each {|i| i.save!}
   end
-  it "get a token via GET" do
-    get '/_api/v1/_authorize?email=email0@example.com&password=password0'
-    expect(response).to be_success
-    expect(response.body.length).to be > 10
-  end
-  it "not get a token via GET" do
-    get '/_api/v1/_authorize?email=email0@example.com&password=password0x'
-    expect(response).not_to be_success
-    expect(response.body).to eq "Unathorized"
-  end
-  it "get a token via POST" do
+
+  it "get a directory listing" do
     post '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
+    token = response.body
+    e = env.merge({"AUTHORIZATION" => "Token token=#{token}"})
+    post "/_api/v1/_dir/dir0", {}, e
     expect(response).to be_success
-    expect(response.body.length).to be > 10
+    expect(response.body).to eq "subdir/\nusername for group for name0"
   end
-  it "not get a token via POST" do
-    post '/_api/v1/_authorize', email: "email0@example.com", password: "password0x"
-    expect(response).not_to be_success
-    expect(response.body).to eq "Unathorized"
+
+  private
+  # TODO: make it DRY
+  def env
+    {
+      'Accept' => 'text/plain',
+      'Content-Type' => 'text/plain'
+    }
   end
+
 end
