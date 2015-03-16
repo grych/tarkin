@@ -60,11 +60,11 @@ class User < ActiveRecord::Base
   #   user.private_key_pem.class    #=> String
   #   user.private_key.class        #=> OpenSSL::PKey::RSA
   def private_key_pem
-    raise Tarkin::WrongPasswordException, "no password for #{self.name}" if @password.nil?
+    raise Tarkin::WrongPasswordException, "no password given for #{self.name}" if @password.nil?
     begin
       OpenSSL::PKey::RSA.new(self.private_key_pem_crypted, @password).to_pem
     rescue OpenSSL::PKey::RSAError, TypeError
-      raise Tarkin::WrongPasswordException, "can't decrypt #{self.name} private key"
+      raise Tarkin::WrongPasswordException, "can't decrypt #{self.name}'s private key"
     end
   end
   def private_key
