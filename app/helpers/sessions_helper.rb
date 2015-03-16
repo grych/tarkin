@@ -65,9 +65,13 @@ module SessionsHelper
 
   # decrypts password from given token 
   def get_token(token)
-    t = decrypt(Base64.urlsafe_decode64(token), Rails.application.secrets.token_secret_key, Rails.application.secrets.token_secret_iv)
+    begin
+      t = decrypt(Base64.urlsafe_decode64(token), Rails.application.secrets.token_secret_key, Rails.application.secrets.token_secret_iv)
+    rescue ArgumentError # invalid base 64
+      return nil
+    end
     y = t[salt.length..-1]
-    logger.debug "****************** #{t} ***********"
+    # logger.debug "****************** #{t} ***********"
     YAML.load(y)
   end
 
