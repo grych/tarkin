@@ -48,6 +48,8 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'spork'
   gem 'growl'
+
+  gem 'factory_girl_rails'
 end
 
 group :production do

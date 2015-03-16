@@ -1,15 +1,7 @@
 class API::V1::SessionsController < Api::ApiController
   include SessionsHelper
+  #   OS_TOKEN=`curl "http://localhost:3000/_api/v1/authorize?email=email0@example.com&password=password0"`
   def create
-    # email, password = [params[:email], password = params[:password]] if params[:email]
-    # user = User.find_by(email: email)
-    # if user && user.authenticate(password)
-    #   sign_in user
-    #   render text: token_from_password(password)
-    # else
-    #   render nothing: true, status: :unathorized
-    # end
-    #render json: 'dupa'
     render json: @token
   end
 end
