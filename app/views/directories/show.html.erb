@@ -1,3 +1,16 @@
-<% @directory.pwd_r.each do |d| %>/<%= if d==@directory then d.name else link_to_directory d end %><% end %>
-<br><br>Contents:<br>
-<%= render 'directory_content' %>
+<div class="row">
+  <div class="tarkin-panel radius">
+    <ul class="breadcrumbs">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Features</a></li>
+      <li class="unavailable"><a href="#">Gene Splicing</a></li>
+      <li class="current"><a href="#">Cloning</a></li>
+    </ul>
+
+    <% @directory.pwd_r.each do |d| %>/<%= if d==@directory then d.name else link_to_directory d end %><% end %>
+    <br><br>Contents:<br>
+    <%= render 'directory_content' %>
+
+  </div>
+</div>
+

@@ -1,21 +1,51 @@
-<% #provide(:title, "Sign in") %>
-<h1>Sign in</h1>
+<% provide(:title, "Sign in") %>
 
-<div class="row">
-  <div class="span6 offset3">
-    <%= form_for(:session, url: sessions_path) do |f| %>
-      <h2>Use you email to login</h2>
-
-      <%= f.label :email %>
-      <%= f.text_field :email, placeholder: 'mail@example.com' %>
-
-      <%= f.label :password %>
-      <%= f.password_field :password %>
-      
-      <br>
-      <%= f.submit "Sign in", class: "btn btn-large btn-primary" %>
-    <% end %>
-
-    <p>Do you want the access? Go speak to Tomasz Gryszkiewicz</p>
+<p>
+  <div class="row">
+    <div class="small-12 columns">
+     
+    </div>
   </div>
-</div>
+</p>
+
+<p>
+  <%= form_for(:session, url: sessions_path, html: {"data-abide" => true}) do |f| %>
+    <div class="row">
+      <div class="large-2 medium-2 columns">&nbsp;</div>
+
+      <div class="large-8 medium-8 columns">
+        <div class="panel radius">
+
+          <div class="row">
+            <div class="medium-3 small-2 columns">
+              <%= f.label :email, class: "right inline" %>
+            </div>
+            <div class="medium-9 small-10 columns">
+              <%= f.email_field :email, placeholder: 'mail@example.com', required: true %>
+              <small class="error">A valid email address is required.</small>
+            </div>
+          </div>
+          <div class="row">
+            <div class="medium-3 small-2 columns">
+              <%= f.label :password, class: "right inline" %>
+            </div>
+            <div class="medium-9 small-10 columns">
+              <%= f.password_field :password, required: true, pattern: ".{4,}" %>
+              <small class="error">Password is required.</small>
+            </div>
+          </div>
+          <div class="row">        
+            <div class="medium-3 small-2 columns">
+            </div>
+            <div class="medium-9 small-10 columns">
+              <%= f.submit "Sign in", class: "button" %>
+            </div>
+          </div>
+
+        </div>    
+      </div>
+
+      <div class="large-2 medium-2 colums">&nbsp;</div>  
+    </div>
+  <% end %>
+</p>

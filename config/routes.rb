@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
   scope '_sessions' do
-    resources :sessions, only: [:new, :create, :destroy]
+    resources :sessions, only: [:new, :create]
+    match '/signout', to: 'sessions#destroy',     via: 'delete'
     #match '/signin',  to: 'sessions#new',         via: 'get'
-    #match '/signout', to: 'sessions#destroy',     via: 'delete'
   end
-
+  scope '_aj' do
+    post 'ok_with_cookies', to: 'directories#ok_with_cookies'
+  end
   namespace :api, path: "_api", defaults: {format: :json} do
     namespace :v1 do
       #resources :sessions, only: [:new]

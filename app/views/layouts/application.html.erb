@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title><%= content_for?(:title) ? yield(:title) : "foundation-rails" %></title>
+    <title><%= full_title(yield(:title)) %></title>
 
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "vendor/modernizr" %>
@@ -13,7 +13,17 @@
   </head>
 
   <body>
-
+    <%= render 'layouts/header' %>
+    <% flash.each do |key, value| %>
+      <div class="row">
+        <div class="large-12 medium-12 columns">
+          <br>
+          <div data-alert class="alert-box <%= key == 'error' ? 'alert' : key %> radius">
+          <%= value %>
+          <a href="#" class="close">&times;</a>
+        </div>  
+      </div>
+    <% end %>
     <%= yield %>
 
   </body>
