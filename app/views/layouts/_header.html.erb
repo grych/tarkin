@@ -1,0 +1,40 @@
+<div class="contain-to-grid">
+  <nav class="top-bar hide-for-small " data-topbar>
+    <section class="top-bar-section">
+      <ul class="left">
+      </ul>
+      <ul class="title-area hide-for-medium hide-for-small">
+        <li class="name" data-tooltip title="Page Root">
+          <h1>
+            <a href="<%= root_url %>"> <%= full_title(yield(:title)) %> </a>
+          </h1>
+        </li>
+      </ul>
+      <ul class="right">
+        <% if current_user %>
+          <li id='user-li' class="has-dropdown">
+            <a>
+              <%= current_user.email %>
+            </a>
+            <ul class="dropdown">
+              <li class="text-right"><%= link_to "Sign out", signout_path, method: "delete" %></li>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  </nav>
+</div>
+
+<% unless session[:ok_with_cookies] %>
+  <div class="row">
+    <div class="large-12 medium-12 columns">
+      <br>
+      <div data-alert class="alert-box info radius">
+        This website uses cookies. If you continue to use this site we assume that you are happy with this.
+        When you close this box we will save this information in a cookie to ensure you'll never be bothered with this information box.
+        <a href="#" class="close" id="cookies-information-close-button">&times;</a>
+      </div>
+    </div>
+  </div>
+<% end %>
