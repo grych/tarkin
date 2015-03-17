@@ -1,8 +1,37 @@
-<% current_user.ls_dirs(@directory).each do |directory| %>
-  DIR: <%= relative_link_to_directory directory %> <br>
-<% end %>
-<% current_user.ls_items(@directory).each do |item| %>
-  ITEM: <%= item.username %> <%= item.password authorization_user: current_user %><br>
-<% end %>
+<div class="tarkin-panel white">
 
-<%=console%>
+  <% unless @directory.root? %>
+    <div class="row directory highlightable">
+      <div class="medium-4 columns">
+        <%= link_to_parent_directory @directory %> 
+      </div>
+      <div class="medium-8 columns hide-for-small">
+        parent directory
+      </div>
+    </div>
+  <% end %>
+
+  <% current_user.ls_dirs(@directory).each do |directory| %>
+    <div class="row directory highlightable">
+      <div class="medium-4 columns">
+        <%= relative_link_to_directory directory %> 
+      </div>
+      <div class="medium-8 columns hide-for-small">
+        <%= groups_for_directory directory %>
+      </div>
+    </div>
+  <% end %>
+
+  <% current_user.ls_items(@directory).each do |item| %>
+    <div class="row item highlightable">
+      <div class="medium-4 columns">
+        <%= item.username %>
+      </div>
+      <div class="medium-8 columns hide-for-small password-row">
+        <span id="item[<%=item.id%>]" class="password">
+        </span>
+      </div>
+    </div>
+  <% end %>
+
+</div>

@@ -14,4 +14,16 @@ class DirectoriesController < ApplicationController
     session[:ok_with_cookies] = true
     render json: {ok: true}
   end
+
+  def password
+    # sleep 1
+    item = Item.find(params[:item].keys.first)
+    if item
+      t = get_token(cookies[:auth_token])
+      current_user.authenticate t[:password]
+      render text: item.password(authorization_user: current_user)
+    else
+      render text: 'unknown', status: 500
+    end
+  end
 end

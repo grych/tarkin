@@ -1,15 +1,35 @@
 @import "foundation/components/panels";
+@import "foundation/components/alert-boxes";
+
 .tarkin-panel {
   @include panel(
     // Sets the panel background color. Default: $panel-pg
-    $bg:#f8f8f8,
+    $bg:#fafafa
     // Sets the panel padding amount. Default: $panel-padding
-    $padding:20px,
+    // $padding:20px,
     // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
-    $adjust:true
+    // $adjust:true,
   );
   margin-top: 10px;
   margin-bottom: 10px;
+  .radius {
+    @include radius();
+  }
+}
+
+// .tarkin-panel-white {
+//   @include tarkin-panel(
+//     $bg:white
+//   );
+// }
+
+.white {
+  background-color: white;
+}
+
+.padded {
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 .login-panel {
@@ -24,3 +44,12 @@
   margin-top: 10px;
   margin-bottom: 10px;  
 }
+
+.alert-box {
+  margin-top: 10px;
+}
+
+div.highlight {    
+   background-color: #d0d0d0;   
+   // color: white;
+} 
