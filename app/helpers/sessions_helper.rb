@@ -65,22 +65,25 @@ module SessionsHelper
     Base64.urlsafe_encode64 encrypt(salt + token.to_yaml, Rails.application.secrets.token_secret_key, Rails.application.secrets.token_secret_iv)
   end
 
-  # decrypts password from given token 
+  # decrypts token from given encrypted one 
   def get_token(token)
     begin
       t = decrypt(Base64.urlsafe_decode64(token), Rails.application.secrets.token_secret_key, Rails.application.secrets.token_secret_iv)
     rescue ArgumentError # invalid base 64
       return nil
     end
-    y = t[salt.length..-1]
-    # logger.debug "****************** #{t} ***********"
-    YAML.load(y)
+    y = YAML.load(t[salt.length..-1])
+    if !(current_user.token_expires_in.blank? || current_user.token_expires_in <= 0) && (Time.now - y[:created_at]).to_i / 1.day > current_user.token_expires_in
+      nil 
+    else
+      y
+    end
   end
 
   def valid_token?(token)
     t = get_token(token) if token
     # token must exists, user must authenticate with it and user agent must not be changed
-    token && current_user.authenticate(t[:password]) && t[:agent] == request.env['HTTP_USER_AGENT']
+    token && t && current_user.authenticate(t[:password]) && t[:agent] == request.env['HTTP_USER_AGENT'] 
     rescue OpenSSL::Cipher::CipherError
       return false
     rescue ArgumentError # bad base64 encode

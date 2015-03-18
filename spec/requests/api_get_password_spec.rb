@@ -46,23 +46,32 @@ describe "API Passwords" do
     expect(response.body).to eq 'password for group for name0'
   end
   it "get a password with token" do
-    post '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
+    get '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
     token = response.body
     e = env.merge({"AUTHORIZATION" => "Token token=#{token}"})
-    post "/_api/v1/_password/1", {}, e
+    get "/_api/v1/_password/1", {}, e
+    expect(response).to be_success
+    expect(response.body).to eq 'password for group for name0'
+  end
+  it "get a password with token in cookie" do
+    get '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
+    token = response.body
+    e = env.merge({"Cookie" => "auth_token=#{token}"})
+    #request.cookies[:auth_token] = token
+    get "/_api/v1/_password/1", {}, e
     expect(response).to be_success
     expect(response.body).to eq 'password for group for name0'
   end
   it "but not with a bad token" do
     e = env.merge({"AUTHORIZATION" => "Token token=badtoken"})
-    post "/_api/v1/_password/1", {}, e
+    get "/_api/v1/_password/1", {}, e
     expect(response).not_to be_success
   end
   it "get a password with given path" do
-    post '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
+    get '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
     token = response.body
     e = env.merge({"AUTHORIZATION" => "Token token=#{token}"})
-    post "/_api/v1/dir0/#{URI::escape('username for group for name0')}", {}, e
+    get "/_api/v1/dir0/#{URI::escape('username for group for name0')}", {}, e
     expect(response).to be_success
     expect(response.body).to eq 'password for group for name0'
   end

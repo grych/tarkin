@@ -2,10 +2,10 @@
 
   <% unless @directory.root? %>
     <div class="row directory highlightable">
-      <div class="medium-4 columns">
+      <div class="medium-4 columns font-terminal">
         <%= link_to_parent_directory @directory %> 
       </div>
-      <div class="medium-8 columns hide-for-small">
+      <div class="medium-8 columns hide-for-small text-smaller">
         parent directory
       </div>
     </div>
@@ -13,10 +13,10 @@
 
   <% current_user.ls_dirs(@directory).each do |directory| %>
     <div class="row directory highlightable">
-      <div class="medium-4 columns">
+      <div class="medium-4 columns font-terminal">
         <%= relative_link_to_directory directory %> 
       </div>
-      <div class="medium-8 columns hide-for-small">
+      <div class="medium-8 columns hide-for-small text-smaller">
         <%= groups_for_directory directory %>
       </div>
     </div>
@@ -24,12 +24,17 @@
 
   <% current_user.ls_items(@directory).each do |item| %>
     <div class="row item highlightable">
-      <div class="medium-4 columns">
+      <div class="medium-4 small-6 columns font-terminal">
         <%= item.username %>
       </div>
-      <div class="medium-8 columns hide-for-small password-row">
-        <span id="item[<%=item.id%>]" class="password">
-        </span>
+      <div class="medium-6 small-4 columns password-row">
+        <div id="item_<%=item.id%>" class="password font-terminal"></div>
+      </div>
+      <div class="medium-2 small-2 columns text-right">
+        <div class="switch tiny round">
+          <input id="switch_<%=item.id%>" type="checkbox" class="password-switch">
+          <label for="switch_<%=item.id%>"></label>
+        </div> 
       </div>
     </div>
   <% end %>

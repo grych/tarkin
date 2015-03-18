@@ -52,4 +52,16 @@
 div.highlight {    
    background-color: #d0d0d0;   
    // color: white;
-} 
+}
+
+.highlightable {
+  padding: 5px 0px 0px 0px;
+}
+
+.font-terminal {
+  font-family: $font-family-monospace;
+}
+
+.text-smaller {
+  font-size: 11pt;
+}

@@ -5,12 +5,17 @@ class API::V1::ItemsController < Api::ApiController
   #
   # <tt>GET|POST /_api/v1/_password/:item_id[.xml|.json]</tt>
   # 
-  # <tt>GET|POST /_api/v1/path_to_token*[.xml|.json]</tt>
+  # <tt>GET|POST /_api/v1/path_to_item*[.xml|.json]</tt>
   #
   # parameters::
+  # * item_id
+  # * path to the password (all directories separated by slash, followed by username)
+  #
+  # authorization::
+  # * auth token in header: <tt>Authorization: Token token=$TOKEN</tt> or
+  # * cookie "auth_token" set, or
   # * User email and password as GET/POST parameters, or
-  # * basic http authentication in header, or
-  # * auth token in header: <tt>Authorization: Token token=$TOKEN</tt>
+  # * basic http authentication in header
   #
   # = Examples
   #   resp = conn.get("http://localhost:3000/_api/v1/_password/1", email: "email0@example.com", password="password0")
@@ -34,6 +39,7 @@ class API::V1::ItemsController < Api::ApiController
   #    <tt>PASSWORD=`curl -H "Authorization: Token token=$OS_TOKEN" "http://localhost:3000/_api/v1/password/1"`</tt>
   # [using path instead of id] <tt>PASSWORD=`curl "http://localhost:3000/_api/databases/C84PCPY/sysadm?email=email0@example.com&password=password0"`</tt>
   def show
+    logger.debug " ---------- params: #{params}"
     if params[:id]
       item = Item.find(params[:id])
     elsif params[:path]

@@ -6,9 +6,13 @@ class API::V1::DirectoriesController < Api::ApiController
   # <tt>GET|POST /_api/v1/_dir/path_to_directory*[.xml|.json]</tt>
   #
   # parameters::
+  # * path to directory
+  #
+  # authorization::
+  # * auth token in header: <tt>Authorization: Token token=$TOKEN</tt> or
+  # * cookie "auth_token" set, or
   # * User email and password as GET/POST parameters, or
-  # * basic http authentication in header, or
-  # * auth token in header: <tt>Authorization: Token token=$TOKEN</tt>
+  # * basic http authentication in header
   #
   # = Examples
   #   resp = conn.get("http://localhost:3000/_dir/databases", email: "email0@example.com", password="password0")

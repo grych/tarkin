@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150303101145) do
+ActiveRecord::Schema.define(version: 20150318150223) do
 
   create_table "directories", force: :cascade do |t|
     t.string   "name",         limit: 256, null: false
@@ -72,14 +72,17 @@ ActiveRecord::Schema.define(version: 20150303101145) do
   add_index "meta_keys", ["user_id"], name: "index_meta_keys_on_user_id"
 
   create_table "users", force: :cascade do |t|
-    t.string   "name",                    limit: 256,  null: false
-    t.string   "email",                   limit: 256,  null: false
-    t.string   "public_key_pem",          limit: 4096, null: false
-    t.binary   "private_key_pem_crypted",              null: false
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.string   "name",                    limit: 256,                  null: false
+    t.string   "email",                   limit: 256,                  null: false
+    t.string   "public_key_pem",          limit: 4096,                 null: false
+    t.binary   "private_key_pem_crypted",                              null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
+    t.integer  "token_expires_in",                     default: 30
+    t.boolean  "admin",                                default: false
   end
 
+  add_index "users", ["admin"], name: "index_users_on_admin"
   add_index "users", ["email"], name: "index_users_on_email", unique: true
 
 end
