@@ -17,55 +17,32 @@
   <% end %>
 
   <% current_user.ls_dirs(@directory).each do |directory| %>
-    <div class="row directory highlightable" data-type="dir" data-id="<%=directory.id%>">
-      <div class="large-3 medium-5 small-5 columns font-terminal">
-        <%= relative_link_to_directory directory %> 
-      </div>
-      <div class="large-3 medium-5 small-5 columns">
-      </div>
-      <div class="large-5 columns hide-for-medium hide-for-small tarkin-groups">
-        <%= groups_for_directory directory %>
-      </div>
-      <div class="large-1 medium-2 small-2 columns text-right">
-        <div class="switch tiny round favorite-switch">
-          <input id="dir_switch_<%=directory.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? directory%> data-type="dir" data-id="<%=directory.id%>">
-          <label for="dir_switch_<%=directory.id%>"></label>
-        </div> 
-        <a class="button tiny round edit-button" style="display: none;" data-type="dir" data-id="<%=directory.id%>"><i class="fi-page-edit"></i>edit</a>
-      </div>
-    </div>
+    <%= render partial: 'directory_row', locals: {directory: directory} %>
   <% end %>
 
   <% current_user.ls_items(@directory).each do |item| %>
-    <div class="row item highlightable" data-type="item" data-id="<%=item.id%>">
-      <div class="large-3 medium-5 small-5 columns font-terminal">
-        <%= item.username %>
-      </div>
-      <div class="large-3 medium-5 small-5 columns password-row">
-        <div id="item_<%=item.id%>" class="password font-terminal" data-id="<%=item.id%>" data-favorite="<%=current_user.favorite? item %>">
-        </div>
-      </div>
-      <div class="large-5 columns hide-for-medium hide-for-small tarkin-groups">
-        <%= groups_for_item item %>
-      </div>
-      <div class="large-1 medium-2 small-2 columns text-right">
-        <div class="switch tiny round favorite-switch">
-          <input id="switch_<%=item.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? item%> data-type="item" data-id="<%=item.id%>">
-          <label for="switch_<%=item.id%>"></label>
-        </div> 
-        <a class="button tiny round edit-button" style="display: none;" data-type="item" data-id="<%=item.id%>"><i class="fi-page-edit inline"></i>edit</a>
-      </div>
-    </div>
+    <%= render partial: 'items/item_row', locals: {item: item} %>
   <% end %>
 </div>
 
-<div class="tarkin-panel white buttons-panel" style="display: none;">
+<div class="tarkin-panel white buttons-panel" style="display: nonexxx;">
   <div class="row">
     <div class="medium-12 columns">
       <ul class="button-group round ">
-        <li><a class="button small">New Item</a></li>
-        <li><a class="button small">New Directory</a></li>
+        <li><a class="button small"><i class="fi-page-add"></i> New Item</a></li>
+        <li><a class="button small" data-reveal-id="new-directory-modal"><i class="fi-folder-add"></i> New Directory</a></li>
       </ul>
     </div>
   </div>
 </div>
+
+<div id="new-directory-modal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+  <h2 id="modalTitle">Create new directory</h2>
+  <p class="lead">The new directory inherits groups from the parent</p>
+  <p>
+    <%= render partial: 'form', locals: {modal: true} %>
+  </p>
+  <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
+

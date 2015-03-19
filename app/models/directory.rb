@@ -13,7 +13,7 @@ class Directory < ActiveRecord::Base
   belongs_to :directory
   has_and_belongs_to_many :groups, -> { uniq }
 
-  after_initialize -> { self.name.strip! }
+  after_initialize -> { self.name.strip! if name }
   before_save :update_path
   validates_with DirectoryValidator
   validates :name, presence: true, format: { with: VALID_DIRECTORY_REGEX }

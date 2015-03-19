@@ -1,0 +1,23 @@
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+<%= form_for(@new_directory, remote: remote, action: :create, html: {role: :form, 'data-model' => 'directory', "data-abide" => true}) do |f| %>
+  <div class="row">
+    <div class="panel radius">
+
+      <div class="row">
+        <div class="medium-3 small-2 columns">
+          <%= f.label :name, class: "right inline" %>
+        </div>
+        <div class="medium-9 small-10 columns">
+          <%= f.text_field :name, placeholder: 'group name', required: true %>
+          <small class="error help-block">Group name is required.</small>
+        </div>
+      </div>
+
+      <ul class="button-group round">
+        <li><%= f.submit 'Submit', class: 'button round' %></li>
+        <li><%= f.submit 'Submit', class: 'button round' %></li>
+      </ul>
+    </div>
+  </div>
+<% end %>

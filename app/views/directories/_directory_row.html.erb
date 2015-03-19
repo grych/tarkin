@@ -1,0 +1,17 @@
+<div class="row directory highlightable" data-type="dir" data-id="<%=directory.id%>">
+  <div class="large-3 medium-5 small-5 columns font-terminal">
+    <%= relative_link_to_directory directory %> 
+  </div>
+  <div class="large-3 medium-5 small-5 columns">
+  </div>
+  <div class="large-5 columns hide-for-medium hide-for-small tarkin-groups">
+    <%= groups_for_directory directory %>
+  </div>
+  <div class="large-1 medium-2 small-2 columns text-right">
+    <div class="switch tiny round favorite-switch">
+      <input id="dir_switch_<%=directory.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? directory%> data-type="dir" data-id="<%=directory.id%>">
+      <label for="dir_switch_<%=directory.id%>"></label>
+    </div> 
+    <a class="button tiny round edit-button" style="display: none;" data-type="dir" data-id="<%=directory.id%>"><i class="fi-page-edit"></i>edit</a>
+  </div>
+</div>

@@ -2,11 +2,27 @@ class DirectoriesController < ApplicationController
   before_action :signed_in_user, except: :ok_with_cookies
 
   def index
+    @new_directory = Directory.new
     @directory = Directory.root
   end
 
   def show
+    @new_directory = Directory.new
     @directory = Directory.cd(params[:path])
+  end
+
+  def create
+    logger.debug " **** MKDIR: #{params[:directory][:name]}"
+    @directory = Directory.new(directory_params)
+    respond_to do |format|
+      if @directory.save
+        format.html {}
+        format.js { render action: 'show', status: :created, location: @directory }
+      else
+        format.html {}
+        format.js { render json: @directory.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # AJAX
@@ -34,6 +50,11 @@ class DirectoriesController < ApplicationController
       end
     end
     render json: {ok: true}
+  end
+
+  private
+  def directory_params
+    params.require(:directory).permit(:name)
   end
 
   # def password
