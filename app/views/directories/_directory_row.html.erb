@@ -12,6 +12,6 @@
       <input id="dir_switch_<%=directory.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? directory%> data-type="dir" data-id="<%=directory.id%>">
       <label for="dir_switch_<%=directory.id%>"></label>
     </div> 
-    <a class="button tiny round edit-button" style="display: none;" data-type="dir" data-id="<%=directory.id%>"><i class="fi-page-edit"></i>edit</a>
+    <a class="button tiny round edit-button hidden" data-type="dir" data-id="<%=directory.id%>"><i class="fi-page-edit"></i>edit</a>
   </div>
 </div>

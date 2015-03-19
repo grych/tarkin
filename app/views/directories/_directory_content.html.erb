@@ -16,16 +16,18 @@
     </div>
   <% end %>
 
-  <% current_user.ls_dirs(@directory).each do |directory| %>
-    <%= render partial: 'directory_row', locals: {directory: directory} %>
-  <% end %>
+  <div id="dirs">
+    <% current_user.ls_dirs(@directory).each do |directory| %>
+      <%= render partial: 'directory_row', locals: {directory: directory} %>
+    <% end %>
+  </div>
 
   <% current_user.ls_items(@directory).each do |item| %>
     <%= render partial: 'items/item_row', locals: {item: item} %>
   <% end %>
 </div>
 
-<div class="tarkin-panel white buttons-panel" style="display: nonexxx;">
+<div class="tarkin-panel white buttons-panel hiddenxxxxxxx">
   <div class="row">
     <div class="medium-12 columns">
       <ul class="button-group round ">
@@ -36,9 +38,15 @@
   </div>
 </div>
 
-<div id="new-directory-modal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-  <h2 id="modalTitle">Create new directory</h2>
+<div id="new-directory-modal" class="reveal-modal" data-reveal aria-labelledby="new-directory-modal-title" aria-hidden="true" role="dialog">
+  <h2 id="new-directory-modal-title">Create new directory</h2>
   <p class="lead">The new directory inherits groups from the parent</p>
+  <div id="new-directory-modal-alert-box" data-alert class="hidden alert-box alert radius">
+    <div id="new-directory-modal-alert-box-text">
+      HERE BE ERRORS.
+    </div>
+<!--     <a href="#" class="close" id="new-directory-modal-alert-box-close-button">&times;</a> -->
+  </div>
   <p>
     <%= render partial: 'form', locals: {modal: true} %>
   </p>

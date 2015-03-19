@@ -1,6 +1,7 @@
 passwords = {} # cache for passwords retrieved by AJAX
 
-ready = () ->
+@ready = () ->
+  $('.hidden').hide()
   $('#cookies-information-close-button').click ->
     ok_with_cookies()
   $('.highlightable').hover(
@@ -15,6 +16,25 @@ ready = () ->
     show_password($(this)) if $(this).data('favorite')
   $('#edit-mode-button').click ->
     switch_edit_mode($(this))
+  $(document).bind('ajaxError', 'form#new_directory', (event, jqxhr, settings, exception) -> 
+    render_form_errors($.parseJSON(jqxhr.responseText)))   # show errors which cames back from rails
+  $('#new-directory-modal').on "opened.fndtn.reveal", -> 
+    $("#new_directory input:text, #new_directory textarea").first().focus(); # focus on the first element
+  $('#new-directory-form-close-button').click -> $('#new-directory-modal').foundation('reveal', 'close')
+
+@ready_with_foundation = () ->
+  $(document).foundation() # bad looking, but it must be re-initialized because of turbolinks
+  ready()
+
+capitalize = (word) -> 
+  word.charAt(0).toUpperCase() + word.slice 1
+
+render_form_errors = (errors) ->
+  s = ""
+  for key, value of errors
+    s += capitalize "#{key} #{value.join(' and ')}. <br>"
+  $('#new-directory-modal-alert-box-text').html(s)
+  $('#new-directory-modal-alert-box').fadeIn(250)
 
 switch_edit_mode = (button) ->
   button.toggleClass('active')
@@ -78,10 +98,6 @@ get_password = (item) ->
     error: ->
       alert "Server not responding"
 
-ready_with_foundation = () ->
-  $(document).foundation() # bad looking, but it must be re-initialized because of turbolinks
-  ready()
-
 ok_with_cookies = () ->
   $.ajax
     url: '/_aj/ok_with_cookies'
@@ -90,5 +106,5 @@ ok_with_cookies = () ->
     error: ->
       alert "Server not responding"
 
-$(document).ready(ready)
-$(document).on('page:load', ready_with_foundation)
+$(document).ready(@ready)
+$(document).on('page:load', @ready_with_foundation)

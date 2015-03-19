@@ -12,15 +12,16 @@ class DirectoriesController < ApplicationController
   end
 
   def create
-    logger.debug " **** MKDIR: #{params[:directory][:name]}"
     @directory = Directory.new(directory_params)
+    @directory.directory_id = params[:parent_id] # parent
+    # Directory.find(params[:parent_id]) << @directory
+    valid = @directory.save && @directory.directory_id
     respond_to do |format|
-      if @directory.save
-        format.html {}
-        format.js { render action: 'show', status: :created, location: @directory }
+      if valid
+        format.js #{ render action: 'show', status: :created, location: @directory }
       else
-        format.html {}
-        format.js { render json: @directory.errors, status: :unprocessable_entity }
+        format.js { 
+          render json: @directory.errors , status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +55,7 @@ class DirectoriesController < ApplicationController
 
   private
   def directory_params
-    params.require(:directory).permit(:name)
+    params.require(:directory).permit([:name, :groups, :description, :parent_id])
   end
 
   # def password

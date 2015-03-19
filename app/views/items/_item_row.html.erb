@@ -14,6 +14,6 @@
       <input id="switch_<%=item.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? item%> data-type="item" data-id="<%=item.id%>">
       <label for="switch_<%=item.id%>"></label>
     </div> 
-    <a class="button tiny round edit-button" style="display: none;" data-type="item" data-id="<%=item.id%>"><i class="fi-page-edit inline"></i>edit</a>
+    <a class="button tiny round edit-button hidden" data-type="item" data-id="<%=item.id%>"><i class="fi-page-edit inline"></i>edit</a>
   </div>
 </div>

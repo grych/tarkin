@@ -10,14 +10,34 @@
         </div>
         <div class="medium-9 small-10 columns">
           <%= f.text_field :name, placeholder: 'group name', required: true %>
-          <small class="error help-block">Group name is required.</small>
+          <small class="error help-block">Directory name is required.</small>
         </div>
       </div>
 
-      <ul class="button-group round">
-        <li><%= f.submit 'Submit', class: 'button round' %></li>
-        <li><%= f.submit 'Submit', class: 'button round' %></li>
-      </ul>
+      <div class="row">
+        <div class="medium-3 small-2 columns">
+          <%= f.label :description, class: "right inline" %>
+        </div>
+        <div class="medium-9 small-10 columns">
+          <%= f.text_field :description, placeholder: 'can be empty', required: false %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="medium-3 small-2 columns">
+        </div>
+      <div class="medium-9 small-10 columns">
+        <%= hidden_field_tag :parent_id, @directory.id %>
+        <ul class="button-group round">
+          <li>
+            <%= button_tag type: :submit, class: 'button round small' do %>
+              <i class="fi-check"></i> OK
+            <% end %>
+          </li>
+          <li><a id="new-directory-form-close-button" class="button round small alert"><i class="fi-x"></i> Cancel</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 <% end %>
+

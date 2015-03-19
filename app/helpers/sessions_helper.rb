@@ -17,7 +17,11 @@ module SessionsHelper
 
   def current_user
     @current_user_id ||= session[:current_user_id]
-    @current_user ||= User.find(@current_user_id) if @current_user_id
+    begin
+      @current_user ||= User.find(@current_user_id) if @current_user_id
+    rescue ActiveRecord::RecordNotFound
+      return nil
+    end
     @current_user
   end
 
@@ -73,7 +77,8 @@ module SessionsHelper
       return nil
     end
     y = YAML.load(t[salt.length..-1])
-    if !(current_user.token_expires_in.blank? || current_user.token_expires_in <= 0) && (Time.now - y[:created_at]).to_i / 1.day > current_user.token_expires_in
+    user = User.find(y[:user_id])
+    if !(user.token_expires_in.blank? || user.token_expires_in <= 0) && (Time.now - y[:created_at]).to_i / 1.day > user.token_expires_in
       nil 
     else
       y
