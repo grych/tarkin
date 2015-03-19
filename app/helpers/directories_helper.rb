@@ -18,4 +18,8 @@ module DirectoriesHelper
   def groups_for_directory(directory)
     directory.groups.map{|group| group.name}.join(', ')
   end
+
+  def groups_for_item(item)
+    item.groups.map{|group| group.name}.join(', ')
+  end
 end

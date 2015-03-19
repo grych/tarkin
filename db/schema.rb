@@ -11,18 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150318150223) do
+ActiveRecord::Schema.define(version: 20150319111856) do
 
   create_table "directories", force: :cascade do |t|
-    t.string   "name",         limit: 256, null: false
+    t.string   "name",         limit: 256,  null: false
     t.text     "description"
     t.integer  "directory_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "path",         limit: 4096
   end
 
   add_index "directories", ["directory_id"], name: "index_directories_on_directory_id"
   add_index "directories", ["name"], name: "index_directories_on_name"
+  add_index "directories", ["path"], name: "index_directories_on_path", unique: true
 
   create_table "directories_groups", force: :cascade do |t|
     t.integer "directory_id"
@@ -32,6 +34,18 @@ ActiveRecord::Schema.define(version: 20150318150223) do
   add_index "directories_groups", ["directory_id", "group_id"], name: "index_directories_groups_on_directory_id_and_group_id", unique: true
   add_index "directories_groups", ["directory_id"], name: "index_directories_groups_on_directory_id"
   add_index "directories_groups", ["group_id"], name: "index_directories_groups_on_group_id"
+
+  create_table "favorites", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "directory_id"
+    t.integer "item_id"
+  end
+
+  add_index "favorites", ["directory_id"], name: "index_favorites_on_directory_id"
+  add_index "favorites", ["item_id"], name: "index_favorites_on_item_id"
+  add_index "favorites", ["user_id", "directory_id"], name: "index_favorites_on_user_id_and_directory_id"
+  add_index "favorites", ["user_id", "item_id"], name: "index_favorites_on_user_id_and_item_id"
+  add_index "favorites", ["user_id"], name: "index_favorites_on_user_id"
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",                    limit: 256,  null: false

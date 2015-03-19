@@ -15,6 +15,27 @@ class DirectoriesController < ApplicationController
     render json: {ok: true}
   end
 
+  def switch_favorite
+    logger.debug "switch_favorite, params: #{params}"
+    case params[:type]
+    when 'item'
+      i = Item.find(params[:id])
+      if current_user.favorite? i
+        current_user.favorite_items.destroy i
+      else
+        current_user.favorite_items << i
+      end
+    when 'dir'
+      d = Directory.find(params[:id])
+      if current_user.favorite? d
+        current_user.favorite_directories.destroy d
+      else
+        current_user.favorite_directories << d
+      end
+    end
+    render json: {ok: true}
+  end
+
   # def password
   #   # sleep 1
   #   item = Item.find(params[:item].keys.first)

@@ -9,10 +9,12 @@ class Directory < ActiveRecord::Base
   VALID_DIRECTORY_REGEX = /\A[^\/\*\n]+\z/    # directory name can't contain slash and asterisk and newline
   has_many   :items
   has_many   :directories
+  # has_many   :users, through: :favorites
   belongs_to :directory
   has_and_belongs_to_many :groups, -> { uniq }
 
   after_initialize -> { self.name.strip! }
+  before_save :update_path
   validates_with DirectoryValidator
   validates :name, presence: true, format: { with: VALID_DIRECTORY_REGEX }
 
@@ -141,6 +143,10 @@ class Directory < ActiveRecord::Base
   end
 
   private
+  def update_path
+    self.path = if self.root? then '/' else pwd.map{|dir| dir.name if not dir.root?}.join('/') end
+  end
+
   def root_not_exists?
     if self.directories.empty?
       false

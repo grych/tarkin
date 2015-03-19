@@ -26,6 +26,9 @@ class User < ActiveRecord::Base
   has_many :meta_keys, dependent: :destroy
   has_many :groups, through: :meta_keys
   has_many :directories, through: :groups
+  has_many :favorite_directories, through: :favorites, source: :directory 
+  has_many :favorite_items,       through: :favorites, source: :item
+  has_many :favorites, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 256 }
   validates :email, presence: true, length: { maximum: 256 }
@@ -159,6 +162,18 @@ class User < ActiveRecord::Base
   def ls_items(dir = Directory.root)
 		dir.items
 	end
+
+  # True, if the given Directory or Item is on the User shortlist. 
+  def favorite?(thing)
+    case thing
+    when Directory
+      self.favorite_directories.where(id: thing.id).exists?
+    when Item
+      self.favorite_items.where(id: thing.id).exists?
+    else
+      false
+    end
+  end
 
   # Shorter view
   def inspect

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   end
   scope '_aj' do
     post 'ok_with_cookies', to: 'directories#ok_with_cookies'
+    post 'switch_favorite', to: 'directories#switch_favorite'
   end
   namespace :api, path: "_api", defaults: {format: :json} do
     namespace :v1 do

@@ -23,6 +23,11 @@
 //   );
 // }
 
+// to prevent colums disapear when empty
+.column, .columns{
+  min-height: 1px;
+}
+
 .white {
   background-color: white;
 }
@@ -55,13 +60,14 @@ div.highlight {
 }
 
 .highlightable {
-  padding: 5px 0px 0px 0px;
+  padding: 4px 0px 0px 0px;
 }
 
 .font-terminal {
   font-family: $font-family-monospace;
 }
 
-.text-smaller {
-  font-size: 11pt;
+.tarkin-groups {
+  font-size: 10pt;
 }
+

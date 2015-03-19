@@ -9,9 +9,8 @@ ready = () ->
       $(this).addClass('highlight')
       item = $(this).find('.password')
       unless item.length == 0
-        item_id_arr = item.attr('id').match(/item_(\d+)/)
-        if item_id_arr
-          item_id = item_id_arr[1]
+        item_id = $(this).data('id')
+        if item_id
           if passwords[item_id]
             # password is in cache
             item.text(passwords[item_id]) 
@@ -33,27 +32,36 @@ ready = () ->
                     $(this).attr('processing', false)
                     $(this).fadeIn(100)
                 error: ->
-                  alert "Can't contact to the server"
+                  alert "Server not responding"
     -> 
       $(this).removeClass('highlight')
-      sw = $(this).find('.password-switch')
+      sw = $(this).find('.favorite-switch')
       item = $(this).find('.password')
       unless item.length == 0 
         unless sw.is(':checked')
-          item.fadeOut(100, -> item.text(''))
+          item.fadeOut(100, -> item.html(''))
           item.attr('showing', false) 
   )
+  $('.favorite-switch').change ->
+    # console.log $(this).data('type')
+    $.ajax
+      url: "/_aj/switch_favorite"
+      type: 'post'
+      data: { type: $(this).data('type'), id: $(this).data('id') }
+      error: ->
+        alert "Server not responding"
 
 ready_with_foundation = () ->
   $(document).foundation() # bad looking, but it must be re-initialized because of turbolinks
   ready()
 
 ok_with_cookies = () ->
-  $.post('/_aj/ok_with_cookies', true, 
-    (data) -> 
-      unless data['ok']
-        alert('Can not save your cookie information, sorry.')
-  )
+  $.ajax
+    url: '/_aj/ok_with_cookies'
+    type: 'post'
+    data: true
+    error: ->
+      alert "Server not responding"
 
 $(document).ready(ready)
 $(document).on('page:load', ready_with_foundation)
