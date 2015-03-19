@@ -10,7 +10,7 @@
     // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
     // $adjust:true,
   );
-  margin-top: 10px;
+  margin-top: 20px;
   margin-bottom: 10px;
   .radius {
     @include radius();
@@ -55,16 +55,16 @@
 }
 
 div.highlight {    
-   background-color: #d0d0d0;   
-   // color: white;
+  background-color: #d0d0d0;   
 }
 
 .highlightable {
-  padding: 4px 0px 0px 0px;
+  padding: 5px 0px 0px 0px;
 }
 
 .font-terminal {
   font-family: $font-family-monospace;
+  font-size: 12pt;
 }
 
 .tarkin-groups {

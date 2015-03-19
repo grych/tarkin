@@ -11,8 +11,8 @@
         </li>
       </ul>
 
-      <ul class="right">
-        <% if current_user %>
+      <% if current_user %>
+        <ul class="right">
           <li id='user-li' class="has-dropdown">
             <a>
               <i class='fi-torso'></i> <%= current_user.email %>
@@ -23,34 +23,34 @@
               </li>
             </ul>
           </li>
-        <% end %>
-      </ul>
+        </ul>
 
-      <ul class="right">
-        <% if current_user && @directory && current_user.favorite_directories.exists? %>
-          <li id='fav-li' class="has-dropdown">
-            <a>
-              <i class="fi-heart"></i> Favorites
-            </a>
-            <ul class="dropdown">
-<!--               <% unless current_user.favorite? @directory %>
-                <li class="text-left active">
-                  <a id="add-to-fav">
-                    <i class="fi-plus"></i> Add to favorites
-                  </a>
-                </li>
-              <% end %>
- -->              <% current_user.favorite_directories.each do |dir| %>
-                <li class="text-left">
-                  <a href="<%=dir.path%>" id="fav_<%=dir.id%>">
-                    <%=dir.path%>
-                  </a>
-                </li>
-              <% end %>
-            </ul>
-          </li>
-        <% end %>
-      </ul>
+        <ul class="right">
+          <% if @directory && current_user.favorite_directories.exists? %>
+            <li id='fav-li' class="has-dropdown">
+              <a>
+                <i class="fi-heart"></i> Favorites
+              </a>
+              <ul class="dropdown">
+                <% current_user.favorite_directories.each do |dir| %>
+                  <li class="text-left">
+                    <a href="<%=dir.path%>" id="fav_<%=dir.id%>">
+                      <%=dir.path%>
+                    </a>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          <% end %>
+        </ul>
+
+        <ul class="right">
+            <li id='edit-mode-button' data-tooltip title="Edit mode on/off" class="">
+              <a>Enable edition</a>
+            </li>
+        </ul>
+
+      <% end %>
 
     </section>
   </nav>

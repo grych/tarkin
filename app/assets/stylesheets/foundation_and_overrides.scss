@@ -79,7 +79,7 @@ $include-html-global-classes: $include-html-classes;
 // $include-html-grid-classes: $include-html-classes;
 // $include-xl-html-grid-classes: false;
 
-// $row-width: rem-calc(1000);
+$row-width: rem-calc(1100);
 // $total-columns: 12;
 // $column-gutter: rem-calc(30);
 
@@ -421,14 +421,15 @@ $font-smoothing: antialiased;
 // $include-html-button-classes: $include-html-classes;
 
 // We use these to build padding for buttons.
-$button-tny: rem-calc(7);
-// $button-sml: rem-calc(14);
+$button-tny: rem-calc(6);
+$button-sml: rem-calc(10);
 // $button-med: rem-calc(16);
 // $button-lrg: rem-calc(18);
 
 // We use this to control the display property.
 // $button-display: inline-block;
-$button-margin-bottom: rem-calc(5);
+// $button-margin-bottom: rem-calc(5);
+$button-margin-bottom: rem-calc(2);
 
 // We use these to control button text styles.
 // $button-font-family: $body-font-family;
@@ -1237,7 +1238,7 @@ $button-margin-bottom: rem-calc(5);
 // $switch-bg: $white;
 
 // We use these to control the switch heights for our default classes
-// $switch-height-tny: rem-calc(22);
+$switch-height-tny: rem-calc(24);
 // $switch-height-sml: rem-calc(28);
 // $switch-height-med: rem-calc(36);
 // $switch-height-lrg: rem-calc(44);
