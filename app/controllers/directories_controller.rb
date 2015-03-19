@@ -14,8 +14,12 @@ class DirectoriesController < ApplicationController
   def create
     @directory = Directory.new(directory_params)
     @directory.directory_id = params[:parent_id] # parent
-    # Directory.find(params[:parent_id]) << @directory
+    parent = Directory.find(params[:parent_id])
     valid = @directory.save && @directory.directory_id
+    # TODO: it should not simply inherit from the parent
+    parent.groups.each do |parent_group|
+      @directory.groups << parent_group
+    end
     respond_to do |format|
       if valid
         format.js #{ render action: 'show', status: :created, location: @directory }
