@@ -8,8 +8,8 @@ class DirectoryValidator < ActiveModel::Validator
     if !record.root? && record.siblings.find_by(name: record.name) 
       record.errors[:name] << 'not unique'
     end
-    # if !record.root? && record.groups.empty?
-    #   record.errors[:directory] << 'must belong to at least one group'
-    # end
+    if record.groups.empty?
+      record.errors[:directory] << 'must belong to at least one group'
+    end
   end
 end

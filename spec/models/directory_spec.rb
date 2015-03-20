@@ -16,12 +16,15 @@ RSpec.describe Directory, type: :model do
     before do
       @d = Directory.new(name: "  A valid directory name?   ")
     end
-    it { expect(@d).to be_valid }
+    it { expect(@d).not_to be_valid }
     it { expect(@d.name).to eq "A valid directory name?"}
   end
   describe "root" do
     before do
+      @user = User.create(name: 'name', email: 'email@email.com', password: 'password')
+      @group = @user.add Group.new(name: 'group')
       @r = Directory.create(name: "root")
+      @r.groups << @group
     end
     it { expect(Directory.root).to eq @r}
     describe "with duplicated root" do
@@ -33,10 +36,14 @@ RSpec.describe Directory, type: :model do
     describe "structure" do
       before do
         @d = [Directory.new(name: 'dir1'), Directory.new(name: 'dir2'), Directory.new(name: 'dir3')]
-        @d.each { |dir| @r.directories << dir }
-        @deeper = @d[0].mkdir 'deep1', description: 'description'
-        @d[1].mkdir_p 'deep2/deeper2', description: 'description2'
-        Directory.mkdir_p '/dir3/deep3/deeper3'
+        @d.each do |dir| 
+          @r.directories << dir 
+          dir.groups << @group
+          dir.save
+        end
+        @deeper = @d[0].mkdir! 'deep1', description: 'description'
+        @d[1].mkdir_p! 'deep2/deeper2', description: 'description2'
+        Directory.mkdir_p! '/dir3/deep3/deeper3'
         @cd = Directory.cd('/dir3/deep3')
         @cd2 = @cd.cd('deeper3')
       end

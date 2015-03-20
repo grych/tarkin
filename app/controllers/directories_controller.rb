@@ -12,20 +12,14 @@ class DirectoriesController < ApplicationController
   end
 
   def create
-    @directory = Directory.new(directory_params)
-    @directory.directory_id = params[:parent_id] # parent
-    parent = Directory.find(params[:parent_id])
-    valid = @directory.save && @directory.directory_id
-    # TODO: it should not simply inherit from the parent
-    parent.groups.each do |parent_group|
-      @directory.groups << parent_group
-    end
+    parent = Directory.find(directory_params[:parent_id])
+    groups = if params[:directory][:groups].try(:map) then params[:directory][:groups].map{ |group_id, _| Group.find(group_id) } else [] end
+    @directory = parent.mkdir(directory_params[:name], description: directory_params[:description], groups: groups) 
     respond_to do |format|
-      if valid
+      if @directory.save           
         format.js #{ render action: 'show', status: :created, location: @directory }
       else
-        format.js { 
-          render json: @directory.errors , status: :unprocessable_entity }
+        format.js { render json: @directory.errors , status: :unprocessable_entity }
       end
     end
   end
@@ -59,7 +53,7 @@ class DirectoriesController < ApplicationController
 
   private
   def directory_params
-    params.require(:directory).permit([:name, :groups, :description, :parent_id])
+    params.require(:directory).permit(:name, :description, :parent_id)
   end
 
   # def password

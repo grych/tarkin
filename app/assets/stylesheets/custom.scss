@@ -1,6 +1,15 @@
 @import "foundation/components/panels";
 @import "foundation/components/alert-boxes";
 
+.white-panel {
+  @include panel(
+    $bg:#fcfcfc
+  );
+  .radius {
+    @include radius();
+  }
+}
+
 .tarkin-panel {
   @include panel(
     // Sets the panel background color. Default: $panel-pg
@@ -16,6 +25,7 @@
     @include radius();
   }
 }
+
 
 // .tarkin-panel-white {
 //   @include tarkin-panel(

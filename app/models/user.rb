@@ -114,15 +114,15 @@ class User < ActiveRecord::Base
   #
   #   other_user.add my_group, authorization_user: current_user
 	def add(other, **options)
-		authenticator = options[:authorization_user]
+		authorizator = options[:authorization_user]
 		case other
 		when Group
 			if other.new_record?
 				other.add self
 				other
 			else
-				raise Tarkin::NotAuthorized, "This operation must be autorized by valid user" unless authenticator and authenticator.authenticated?
-				other.add self, authorization_user: authenticator
+				raise Tarkin::NotAuthorized, "This operation must be autorized by valid user" unless authorizator and authorizator.authenticated?
+				other.add self, authorization_user: authorizator
 				other
 			end
 		end
@@ -130,6 +130,7 @@ class User < ActiveRecord::Base
 
   # Set up user to perform next action with. See #<< operator
   def authorize(authorizor)
+    raise Tarkin::NotAuthorized, "Did you mean 'authenticate'?" unless authorizor.is_a? User
     @authorization_user = authorizor
   end
 
@@ -160,7 +161,7 @@ class User < ActiveRecord::Base
 
 	# Like #ls, but returns only items
   def ls_items(dir = Directory.root)
-		dir.items
+		self.items & dir.items
 	end
 
   # True, if the given Directory or Item is on the User shortlist. 

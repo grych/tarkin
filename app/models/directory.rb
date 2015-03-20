@@ -41,22 +41,79 @@ class Directory < ActiveRecord::Base
     self.directory
   end
 
-  # Create the directory under current dir. If it already exists, just returns it
+  # Groups of current Directory.
+  # In the special case, when Directory is root, returns all groups OR all groups for a given user
   #
-  #   Directory.root.mkdir "new dir", description: "The brand new one"
+  #   Directory.root.groups.count                     #=> 15
+  #   Directory.root.groups(user: User.first).count   #=> 2
+  #   directory.groups.count                          #=> 2
+  alias_method :groups_old, :groups
+  def groups(**options)
+    if options[:user]
+      options[:user].groups
+    else
+      if self.root?
+        Group.all
+      else
+        self.groups_old
+      end
+    end
+  end
+
+  # Create the directory under current dir. If it already exists, just returns it.
+  # New directory inherits groups from the parent. If creating directory is under root,
+  # User can be given as an option (in this case it inherits only Users groups).
+  # It is also possible to specify list of groups which should be connected with the
+  # new directory by adding options[:groups]
+  #
+  #   Directory.root.mkdir "new dir", description: "The brand new one", user: User.first
   #   #=> #<Directory:0x007f8ba7c6063, id: 16, name: "new dir", description: "The brand new one">
   def mkdir(name, **options)
-    Directory.find_or_create_by!(name: name, directory: self, **options)
+    user = nil
+    if options[:user]
+      user = options[:user]
+      options.delete :user
+    end
+    groups = nil
+    if options[:groups]
+      groups = options[:groups]
+      options.delete :groups
+    end
+    d = Directory.find_by(name: name, directory: self)
+    unless d 
+      d = Directory.new(name: name, directory: self, **options)
+      if user || groups
+        # inherits groups from user
+        self.groups(user: user).each { |group| d.groups << group  } if user
+        # take the groups from the list
+        groups.each { |group| d.groups << group  } if groups
+      else 
+        # inherit all groups from parent
+        self.groups.each do |group|
+          d.groups << group
+        end
+      end
+    end
+    d
+  end
+
+  def mkdir!(name, **options)
+    d = Directory.find_by(name: name, directory: self)
+    unless d
+      d = self.mkdir(name, **options)
+      d.save!
+    end
+    d
   end
 
   # Create a bunch of directories (equivalent to Unix 'mkdir -p') separated by slash.
   # Returns last of them.
   #
   #   d.mkdir_p 'usr/local/bin' #=> #<Directory:0x007f8ba57c9ce id: 15, name: "bin">
-  def mkdir_p(path, **options)
+  def mkdir_p!(path, **options)
     r = self
     path.split('/').reject(&:empty?).each do |dir|
-      r = r.mkdir(dir, **options)
+      r = r.mkdir!(dir, **options)
     end
     r
   end
@@ -64,8 +121,10 @@ class Directory < ActiveRecord::Base
   # Creates a bunch of directories starting with root
   #
   #   Directory.mkdir_p '/Users/grych'
-  def self.mkdir_p(path, **options)
-    Directory.root.mkdir_p(path, **options)
+  def self.mkdir_p!(path, **options)
+    d = Directory.root.mkdir_p!(path, **options)
+    Directory.root.reload
+    d
   end
 
   # Find a directory belongs to current directory. If the path starts with '/', it keeps searching
@@ -115,6 +174,7 @@ class Directory < ActiveRecord::Base
   #   #=>    subdir/ []
   #   #=>    username 0
   def list
+    self.reload
     puts _list 0
   end
 
