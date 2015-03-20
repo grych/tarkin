@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     post 'ok_with_cookies', to: 'directories#ok_with_cookies'
     post 'switch_favorite', to: 'directories#switch_favorite'
     #post 'dir',           to: 'directories#create'
-    resources :directories, only: [:create]
+    resources :directories, only: [:create, :update, :edit]
   end
   namespace :api, path: "_api", defaults: {format: :json} do
     namespace :v1 do

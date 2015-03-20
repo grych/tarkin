@@ -11,7 +11,11 @@
     <div class="switch tiny round favorite-switch">
       <input id="dir_switch_<%=directory.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? directory%> data-type="dir" data-id="<%=directory.id%>">
       <label for="dir_switch_<%=directory.id%>"></label>
-    </div> 
-    <a class="button tiny round edit-button hidden" data-type="dir" data-id="<%=directory.id%>"><i class="fi-page-edit"></i>edit</a>
+    </div>
+    <%= form_tag edit_directory_path(directory.id), method: :get, remote: true, action: :edit, html: {role: :form, 'data-model' => 'directory', "data-abide" => true} do %>
+      <%= button_tag type: :submit, class: 'button tiny round edit-button hidden', "data-type"=>"dir", "data-id"=>directory.id do %>
+        <i class="fi-page-edit"></i>edit
+      <% end %>
+    <% end %>
   </div>
 </div>

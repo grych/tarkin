@@ -79,19 +79,16 @@ class Directory < ActiveRecord::Base
       groups = options[:groups]
       options.delete :groups
     end
-    d = Directory.find_by(name: name, directory: self)
-    unless d 
-      d = Directory.new(name: name, directory: self, **options)
-      if user || groups
-        # inherits groups from user
-        self.groups(user: user).each { |group| d.groups << group  } if user
-        # take the groups from the list
-        groups.each { |group| d.groups << group  } if groups
-      else 
-        # inherit all groups from parent
-        self.groups.each do |group|
-          d.groups << group
-        end
+    d = Directory.new(name: name, directory: self, **options)
+    if user || groups
+      # inherits groups from user
+      self.groups(user: user).each { |group| d.groups << group  } if user
+      # take the groups from the list
+      groups.each { |group| d.groups << group  } if groups
+    else 
+      # inherit all groups from parent
+      self.groups.each do |group|
+        d.groups << group
       end
     end
     d
@@ -156,7 +153,7 @@ class Directory < ActiveRecord::Base
 
   # Siblings are all directories in the same level except self
   def siblings
-    self.parent.directories.where.not(directory: self)
+    self.parent.directories.where.not(id: self.id)
   end
 
   # See #list

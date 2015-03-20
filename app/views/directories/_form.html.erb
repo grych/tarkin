@@ -2,7 +2,7 @@
 <% remote = modal ? true : false %>
 <% parent_directory ||= @directory %>
 <% editing_directory ||= @new_directory %>
-<%= form_for(editing_directory, remote: remote, action: :create, html: {role: :form, 'data-model' => 'directory', "data-abide" => true}) do |f| %>
+<%= form_for(editing_directory, remote: remote, action: action, html: {role: :form, 'data-model' => 'directory', "data-abide" => true}) do |f| %>
   <div class="row panel radius">
     <div class="large-7 columns white-panel radius">
 
@@ -32,8 +32,8 @@
         <div class="row">
           <div class="medium-4 small-2 columns text-right">
             <div class="switch small round">
-              <%= check_box_tag "directory[groups][#{group.id}]", true, parent_directory.groups.include?(group) %>
-              <label for="directory_groups_<%= group.id %>"></label>
+              <%= check_box_tag "groups[#{group.id}]", true, groups.include?(group) %>
+              <label for="groups_<%= group.id %>"></label>
             </div> 
           </div>
 
@@ -51,7 +51,7 @@
     <div class="row">
       <div class="medium-2 columns text-right hide-for-small"></div>
       <div class="medium-10 columns">
-        <%= hidden_field_tag 'directory[parent_id]', parent_directory.id %>
+        <%= hidden_field_tag 'parent_id', parent_directory.id %>
         <ul class="button-group round">
           <li>
             <%= button_tag type: :submit, class: 'button round small' do %>

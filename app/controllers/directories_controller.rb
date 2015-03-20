@@ -9,15 +9,37 @@ class DirectoriesController < ApplicationController
   def show
     @new_directory = Directory.new
     @directory = Directory.cd(params[:path])
+    @groups = @directory.groups
   end
 
   def create
-    parent = Directory.find(directory_params[:parent_id])
-    groups = if params[:directory][:groups].try(:map) then params[:directory][:groups].map{ |group_id, _| Group.find(group_id) } else [] end
-    @directory = parent.mkdir(directory_params[:name], description: directory_params[:description], groups: groups) 
+    parent = Directory.find(params[:parent_id])
+    @directory = parent.mkdir(directory_params[:name], description: directory_params[:description], groups: groups)
+    respond_to do |format|
+      if @directory.new_record? && @directory.save           
+        format.js #{ render action: 'show', status: :created, location: @directory }
+      else
+        format.js { render json: @directory.errors , status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def edit
+    @directory=Directory.find(params[:id])
+    @parent_directory = @directory.parent
+    @groups = @directory.groups
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def update
+    @directory=Directory.find(params[:id])
+    @directory.update_attributes directory_params
+    @directory.groups = groups
     respond_to do |format|
       if @directory.save           
-        format.js #{ render action: 'show', status: :created, location: @directory }
+        format.js
       else
         format.js { render json: @directory.errors , status: :unprocessable_entity }
       end
@@ -53,9 +75,16 @@ class DirectoriesController < ApplicationController
 
   private
   def directory_params
-    params.require(:directory).permit(:name, :description, :parent_id)
+    params.require(:directory).permit(:name, :description)
   end
 
+  def groups
+    if params[:groups].try(:map)
+      params[:groups].map{ |group_id, _| Group.find(group_id) } 
+    else 
+      [] 
+    end
+  end
   # def password
   #   # sleep 1
   #   item = Item.find(params[:item].keys.first)

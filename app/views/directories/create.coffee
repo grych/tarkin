@@ -1,3 +1,3 @@
 $('#dirs').append("<%= j render partial: 'directory_row', locals: {directory: @directory} %>")
-@ready()
+# @ready()
 $('#new-directory-modal').foundation('reveal', 'close')
