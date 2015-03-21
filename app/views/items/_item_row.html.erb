@@ -1,14 +1,22 @@
 <div class="row item highlightable" data-type="item" data-id="<%=item.id%>">
-  <div class="large-3 medium-5 small-5 columns font-terminal">
-    <%= item.username %>
-  </div>
-  <div class="large-3 medium-5 small-5 columns password-row">
-    <div id="item_<%=item.id%>" class="password font-terminal" data-id="<%=item.id%>" data-favorite="<%=current_user.favorite? item %>">
+
+  <div class="large-11 medium-10 small-10 columns">
+    <div class="row">
+
+      <div class="large-3 medium-6 small-6 columns font-terminal">
+        <%= item.username %>
+      </div>
+      <div class="large-3 medium-6 small-6 columns password-row">
+        <div id="item_<%=item.id%>" class="password font-terminal" data-id="<%=item.id%>" data-favorite="<%=current_user.favorite? item %>">
+        </div>
+      </div>
+      <div class="large-6 columns hide-for-medium hide-for-small tarkin-groups">
+        <%= groups_for_item item %>
+      </div>
+
     </div>
   </div>
-  <div class="large-5 columns hide-for-medium hide-for-small tarkin-groups">
-    <%= groups_for_item item %>
-  </div>
+
   <div class="large-1 medium-2 small-2 columns text-right">
     <div class="switch tiny round favorite-switch">
       <input id="switch_<%=item.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? item%> data-type="item" data-id="<%=item.id%>">

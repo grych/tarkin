@@ -1,15 +1,11 @@
 passwords = {} # cache for passwords retrieved by AJAX
+# edit_mode = false
 
 @ready = () ->
   $('.hidden').hide()
   $('#cookies-information-close-button').click ->
     ok_with_cookies()
-  $('.highlightable').hover(
-    -> 
-      highlight_row($(this))
-    -> 
-      lowlight_row($(this))
-  )
+  enable_highlights()
   $('.favorite-switch').change ->
     favorite_switch($(this))
   $('.password').each ->
@@ -18,9 +14,7 @@ passwords = {} # cache for passwords retrieved by AJAX
     switch_edit_mode($(this))
   $(document).bind('ajaxError', 'form#new_directory', (event, jqxhr, settings, exception) -> 
     render_form_errors($.parseJSON(jqxhr.responseText)))   # show errors which cames back from rails
-  $('#new-directory-modal').on "opened.fndtn.reveal", -> 
-    $("#new_directory input:text, #new_directory textarea").first().focus(); # focus on the first element
-  $('#new-directory-form-close-button').click -> $('#new-directory-modal').foundation('reveal', 'close')
+  setup_alert_box()
 
 @ready_with_foundation = () ->
   $(document).foundation() # bad looking, but it must be re-initialized because of turbolinks
@@ -29,14 +23,34 @@ passwords = {} # cache for passwords retrieved by AJAX
 capitalize = (word) -> 
   word.charAt(0).toUpperCase() + word.slice 1
 
+@enable_highlights = () ->
+  $('.highlightable').hover(
+    -> 
+      highlight_row($(this))
+    -> 
+      lowlight_row($(this))
+  )
+
+@setup_alert_box = () ->
+  $('#new-directory-form-close-button').click -> 
+    $('#new-directory-modal').foundation('reveal', 'close')
+  alert_box_text "" # clean up the alert box
+
+alert_box_text = (text) ->
+  $('#new-directory-modal-alert-box-text').html(text)
+  if text == ""
+    $('#new-directory-modal-alert-box').fadeOut(250)
+  else
+    $('#new-directory-modal-alert-box').fadeIn(250)
+
 render_form_errors = (errors) ->
   s = ""
   for key, value of errors
     s += capitalize "#{key} #{value.join(' and ')}. <br>"
-  $('#new-directory-modal-alert-box-text').html(s)
-  $('#new-directory-modal-alert-box').fadeIn(250)
+  alert_box_text(s)
 
 switch_edit_mode = (button) ->
+  # edit_mode = not edit_mode
   button.toggleClass('active')
   $('.favorite-switch').toggle()
   $('.edit-button').toggle()

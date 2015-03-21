@@ -2,7 +2,8 @@
 <% remote = modal ? true : false %>
 <% parent_directory ||= @directory %>
 <% editing_directory ||= @new_directory %>
-<%= form_for(editing_directory, remote: remote, action: action, html: {role: :form, 'data-model' => 'directory', "data-abide" => true}) do |f| %>
+
+<%= form_for(editing_directory, remote: remote, action: action, "data-abide" => true) do |f| %>
   <div class="row panel radius">
     <div class="large-7 columns white-panel radius">
 
@@ -12,7 +13,6 @@
         </div>
         <div class="medium-10 columns">
           <%= f.text_field :name, placeholder: 'directory name', required: true %>
-          <small class="error help-block">Directory name is required.</small>
         </div>
       </div>
 

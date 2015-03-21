@@ -1,11 +1,8 @@
 <div class="row directory highlightable" data-type="dir" data-id="<%=directory.id%>">
-  <div class="large-3 medium-5 small-5 columns font-terminal">
-    <%= relative_link_to_directory directory %> 
-  </div>
-  <div class="large-3 medium-5 small-5 columns">
-  </div>
-  <div class="large-5 columns hide-for-medium hide-for-small tarkin-groups">
-    <%= groups_for_directory directory %>
+  <div class="large-11 medium-10 small-10 columns">
+    <div id="directory-row-content-holder_<%=directory.id%>" class="row">
+      <%= render partial: 'directory_row_content', locals: {directory: directory} %>
+    </div>
   </div>
   <div class="large-1 medium-2 small-2 columns text-right">
     <div class="switch tiny round favorite-switch">

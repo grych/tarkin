@@ -1,4 +1,5 @@
 class DirectoriesController < ApplicationController
+  include DirectoriesHelper
   before_action :signed_in_user, except: :ok_with_cookies
 
   def index
@@ -8,7 +9,7 @@ class DirectoriesController < ApplicationController
 
   def show
     @new_directory = Directory.new
-    @directory = Directory.cd(params[:path])
+    @directory = Directory.cd(path_from_url(params[:path]))
     @groups = @directory.groups
   end
 
@@ -28,6 +29,17 @@ class DirectoriesController < ApplicationController
     @directory=Directory.find(params[:id])
     @parent_directory = @directory.parent
     @groups = @directory.groups
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def new
+    @directory=Directory.new
+    @parent_directory = Directory.find(params[:parent_id])
+    logger.debug "------------- #{@parent_directory.id}"
+    @groups = @parent_directory.groups # user: current_user
+    logger.debug "------------- #{@groups.count}"
     respond_to do |format|
       format.js
     end

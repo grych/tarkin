@@ -32,9 +32,19 @@
 <div class="tarkin-panel white buttons-panel hidden">
   <div class="row">
     <div class="medium-12 columns">
-      <ul class="button-group round ">
-        <li><a class="button small"><i class="fi-page-add"></i> New Item</a></li>
-        <li><a class="button small" data-reveal-id="new-directory-modal"><i class="fi-folder-add"></i> New Directory</a></li>
+      <ul class="button-group">
+
+        <li><button class="button small"><i class="fi-page-add"></i> New Item</button></li>
+
+        <li>
+          <%= form_tag new_directory_path, method: :get, remote: true, action: :new, role: :form, 'data-model' => 'directory', "data-abide" => true do %>
+              <%= hidden_field_tag 'parent_id', @directory.id %>
+              <%= button_tag type: :submit, class: 'button small', "data-type"=>"dir" do %>
+              <i class="fi-folder-add"></i> New Directory
+            <% end %>
+          <% end %>
+        </li>
+
       </ul>
     </div>
   </div>
