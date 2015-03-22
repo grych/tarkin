@@ -14,6 +14,7 @@ passwords = {} # cache for passwords retrieved by AJAX
     switch_edit_mode($(this))
   $(document).bind('ajaxError', 'form#new_directory', (event, jqxhr, settings, exception) -> 
     render_form_errors($.parseJSON(jqxhr.responseText)))   # show errors which cames back from rails
+  $('#new-directory-modal').on 'opened', -> $(this).find('form :input:enabled:visible:first').focus() 
   setup_alert_box()
 
 @ready_with_foundation = () ->

@@ -2,3 +2,5 @@ $('#dirs').append("<%= j render partial: 'directory_row', locals: {directory: @d
 @enable_highlights()
 $('.directory .switch').hide() # hide favorite switch
 $('#new-directory-modal').foundation('reveal', 'close')
+# $(document).foundation();
+# $(document).foundation('reflow');
