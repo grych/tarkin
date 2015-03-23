@@ -18,7 +18,7 @@ passwords = {} # cache for passwords retrieved by AJAX
   setup_alert_box()
 
 @ready_with_foundation = () ->
-  $(document).foundation() # bad looking, but it must be re-initialized because of turbolinks
+  $(document).foundation() # must be re-initialized because of turbolinks
   ready()
 
 capitalize = (word) -> 
@@ -96,7 +96,6 @@ lowlight_row = (row) ->
     unless sw.is(':checked')
       item.fadeOut(100, -> item.html(''))
       item.attr('showing', false) 
-
 
 get_password = (item) ->
   $.ajax
