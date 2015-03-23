@@ -14,7 +14,7 @@ passwords = {} # cache for passwords retrieved by AJAX
     switch_edit_mode($(this))
   $(document).bind('ajaxError', 'form#new_directory', (event, jqxhr, settings, exception) -> 
     render_form_errors($.parseJSON(jqxhr.responseText)))   # show errors which cames back from rails
-  $('#new-directory-modal').on 'opened', -> $(this).find('form :input:enabled:visible:first').focus() 
+  $('#edit-modal').on 'opened', -> $(this).find('form :input:enabled:visible:first').focus() 
   setup_alert_box()
   $.ajaxSetup
     timeout: 10000
@@ -37,16 +37,16 @@ capitalize = (word) ->
   )
 
 @setup_alert_box = () ->
-  $('#new-directory-form-close-button').click -> 
-    $('#new-directory-modal').foundation('reveal', 'close')
+  $('#edit-form-close-button').click -> 
+    $('#edit-modal').foundation('reveal', 'close')
   alert_box_text "" # clean up the alert box
 
 alert_box_text = (text) ->
-  $('#new-directory-modal-alert-box-text').html(text)
+  $('#edit-modal-alert-box-text').html(text)
   if text == ""
-    $('#new-directory-modal-alert-box').fadeOut(250)
+    $('#edit-modal-alert-box').fadeOut(250)
   else
-    $('#new-directory-modal-alert-box').fadeIn(250)
+    $('#edit-modal-alert-box').fadeIn(250)
 
 render_form_errors = (errors) ->
   s = ""

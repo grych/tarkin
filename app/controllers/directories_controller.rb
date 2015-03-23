@@ -13,9 +13,18 @@ class DirectoriesController < ApplicationController
     @groups = @directory.groups
   end
 
+  def new
+    @directory=Directory.new
+    @parent_directory = Directory.find(params[:parent_id])
+    @groups = @parent_directory.groups # user: current_user
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def create
     parent = Directory.find(params[:parent_id])
-    @directory = parent.mkdir(directory_params[:name], description: directory_params[:description], groups: groups)
+    @directory = parent.mkdir(directory_params[:name], groups: groups, **directory_params.symbolize_keys.except(:name))
     respond_to do |format|
       if @directory.new_record? && @directory.save           
         format.js #{ render action: 'show', status: :created, location: @directory }
@@ -34,20 +43,10 @@ class DirectoriesController < ApplicationController
     end
   end
 
-  def new
-    @directory=Directory.new
-    @parent_directory = Directory.find(params[:parent_id])
-    logger.debug "------------- #{@parent_directory.id}"
-    @groups = @parent_directory.groups # user: current_user
-    logger.debug "------------- #{@groups.count}"
-    respond_to do |format|
-      format.js
-    end
-  end
-
   def update
     @directory=Directory.find(params[:id])
     @directory.update_attributes directory_params
+    # TODO: should modify only the users groups, not touch the others
     @directory.groups = groups
     respond_to do |format|
       if @directory.save           
@@ -97,15 +96,4 @@ class DirectoriesController < ApplicationController
       [] 
     end
   end
-  # def password
-  #   # sleep 1
-  #   item = Item.find(params[:item].keys.first)
-  #   if item
-  #     t = get_token(cookies[:auth_token])
-  #     current_user.authenticate t[:password]
-  #     render text: item.password(authorization_user: current_user)
-  #   else
-  #     render text: 'unknown', status: 500
-  #   end
-  # end
 end
