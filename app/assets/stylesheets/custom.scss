@@ -72,6 +72,10 @@ div.highlight {
   padding: 5px 0px 0px 0px;
 }
 
+.highlightable:hover {
+  background-color: #d0d0d0;
+}
+
 .font-terminal {
   font-family: $font-family-monospace;
   font-size: 12pt;

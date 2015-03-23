@@ -5,7 +5,7 @@ passwords = {} # cache for passwords retrieved by AJAX
   $('.hidden').hide()
   $('#cookies-information-close-button').click ->
     ok_with_cookies()
-  enable_highlights()
+  show_hide_passwords()
   $('.favorite-switch').change ->
     favorite_switch($(this))
   $('.password').each ->
@@ -16,6 +16,10 @@ passwords = {} # cache for passwords retrieved by AJAX
     render_form_errors($.parseJSON(jqxhr.responseText)))   # show errors which cames back from rails
   $('#new-directory-modal').on 'opened', -> $(this).find('form :input:enabled:visible:first').focus() 
   setup_alert_box()
+  $.ajaxSetup
+    timeout: 10000
+  # $(document).ajaxError (event, jqxhr, settings, thrownError) ->
+  #   console.log thrownError
 
 @ready_with_foundation = () ->
   $(document).foundation() # must be re-initialized because of turbolinks
@@ -24,12 +28,12 @@ passwords = {} # cache for passwords retrieved by AJAX
 capitalize = (word) -> 
   word.charAt(0).toUpperCase() + word.slice 1
 
-@enable_highlights = () ->
-  $('.highlightable').hover(
+@show_hide_passwords = () ->
+  $('.item.highlightable').hover(
     -> 
-      highlight_row($(this))
+      show_password_in_row ($(this))
     -> 
-      lowlight_row($(this))
+      hide_password_in_row($(this))
   )
 
 @setup_alert_box = () ->
@@ -65,10 +69,6 @@ favorite_switch = (sw) ->
     error: ->
       alert "Server not responding"
 
-highlight_row = (row) ->
-  row.addClass('highlight')
-  show_password_in_row(row)
-
 show_password_in_row = (row) ->
   item = row.find('.password')
   show_password(item)
@@ -88,13 +88,12 @@ show_password = (item) ->
           item.attr('processing', true)
           get_password(item)
 
-lowlight_row = (row) ->
-  row.removeClass('highlight')
+hide_password_in_row = (row) ->
   sw = row.find('.favorite-switch')
   item = row.find('.password')
   unless item.length == 0 
     unless sw.is(':checked')
-      item.fadeOut(100, -> item.html(''))
+      item.fadeOut(100, -> item.empty())
       item.attr('showing', false) 
 
 get_password = (item) ->

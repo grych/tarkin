@@ -1,10 +1,14 @@
 module DirectoriesHelper
   def urlsafe_path(path)
-    path.split('/').map{ |x| CGI::escape(x) }.join('/')
+    if path == "/"
+      path
+    else
+      path.split('/').map{ |x| CGI::escape(x) }.join('/') 
+    end
   end
-  
+
   def path_from_url(path)
-    path.split('/').map{|x| CGI::unescape(x) }.join('/')
+    path.split('/').map{|x| CGI::unescape(x) }.join('/') if path
   end
 
   def relative_link_to_directory(directory, **options)
