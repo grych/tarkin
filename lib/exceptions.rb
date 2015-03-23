@@ -5,5 +5,6 @@ class Tarkin::PrivateKeyNotAccessibleException  < Exception; end
 class Tarkin::NotAuthorized                     < Exception; end
 class Tarkin::PasswordNotAccessibleException    < Exception; end
 class Tarkin::MustSpecifyGroupException         < Exception; end
+class Tarkin::MustSpecifyPasswordException      < Exception; end
 
 class Tarkin::DirectoryNotFound                 < Exception; end

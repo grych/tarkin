@@ -1,0 +1,65 @@
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+
+<%= form_for(@item, remote: false, action: action, "data-abide" => true) do |f| %>
+  <div class="row panel radius">
+    <div class="large-7 columns white-panel radius">
+
+      <div class="row">
+        <div class="medium-2 columns text-right hide-for-small">
+          <%= f.label :username, class: "right inline" %>
+        </div>
+        <div class="medium-10 columns">
+          <%= f.text_field :username, placeholder: 'user name', required: true %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="medium-2 columns text-right hide-for-small">
+          <%= f.label :password, class: "right inline" %>
+        </div>
+        <div class="medium-10 columns">
+          <% # f.text_field :password, placeholder: 'password', required: true %>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="large-5 columns white-panel radius">
+      <% current_user.groups.each do |group| %>
+        <div class="row">
+          <div class="medium-4 small-2 columns text-right">
+            <div class="switch small round">
+              <%= check_box_tag "groups[#{group.id}]", true, groups.include?(group) %>
+              <label for="groups_<%= group.id %>"></label>
+            </div> 
+          </div>
+
+          <div class="medium-8 small-10 columns">
+            <label for="directory_groups_<%= group.id %>"><%= group.name %></label>
+          </div>
+
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+<!--       buttons -->
+  <div class="large-7 columns">
+    <div class="row">
+      <div class="medium-2 columns text-right hide-for-small"></div>
+      <div class="medium-10 columns">
+        <ul class="button-group round">
+          <li>
+            <%= hidden_field_tag 'directory_id', directory.id %>
+            <%= button_tag type: :submit, class: 'button round small' do %>
+              <i class="fi-check"></i> OK
+            <% end %>
+          </li>
+          <li><a id="edit-form-close-button" class="button round small alert"><i class="fi-x"></i> Cancel</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>
+

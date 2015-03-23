@@ -1,7 +1,7 @@
 module DirectoriesHelper
   def urlsafe_path(path)
-    if path == "/"
-      path
+    if !path || path == "/"
+      '/'
     else
       path.split('/').map{ |x| CGI::escape(x) }.join('/') 
     end

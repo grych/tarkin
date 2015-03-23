@@ -34,7 +34,14 @@
     <div class="medium-12 columns">
       <ul class="button-group">
 
-        <li><button class="button small"><i class="fi-page-add"></i> New Item</button></li>
+        <li>
+          <%= form_tag new_item_path, method: :get, remote: true, action: :new, role: :form, 'data-model' => 'directory', "data-abide" => true do %>
+              <%= hidden_field_tag 'parent_id', @directory.id %>
+              <%= button_tag type: :submit, class: 'button small', "data-type"=>"item" do %>
+              <i class="fi-page-add"></i> New Item
+            <% end %>
+          <% end %>
+        </li>
 
         <li>
           <%= form_tag new_directory_path, method: :get, remote: true, action: :new, role: :form, 'data-model' => 'directory', "data-abide" => true do %>
