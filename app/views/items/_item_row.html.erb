@@ -1,19 +1,8 @@
 <div class="row item highlightable" data-type="item" data-id="<%=item.id%>">
 
   <div class="large-11 medium-10 small-10 columns">
-    <div class="row">
-
-      <div class="large-3 medium-6 small-6 columns font-terminal">
-        <%= item.username %>
-      </div>
-      <div class="large-3 medium-6 small-6 columns password-row">
-        <div id="item_<%=item.id%>" class="password font-terminal" data-id="<%=item.id%>" data-favorite="<%=current_user.favorite? item %>">
-        </div>
-      </div>
-      <div class="large-6 columns hide-for-medium hide-for-small tarkin-groups">
-        <%= groups_for_item item %>
-      </div>
-
+    <div id="item-row-content-holder_<%=item.id%>" class="row">
+      <%= render partial: 'items/item_row_content', locals: {item: item} %>
     </div>
   </div>
 
@@ -22,6 +11,10 @@
       <input id="switch_<%=item.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? item%> data-type="item" data-id="<%=item.id%>">
       <label for="switch_<%=item.id%>"></label>
     </div> 
-    <a class="button tiny round edit-button hidden" data-type="item" data-id="<%=item.id%>"><i class="fi-page-edit inline"></i>edit</a>
+    <%= form_tag edit_item_path(item.id), method: :get, remote: true, action: :edit, html: {role: :form, 'data-model' => 'item', "data-abide" => true} do %>
+      <%= button_tag type: :submit, class: 'button tiny round edit-button hidden', "data-type"=>"item", "data-id"=>item.id do %>
+        <i class="fi-page-edit"></i>edit
+      <% end %>
+    <% end %>
   </div>
 </div>

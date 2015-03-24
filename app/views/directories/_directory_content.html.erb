@@ -24,9 +24,11 @@
     <% end %>
   </div>
 
-  <% current_user.ls_items(@directory).each do |item| %>
-    <%= render partial: 'items/item_row', locals: {item: item} %>
-  <% end %>
+  <div id="items">
+    <% current_user.ls_items(@directory).each do |item| %>
+      <%= render partial: 'items/item_row', locals: {item: item} %>
+    <% end %>
+  </div>
 </div>
 
 <div class="tarkin-panel white buttons-panel hidden">

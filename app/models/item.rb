@@ -55,13 +55,18 @@ class Item < ActiveRecord::Base
     # raise Tarkin::PasswordNotAccessibleException, "Password can't be accessed at this moment" if !new_record? && authenticator.nil? 
     return "********" if !new_record? && authenticator.nil? # for validator
     if new_record? && @password
-      @password
+      @password.force_encoding('utf-8')
     else
       if authenticator
-        meta, group = meta_and_group_for_user authenticator
-        decrypt self.password_crypted,
+        begin
+          meta, group = meta_and_group_for_user authenticator
+        rescue Tarkin::ItemNotAccessibleException
+          self.errors[:password] << "can't be decrypted"
+          return "********"
+        end
+        decrypt(self.password_crypted,
             group.private_key(authorization_user: authenticator).private_decrypt(meta.key_crypted),
-            group.private_key(authorization_user: authenticator).private_decrypt(meta.iv_crypted)
+            group.private_key(authorization_user: authenticator).private_decrypt(meta.iv_crypted)).force_encoding( 'utf-8' )
       else
         self.errors[:password] << "can't be empty"
         "********"
