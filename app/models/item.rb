@@ -8,6 +8,7 @@ class Item < ActiveRecord::Base
 
   validates :password_crypted, presence: true
   # validates :password, presence: true
+  validates :username, presence: true
   validate  :have_groups
 
   after_save :reload_groups
@@ -81,7 +82,6 @@ class Item < ActiveRecord::Base
         meta = self.meta_keys.find {|x| x.group == other}
         raise "Couldn't find the corresponding meta" unless meta
         meta.key_crypted, meta.iv_crypted = key_crypted, iv_crypted
-        other
       else
         # have to decrypt
         raise Tarkin::NotAuthorized, "This operation must be autorized by valid user" unless authenticator
@@ -93,10 +93,10 @@ class Item < ActiveRecord::Base
         key_crypted, iv_crypted = other.public_key.public_encrypt(item_key), other.public_key.public_encrypt(item_iv)
         self.meta_keys.new group: other, key_crypted: key_crypted, iv_crypted: iv_crypted
         @must_reload = true # must reload after save to see the new added group
-        other
         # self.items(true)
         # other.groups(true)
       end
+      other
     end
   end
 
@@ -106,8 +106,10 @@ class Item < ActiveRecord::Base
   #   item << Group.first
   def <<(other)
     raise Tarkin::NotAuthorized, "This operation must be autorized by valid user" unless @authorization_user
-    add(other, authorization_user: @authorization_user)
+    o = add(other, authorization_user: @authorization_user)
+    other.save!
     self.save!
+    o
   end
 
 

@@ -23,6 +23,7 @@ RSpec.describe Directory, type: :model do
     before do
       @user = User.create(name: 'name', email: 'email@email.com', password: 'password')
       @group = @user.add Group.new(name: 'group')
+      @group.save!
       @r = Directory.create(name: "root")
       @r.groups << @group
     end

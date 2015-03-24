@@ -96,6 +96,7 @@ RSpec.describe User, type: :model do
       before do
         @group = Group.new(name: 'group')
         @user.add @group
+        @user.save!
       end
       it { expect(@user.groups.first).to eq @group }
       it { expect(@group.new_record?).to eq false }
@@ -106,6 +107,7 @@ RSpec.describe User, type: :model do
         describe "authorization" do 
           before do 
             @other_user.add @group, authorization_user: @user
+            @other_user.save!
           end
           it { expect(@group.users.count).to eq 2}
         end
@@ -118,7 +120,7 @@ RSpec.describe User, type: :model do
           @group.authorize @user
           @group2 = @user << Group.new(name: 'group2')
           @group2.authorize @user
-          @items = [@group << Item.create(password:'item1'), @group2 << Item.new(password:'item2')]
+          @items = [@group << Item.create(username: 'x', password:'item1'), @group2 << Item.new(username: 'x', password:'item2')]
         end
         it { expect(@user.items.count).to eq 2 }
         it { expect(@user.items).to eq @items }

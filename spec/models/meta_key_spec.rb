@@ -7,6 +7,7 @@ RSpec.describe MetaKey, type: :model do
     before do
       @user = User.create(name: 'name', email: 'email@email.com', password: 'password')
       @group = @user.add Group.new(name: 'group')
+      @group.save!
     end
     it "should be able to add new group" do
       expect(@user.groups.count).to eq 1
@@ -20,6 +21,7 @@ RSpec.describe MetaKey, type: :model do
       before do
         @other_user = User.create(name: 'name', email: 'email2@email.com', password: 'new password')
         @other_user.add @group, authorization_user: @user
+        @other_user.save!
       end
       it "other user should be able to read the group private key" do
         expect(@group.private_key_pem authorization_user:@other_user).to eq @group.private_key_pem(authorization_user:@user)
@@ -27,6 +29,7 @@ RSpec.describe MetaKey, type: :model do
       describe "with the different group" do
         before do
           @new_group = @user.add Group.new(name: 'new group')
+          @new_group.save!
         end
         it "the other user should not be able to read the key" do
           expect{@new_group.private_key_pem(authorization_user: @other_user)}.to raise_error(Tarkin::GroupNotAccessibleException)
@@ -37,6 +40,7 @@ RSpec.describe MetaKey, type: :model do
         describe "after inviting the other user to a new group" do
           before do
             @new_group.add @other_user, authorization_user: @user
+            @new_group.save!
           end
           it "the new group password should be readable" do
             expect(@new_group.private_key_pem(authorization_user: @other_user)).not_to be_nil

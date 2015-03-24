@@ -20,6 +20,7 @@ RSpec.describe Group, type: :model do
       before do
         @group = Group.new(name: 'group')
         @group.add(@user)
+        @group.save!
       end
       it { expect(@group).to be_valid }
       it "group should be saved" do 
@@ -38,7 +39,9 @@ RSpec.describe Group, type: :model do
 
     describe "to existing group" do
       before do
-        Group.new(name: 'group').add @user
+        g = Group.new(name: 'group')
+        g.add @user
+        g.save!
         @group = Group.find_by(name: 'group')
       end
       it "private key should be readable" do 
@@ -75,13 +78,25 @@ RSpec.describe Group, type: :model do
       before do
         @u1 = User.create(name: 'name', email: 'email1@email.com', password: 'password1')
         @u2 = User.create(name: 'name', email: 'email2@email.com', password: 'password2')
-        Group.new(name: 'g1').add @u1
-        Group.new(name: 'g2').add @u2
+        g = Group.new(name: 'g1')
+        g.add @u1
+        g.save!
+        g = Group.new(name: 'g2')
+        g.add @u2
+        g.save!
         @g1 = Group.find_by(name: 'g1')
         @g2 = Group.find_by(name: 'g2')
-        @i1 = @g1.add Item.new(password: 'i1'), authorization_user: @u1
-        @i2 = @g2.add Item.new(password: 'i2'), authorization_user: @u2
+        @g1.authorize @u1
+        @g2.authorize @u2
+        @i1 = @g1 << Item.create(username:'u1', password: 'i1')
+        @i2 = @g2 << Item.create(username:'u2', password: 'i2')
         @g1.add @i2, authorization_user: @u2
+        @g1.save!
+
+        @g1.reload
+        # @i1 = @g1.add Item.new(username:'u1', password: 'i1'), authorization_user: @u1
+        # @i2 = @g2.add Item.new(username:'u2', password: 'i2'), authorization_user: @u2
+        # @g1.add @i2, authorization_user: @u2
       end
       it { expect(@g1.items.count).to eq 2 }
       it { expect(@g1.items).to eq [@i1, @i2]}

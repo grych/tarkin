@@ -7,7 +7,8 @@ RSpec.describe Item, type: :model do
   before do
     @user = User.create(name: 'name', email: 'email@email.com', password: 'password')
     @group = @user.add Group.new(name: 'group')
-    @item = @group.add Item.new(password: PASSWORD), authorization_user: @user
+    @item = @group.add Item.new(username: 'x', password: PASSWORD), authorization_user: @user
+    @item.save!
   end
   it "should have the crypted password" do
     expect(@item.password_crypted).to_not be_nil
@@ -42,7 +43,8 @@ RSpec.describe Item, type: :model do
     @users = 3.times.map{|i| User.create(name: "name#{i}", email: "email#{i}@example.com", password: "password#{i}")}
     @groups = @users.map{|user| user << Group.new(name: "group #{user.name}")}
     @groups.each_with_index {|group, i| group.authorize(@users[i])}
-    @items = @groups.map {|group| group << Item.new(password: "password for #{group.name}")}
+    @items = @groups.map {|group| group << Item.new(username: 'x', password: "password for #{group.name}")}
+    @items.each {|item| item.save!}
   end
   3.times.each do |i|
     it { expect(@users[i].items.count).to eq 1 }
@@ -51,6 +53,7 @@ RSpec.describe Item, type: :model do
   describe "add item[1] to group[0], authorized by user[1]" do
     before do
       @groups[0].add @items[1], authorization_user: @users[1]
+      @groups[0].save!
     end
     it { expect(@users[0].items.count).to eq 2 }
     it { expect(@users[0].items.last).to eq @items[1] }

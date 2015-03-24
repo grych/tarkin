@@ -3,7 +3,8 @@ require 'rails_helper'
 describe "overall" do
   before do
     @users = 3.times.map{|i| User.create(name: "name#{i}", email: "email#{i}@example.com", password: "password#{i}")}
-    @groups = @users.map{|user| user.add Group.new(name: "group for #{user.name}")}
+    @groups = @users.map{|user| user << Group.new(name: "group for #{user.name}") }
+    # @groups.each {|group| group.save! }
     @groups.each_with_index {|group, i| group.authorize(@users[i])}
     @items = @groups.map {|group| group.add Item.new(username: "username for #{group.name}", password: "password for #{group.name}")}
 

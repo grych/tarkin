@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 8, maximum: 32}
 
   before_save { email.downcase! }
+  before_save :save_groups
   after_initialize :generate_keys
 
   # This is only for validators, password should never be readable
@@ -115,6 +116,7 @@ class User < ActiveRecord::Base
   #   other_user.add my_group, authorization_user: current_user
 	def add(other, **options)
 		authorizator = options[:authorization_user]
+    @to_save = other
 		case other
 		when Group
 			if other.new_record?
@@ -139,7 +141,10 @@ class User < ActiveRecord::Base
   #   user.authorize other_user
   #   other << item
   def <<(other)
-    add(other, authorization_user: @authorization_user)
+    o = add(other, authorization_user: @authorization_user)
+    other.save!
+    self.save!
+    o
   end
 
   # Returns array of items which belongs to this user, with intersection by Group
@@ -194,5 +199,14 @@ class User < ActiveRecord::Base
   def password_hash
     raise Tarkin::WrongPasswordException, "Please specify a password for #{self.name}" unless @password
     OpenSSL::Digest::SHA256.digest @password
+  end
+
+  def save_groups
+    if @to_save
+      @to_save.save! 
+      @to_save.reload
+    end 
+    @to_save = nil
+    true
   end
 end

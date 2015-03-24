@@ -23,6 +23,7 @@ class Group < ActiveRecord::Base
   validate  :have_users
 
   after_initialize :generate_keys
+  after_save :must_reload
 
   # Public key and its PEM is always visible and accessible to any 
   def public_key
@@ -100,7 +101,7 @@ class Group < ActiveRecord::Base
                                                             # it should be a new record, so contains just one meta_key
           meta.key_crypted, meta.iv_crypted = other.public_key.public_encrypt(new_group_key), 
                                               other.public_key.public_encrypt(new_group_iv)
-          self.save!
+          # self.save!
         else
           raise Tarkin::GroupNotAccessibleException, "Group #{self.name} can't be accessed by #{other.name}"
         end
@@ -112,10 +113,12 @@ class Group < ActiveRecord::Base
           group_key, group_iv = authenticator.private_key.private_decrypt(meta.key_crypted),
                                 authenticator.private_key.private_decrypt(meta.iv_crypted)
           # save it with other user public key 
-          self.meta_keys.create! user: other, key_crypted: other.public_key.public_encrypt(group_key),
+          self.meta_keys.new user: other, key_crypted: other.public_key.public_encrypt(group_key),
                                               iv_crypted: other.public_key.public_encrypt(group_iv)
-          self.users(true)     # reload the users after creating MetaKey manually
-          other.groups(true)   # reload the groups for user after adding it
+          # self.users(true)     # reload the users after creating MetaKey manually
+          # other.groups(true)   # reload the groups for user after adding it
+          @must_reload = true
+          @to_reload = other
         else
           raise Tarkin::GroupNotAccessibleException, "Group #{self.name} does not belongs to #{authenticator.name}"
         end
@@ -132,16 +135,19 @@ class Group < ActiveRecord::Base
         meta = other.meta_keys.find {|x| x.group == self}
         raise "Couldn't find the corresponding meta" unless meta
         meta.key_crypted, meta.iv_crypted = key_crypted, iv_crypted
-        other.save!
+        # other.save!
       else
         authenticator_meta, authenticator_group = meta_and_group_for_user_and_item authenticator, other
         authenticator_group_private_key = authenticator_group.private_key(authorization_user: authenticator)
         item_key, item_iv = authenticator_group_private_key.private_decrypt(authenticator_meta.key_crypted),
                             authenticator_group_private_key.private_decrypt(authenticator_meta.iv_crypted)
         key_crypted, iv_crypted = self.public_key.public_encrypt(item_key), self.public_key.public_encrypt(item_iv)
-        self.meta_keys.create! item: other, key_crypted: key_crypted, iv_crypted: iv_crypted
-        self.items(true)
-        other.groups(true)
+        self.meta_keys.new item: other, key_crypted: key_crypted, iv_crypted: iv_crypted
+        # other.meta_keys.new group: self, key_crypted: key_crypted, iv_crypted: iv_crypted
+        @must_reload = true
+        @to_reload = other
+        # self.items(true)
+        # other.groups(true)
       end
       other
     end
@@ -152,13 +158,16 @@ class Group < ActiveRecord::Base
     @authorization_user = authorizor
   end
 
-  # Operator similar to #add method. Requires #authorize before:
+  # Operator similar to #add method. Requires #authorize before. Unless #add, it saves.
   #
   #   group.authorize user
   #   group << item
   def <<(other)
     raise Tarkin::NotAuthorized, "This operation must be autorized by valid user" unless @authorization_user
-    add(other, authorization_user: @authorization_user)
+    o = add(other, authorization_user: @authorization_user)
+    o.save!
+    self.save!
+    o
   end
 
   # Shorter view - to prevent rails console to show all the encrypted data
@@ -193,5 +202,13 @@ class Group < ActiveRecord::Base
     meta = item.meta_keys.find_by(group: group)
     raise Tarkin::ItemNotAccessibleException, "Item #{self.id} does not belong to #{group.name}" unless meta
     [meta, group]
+  end
+
+  def must_reload
+    if @must_reload
+      self.reload
+      @to_reload.reload
+    end
+    @must_reload = false
   end
 end
