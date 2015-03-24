@@ -3,7 +3,7 @@ module ApplicationHelper
     base_title = "Tarkin"
     if page_title.empty?
       base_title
-    else
+    else 
       "#{base_title} | #{page_title}"
     end
   end

@@ -52,14 +52,20 @@ class API::V1::ItemsController < Api::ApiController
       b = File.basename(params[:path])
       item = d.items.find_by(username: b)
     end
-    
-    respond_to do |format|
-      format.json { render json: item_data(item)}
-      format.xml  { render xml:  item_data(item)}
-      format.text { render text: item.password(authorization_user: current_user)}
+    if item.password(authorization_user: current_user)
+      respond_to do |format|
+        format.json { render json: item_data(item)}
+        format.xml  { render xml:  item_data(item)}
+        format.text { render text: item.password(authorization_user: current_user)}
+      end
+    else
+      respond_to do |format|
+        format.text { render text: 'unprocessable', status: :unprocessable_entity }
+        format.json { render text: {status: 'unprocessable'}, status: :unprocessable_entity }
+        format.xml  { render text: {status: 'unprocessable'}, status: :unprocessable_entity }
+      end
     end
   end
-
   private
   def item_data(item)
     {id: item.id, username: item.username, password: item.password(authorization_user: current_user)}

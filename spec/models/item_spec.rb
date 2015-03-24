@@ -61,7 +61,7 @@ RSpec.describe Item, type: :model do
       expect(@items[1].password(authorization_user: @users[0])).to eq "password for group name1"
     end
     it "but not item[2] password" do
-      expect{@items[2].password(authorization_user: @users[0])}.to raise_error Tarkin::ItemNotAccessibleException
+      expect(@items[2].password(authorization_user: @users[0])).not_to eq "password for group name2"
     end
   end
 end
@@ -94,7 +94,7 @@ RSpec.describe Item, type: :model do
       expect(@items[1].password(authorization_user: @users[0])).to eq "password for name1"
     end
     it "but not item[2] password" do
-      expect{@items[2].password(authorization_user: @users[0])}.to raise_error Tarkin::ItemNotAccessibleException
+      expect(@items[2].password(authorization_user: @users[0])).not_to eq "password for name2"
     end
   end
 end

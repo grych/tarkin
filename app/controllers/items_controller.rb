@@ -39,35 +39,44 @@ class ItemsController < ApplicationController
   def update
     @item = Item.find(params[:id])
     @item.authorize current_user
-    @item.update_attributes item_params
     # TODO: should modify only the users groups, not touch the others
     # @item.groups.delete(group)
     # @item.groups = []
     # groups.each do |group|
     #   @item.add group
     # end
+
     item_groups_previous = @item.groups.to_a
     errors = nil
     Item.transaction do 
-      logger.debug "***** to add: #{(groups - item_groups_previous)}"
-      (groups - item_groups_previous).each do |group|
-        @item.add group
-      end
-      logger.debug "***** afer add: #{@item.groups.to_a}"
-      logger.debug "***** to destroy: #{(item_groups_previous - groups)}"
-      @item.groups.destroy(item_groups_previous - groups)
-      logger.debug "***** afer destroy: #{@item.groups.to_a}"
-      if @item.groups.empty?
+      if groups.empty?
         errors = "can't be empty"
-        raise ActiveRecord::Rollback 
-      end
-    end
-    @item.errors[:groups] << errors if errors
-    respond_to do |format|
-      if @item.save           
-        format.js
       else
-        format.js { render json: @item.errors , status: :unprocessable_entity }
+        @item.update_attributes item_params
+        groups_to_add = (groups - item_groups_previous) & current_user.groups
+        logger.debug "***** to add: #{(groups_to_add)}"
+        groups_to_add.each do |group|
+          @item.add group
+        end
+        logger.debug "***** afer add: #{@item.groups.to_a}"
+        @item.save!
+        groups_to_destroy = (item_groups_previous - groups) & current_user.groups
+        logger.debug "***** to destroy: #{groups_to_destroy}"
+        @item.groups.destroy groups_to_destroy
+        logger.debug "***** afer destroy: #{@item.groups.to_a}"
+        if @item.groups.empty?
+          errors = "can't be empty"
+          raise ActiveRecord::Rollback 
+        end
+      end
+      @item.errors[:groups] << errors if errors
+      logger.debug "-------------------- #{errors}"
+      respond_to do |format|
+        if errors.blank? && @item.save 
+          format.js
+        else
+          format.js { render json: @item.errors , status: :unprocessable_entity }
+        end
       end
     end
   end

@@ -62,14 +62,14 @@ class Item < ActiveRecord::Base
           meta, group = meta_and_group_for_user authenticator
         rescue Tarkin::ItemNotAccessibleException
           self.errors[:password] << "can't be decrypted"
-          return "********"
+          return nil
         end
         decrypt(self.password_crypted,
             group.private_key(authorization_user: authenticator).private_decrypt(meta.key_crypted),
             group.private_key(authorization_user: authenticator).private_decrypt(meta.iv_crypted)).force_encoding( 'utf-8' )
       else
         self.errors[:password] << "can't be empty"
-        "********"
+        nil
       end
     end
   end
@@ -138,12 +138,8 @@ class Item < ActiveRecord::Base
   # as the intersections between two group arrays
   def meta_and_group_for_user(user)
     groups = user.groups & self.groups
-    # puts "user #{user.id} groups #{user.groups.map{|x| x.id}}"
-    # puts "item #{self.id} groups #{self.groups.map{|x| x.id}}"
-    # puts "#{groups}"
     raise Tarkin::ItemNotAccessibleException, "Group association not found for item #{self.username} and user #{user.name}" if groups.nil? || groups.empty? 
     group = groups.first
-    # meta = self.meta_keys.find_by(group: group)
     meta = self.meta_keys.find {|x| x.group == group}
     raise Tarkin::ItemNotAccessibleException, "Item #{self.id} does not belong to #{group.name}" unless meta
     [meta, group]

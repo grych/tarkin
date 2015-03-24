@@ -45,14 +45,32 @@ class DirectoriesController < ApplicationController
 
   def update
     @directory=Directory.find(params[:id])
-    @directory.update_attributes directory_params
-    # TODO: should modify only the users groups, not touch the others
-    @directory.groups = groups
-    respond_to do |format|
-      if @directory.save           
-        format.js
+    errors = nil
+    directory_groups_previous = @directory.groups.to_a
+    @directory.transaction do 
+      if groups.empty?
+        errors = "can't be empty"
       else
-        format.js { render json: @directory.errors , status: :unprocessable_entity }
+        @directory.update_attributes directory_params
+        # update group list for directory
+        groups_to_add = (groups - directory_groups_previous) & current_user.groups
+        groups_to_add.each do |group|
+          @directory.groups << group
+        end
+        groups_to_destroy = (directory_groups_previous - groups) & current_user.groups
+        @directory.groups.destroy groups_to_destroy
+        if @directory.groups.empty?
+          errors = "can't be empty"
+          raise ActiveRecord::Rollback 
+        end
+      end
+      @directory.errors[:groups] << errors if errors
+      respond_to do |format|
+        if errors.blank? && @directory.save           
+          format.js
+        else
+          format.js { render json: @directory.errors , status: :unprocessable_entity }
+        end
       end
     end
   end

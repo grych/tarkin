@@ -72,7 +72,7 @@ RSpec.describe Group, type: :model do
           end
         end
       end
-    end
+    end 
 
     describe "add existing item to the group" do
       before do
@@ -117,7 +117,7 @@ RSpec.describe Group, type: :model do
         end
         it { expect(@item1.password  authorization_user: @u).to eq 'i1' }
         it { expect(@item2.password  authorization_user: @u).to eq 'i2'}
-        it { expect{@item1.password  authorization_user: @user2}.to raise_error Tarkin::ItemNotAccessibleException }
+        it { expect(@item1.password  authorization_user: @user2).not_to eq 'i1'}
       end
     end
 
