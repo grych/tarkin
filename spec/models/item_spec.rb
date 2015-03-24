@@ -71,13 +71,27 @@ RSpec.describe Item, type: :model do
     @items.each_with_index do |item, i| 
       item.authorize(@users[i])
       item << @groups[i]
-      item.save!
     end
   end
   describe "should contain good password" do 
     3.times.each do |i|
       it { expect(@users[i].items.count).to eq 1 }
       it { expect(@users[i].items.first.password(authorization_user: @users[i])).to eq "password for #{@users[i].name}" }
+    end
+  end
+  describe "add item[1] to group[0], authorized by user[1]" do
+    before do
+      @items[1].add @groups[0], authorization_user: @users[1]
+      @items[1].save!
+    end
+    it { expect(@items[1].groups.count).to eq 2 }
+    it { expect(@users[0].items.count).to eq 2 }
+    it { expect(@users[0].items.last).to eq @items[1] }
+    it "user[0] should be now able to read item[1] password" do
+      expect(@items[1].password(authorization_user: @users[0])).to eq "password for name1"
+    end
+    it "but not item[2] password" do
+      expect{@items[2].password(authorization_user: @users[0])}.to raise_error Tarkin::ItemNotAccessibleException
     end
   end
 end
