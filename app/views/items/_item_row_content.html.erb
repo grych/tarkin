@@ -1,0 +1,10 @@
+<div class="large-3 medium-6 small-6 columns font-terminal">
+  <%= item.username %>
+</div>
+<div class="large-3 medium-6 small-6 columns password-row">
+  <div id="item_<%=item.id%>" class="password font-terminal" data-id="<%=item.id%>" data-favorite="<%=current_user.favorite? item %>">
+  </div>
+</div>
+<div class="large-6 columns hide-for-medium hide-for-small tarkin-groups">
+  <%= groups_for_item item %>
+</div>
