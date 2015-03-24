@@ -1,7 +1,7 @@
 <% modal ||= false %>
 <% remote = modal ? true : false %>
 
-<%= form_for(@item, remote: false, action: action, "data-abide" => true) do |f| %>
+<%= form_for(@item, remote: remote, action: action, "data-abide" => true) do |f| %>
   <div class="row panel radius">
     <div class="large-7 columns white-panel radius">
 
@@ -10,7 +10,7 @@
           <%= f.label :username, class: "right inline" %>
         </div>
         <div class="medium-10 columns">
-          <%= f.text_field :username, placeholder: 'user name', required: true %>
+          <%= f.text_field :username, placeholder: 'user name', required: false %>
         </div>
       </div>
 
@@ -19,7 +19,7 @@
           <%= f.label :password, class: "right inline" %>
         </div>
         <div class="medium-10 columns">
-          <% # f.text_field :password, placeholder: 'password', required: true %>
+          <%= f.text_field :password, placeholder: 'password', required: false %>
         </div>
       </div>
 
@@ -51,7 +51,7 @@
       <div class="medium-10 columns">
         <ul class="button-group round">
           <li>
-            <%= hidden_field_tag 'directory_id', directory.id %>
+            <%= hidden_field_tag 'item[directory_id]', directory.id %>
             <%= button_tag type: :submit, class: 'button round small' do %>
               <i class="fi-check"></i> OK
             <% end %>

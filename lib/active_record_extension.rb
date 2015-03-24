@@ -3,6 +3,7 @@ module ActiveRecordExtension
 
   # Returns binary data encrypted with AES-256-CBC
   def encrypt(data, key, iv)
+    return nil if data.blank?
     cipher = OpenSSL::Cipher::AES256.new(:CBC)
     cipher.encrypt
     cipher.key = key

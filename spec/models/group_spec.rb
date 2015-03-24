@@ -76,33 +76,38 @@ RSpec.describe Group, type: :model do
 
     describe "add existing item to the group" do
       before do
-        @u1 = User.create(name: 'name', email: 'email1@email.com', password: 'password1')
-        @u2 = User.create(name: 'name', email: 'email2@email.com', password: 'password2')
+        @u1 = User.create(name: 'name1', email: 'email1@email.com', password: 'password1')
+        @u2 = User.create(name: 'name2', email: 'email2@email.com', password: 'password2')
         g = Group.new(name: 'g1')
         g.add @u1
         g.save!
         g = Group.new(name: 'g2')
         g.add @u2
         g.save!
+
         @g1 = Group.find_by(name: 'g1')
         @g2 = Group.find_by(name: 'g2')
         @g1.authorize @u1
         @g2.authorize @u2
-        @i1 = @g1 << Item.create(username:'u1', password: 'i1')
-        @i2 = @g2 << Item.create(username:'u2', password: 'i2')
+
+        @i1 = Item.new(username:'u1', password: 'i1')
+        @i1.authorize @u1
+        @i1 << @g1
+        @i2 = Item.new(username:'u2', password: 'i2')
+        @i2.authorize @u2
+        @i2 << @g2
+
+        # @i2.add @g1, authorization_user: @u2
+        # @i2.save!
         @g1.add @i2, authorization_user: @u2
         @g1.save!
-
-        @g1.reload
-        # @i1 = @g1.add Item.new(username:'u1', password: 'i1'), authorization_user: @u1
-        # @i2 = @g2.add Item.new(username:'u2', password: 'i2'), authorization_user: @u2
-        # @g1.add @i2, authorization_user: @u2
       end
       it { expect(@g1.items.count).to eq 2 }
       it { expect(@g1.items).to eq [@i1, @i2]}
       it { expect(@g2.items.count).to eq 1 }
       it { expect(@i1.password  authorization_user: @u1).to eq 'i1' }
-      it { expect(@i2.password  authorization_user: @u1).to eq 'i2' }
+      it { expect(@i2.password  authorization_user: @u2).to eq 'i2' }
+      it { expect(@i2.password  authorization_user: @u1).to eq 'i2' } ###
       describe "loaded from database" do
         before do
           @u = User.find_by(email: 'email1@email.com'); @u.password = 'password1'

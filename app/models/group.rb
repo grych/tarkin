@@ -127,7 +127,7 @@ class Group < ActiveRecord::Base
     when Item
       raise Tarkin::NotAuthorized, "This operation must be autorized by valid user" unless authenticator.authenticated?
       # generate key and iv to be used to encrypt the item password
-      if other.new_record?
+      if other.new_record? && self.items.empty?
         new_item_key, new_item_iv = cipher.random_key, cipher.random_iv
         key_crypted, iv_crypted = self.public_key.public_encrypt(new_item_key), self.public_key.public_encrypt(new_item_iv)
         other.password_crypted = encrypt(other.password, new_item_key, new_item_iv)
@@ -165,8 +165,8 @@ class Group < ActiveRecord::Base
   def <<(other)
     raise Tarkin::NotAuthorized, "This operation must be autorized by valid user" unless @authorization_user
     o = add(other, authorization_user: @authorization_user)
-    o.save!
     self.save!
+    o.save!
     o
   end
 
@@ -199,8 +199,9 @@ class Group < ActiveRecord::Base
     groups = user.groups & item.groups
     raise Tarkin::ItemNotAccessibleException, "Group association not found for item #{item.id} and user #{user.id}" if groups.nil? || groups.empty? || groups.length != 1
     group = groups.first
-    meta = item.meta_keys.find_by(group: group)
-    raise Tarkin::ItemNotAccessibleException, "Item #{self.id} does not belong to #{group.name}" unless meta
+    # meta = item.meta_keys.find_by(group: group)
+    meta = item.meta_keys.find {|x| x.group == group}
+    raise Tarkin::ItemNotAccessibleException, "Item #{item.username} does not belong to #{group.name}" unless meta
     [meta, group]
   end
 
@@ -210,5 +211,6 @@ class Group < ActiveRecord::Base
       @to_reload.reload
     end
     @must_reload = false
+    true
   end
 end

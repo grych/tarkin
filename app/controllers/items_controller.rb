@@ -13,17 +13,12 @@ class ItemsController < ApplicationController
 
   def create
     # directory = Directory.find(params[:directory_id])
-    @item = Item.new(**item_params, directory_id: params[:directory_id])
-    begin
-      groups.each do |group|
-        group.add @item, authorization_user: current_user
-      end
-    # TODO: rethink. Shouldn't be exceptions here...
-    rescue Tarkin::MustSpecifyPasswordException => e
-      
+    @item = Item.new(**item_params)
+    groups.each do |group|
+      @item.add group, authorization_user: current_user
     end
     respond_to do |format|
-      if @item.new_record? && @item.save           
+      if @item.new_record? && @item.save
         format.js
       else
         format.js { render json: @item.errors , status: :unprocessable_entity }
@@ -33,7 +28,7 @@ class ItemsController < ApplicationController
 
   private
   def item_params
-    params.require(:item).permit(:username).symbolize_keys
+    params.require(:item).permit(:username, :password, :directory_id).symbolize_keys
   end
 
   def groups
