@@ -62,3 +62,22 @@ RSpec.describe Item, type: :model do
     end
   end
 end
+
+RSpec.describe Item, type: :model do
+  before do 
+    @users = 3.times.map{|i| User.create(name: "name#{i}", email: "email#{i}@example.com", password: "password#{i}")}
+    @groups = @users.map{|user| user << Group.new(name: "group #{user.name}")}
+    @items = 3.times.map{|i| Item.create(username: "item#{i}", password: "password for name#{i}")}
+    @items.each_with_index do |item, i| 
+      item.authorize(@users[i])
+      item << @groups[i]
+      item.save!
+    end
+  end
+  describe "should contain good password" do 
+    3.times.each do |i|
+      it { expect(@users[i].items.count).to eq 1 }
+      it { expect(@users[i].items.first.password(authorization_user: @users[i])).to eq "password for #{@users[i].name}" }
+    end
+  end
+end
