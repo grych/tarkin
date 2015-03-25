@@ -66,11 +66,6 @@ RSpec.describe Directory, type: :model do
         end
         it { expect(@dup).not_to be_valid }
       end
-      describe "with items" do
-        before do
-          #@i = Item.create
-        end
-      end
     end
   end
 end

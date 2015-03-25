@@ -17,6 +17,7 @@ class Directory < ActiveRecord::Base
   before_save :update_path
   validates_with DirectoryValidator
   validates :name, presence: true, format: { with: VALID_DIRECTORY_REGEX }
+  before_destroy :check_children
 
   # default_scope { order('name ASC') }
 
@@ -209,6 +210,13 @@ class Directory < ActiveRecord::Base
       false
     else
       !Directory.root.nil?
+    end
+  end
+
+  def check_children
+    if !self.directories.empty? && !self.items.empty?
+      self.errors[:directory] << "is not empty"
+      return false
     end
   end
 end
