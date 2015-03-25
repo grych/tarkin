@@ -3,6 +3,7 @@ require 'rails_helper'
 PASSWORD = 'the password'
 NEW_PASSWORD = 'the new password'
 
+#TODO: review and rewrite all tests
 RSpec.describe Item, type: :model do
   before do
     @user = User.create(name: 'name', email: 'email@email.com', password: 'password')

@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+#TODO: review and rewrite all tests
 RSpec.describe Directory, type: :model do
   describe "with invalid name" do
     before do

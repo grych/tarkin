@@ -27,7 +27,7 @@ class DirectoriesController < ApplicationController
     @directory = parent.mkdir(directory_params[:name], groups: groups, **directory_params.symbolize_keys.except(:name))
     respond_to do |format|
       if @directory.new_record? && @directory.save           
-        format.js #{ render action: 'show', status: :created, location: @directory }
+        format.js 
       else
         format.js { render json: @directory.errors , status: :unprocessable_entity }
       end

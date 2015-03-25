@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+#TODO: review and rewrite all tests
 RSpec.describe Group, type: :model do
   it { should respond_to :public_key_pem }
   it { should respond_to :private_key_pem }

@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+#TODO: review and rewrite all tests
 describe "API Passwords" do
   # TODO: DRY with some factory_girl
   before do

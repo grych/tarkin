@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+#TODO: review and rewrite all tests
 RSpec.describe User, type: :model do
   it { should respond_to :name }
   it { should respond_to :email }

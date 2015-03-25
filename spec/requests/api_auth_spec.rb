@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+#TODO: review and rewrite all tests
 describe "API Authorization" do
   before do
     @users = 3.times.map{|i| User.create(name: "name#{i}", email: "email#{i}@example.com", password: "password#{i}")}

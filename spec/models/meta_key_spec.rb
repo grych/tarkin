@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+#TODO: review and rewrite all tests
 RSpec.describe MetaKey, type: :model do
   it { should respond_to :key_crypted }
   it { should respond_to :iv_crypted }
