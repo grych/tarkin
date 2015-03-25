@@ -98,14 +98,14 @@ hide_password_in_row = (row) ->
 
 get_password = (item) ->
   $.ajax
-    url: "/_api/v1/_password"
+    url: "/_api/v1/_password.json"
     type: 'get'
     data: {id: item.data('id')}
     context: item
     success: (data) ->
-      passwords[item.data('id')] = data
+      passwords[item.data('id')] = data.password
       unless item.attr('showing') 
-        $(this).text(data)
+        $(this).text(data.password)
         $(this).attr('processing', false)
         $(this).fadeIn(100)
     error: ->
