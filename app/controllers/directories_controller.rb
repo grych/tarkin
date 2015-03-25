@@ -8,7 +8,7 @@ class DirectoriesController < ApplicationController
   end
 
   def show
-    @new_directory = Directory.new
+    # @new_directory = Directory.new
     @directory = Directory.cd(path_from_url(params[:path]))
     @groups = @directory.groups
   end

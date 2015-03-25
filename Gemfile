@@ -21,7 +21,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'foundation-rails'
+gem 'foundation-rails', '5.5.1.0'
 gem 'foundation-icons-sass-rails'
 
 group :development, :test do

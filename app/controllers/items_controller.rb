@@ -81,6 +81,17 @@ class ItemsController < ApplicationController
     end
   end
 
+  def destroy
+    @item = Item.find(params[:id])
+    respond_to do |format|
+      if @item && @item.destroy
+        format.js
+      else
+        format.js { render json: @item.errors , status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
   def item_params
     params.require(:item).permit(:username, :password, :directory_id).symbolize_keys

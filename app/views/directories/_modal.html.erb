@@ -1,6 +1,6 @@
 <div id="edit-modal" class="reveal-modal xlarge" data-reveal aria-labelledby="edit-modal-title" aria-hidden="true" role="dialog">
-  <h2 id="edit-modal-title">Directory</h2>
-  <p class="lead">The new directory inherits groups from the parent</p>
+  <h2 id="edit-modal-title">Edit</h2>
+  <p class="lead">The new object inherits groups from the parent directory.</p>
   <div id="edit-modal-alert-box" data-alert class="hidden alert-box alert radius">
     <div id="edit-modal-alert-box-text">
       HERE BE ERRORS.
@@ -9,7 +9,7 @@
   </div>
   <p>
     <div id='modal-form-holder'>
-      <%= render partial: 'form', locals: {modal: modal, parent_directory: parent_directory, editing_directory: editing_directory, groups: groups, action: action} %>
+      <%# render partial: 'form', locals: {modal: modal, parent_directory: parent_directory, editing_directory: editing_directory, groups: groups, action: action} %>
     </div>
   </p>
   <a class="close-reveal-modal" aria-label="Close">&#215;</a>

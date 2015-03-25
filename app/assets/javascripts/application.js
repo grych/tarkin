@@ -13,7 +13,18 @@
 //= require jquery
 //= require jquery_ujs
 //= require foundation
+//= require confirm_with_reveal.min
 //= require turbolinks
 //= require_tree .
 
-$(function(){ $(document).foundation(); });
+$(function(){ 
+  $(document).foundation({
+    reveal : {
+      animation_speed: 200,
+      // not working with 5.5.1.0, waiting for an update
+      multiple_opened: true,
+      close_on_background_click: true
+    }
+  });
+});
+$(document).confirmWithReveal();

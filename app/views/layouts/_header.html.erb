@@ -19,7 +19,9 @@
             </a>
             <ul class="dropdown">
               <li class="text-right">
-                <%= link_to "Sign out", signout_path, method: "delete" %>
+                <%= link_to "Sign out", signout_path, method: "delete", 
+                    data: {confirm: {title: "Are you sure?", body: "This will log you out.", ok: "OK", cancel: "Cancel"}}
+                 %>
               </li>
             </ul>
           </li>
