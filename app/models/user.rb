@@ -162,13 +162,13 @@ class User < ActiveRecord::Base
 	# Like #ls, but returns only directories
   def ls_dirs(dir = Directory.root)
 		# self.directories & dir.directories
-    dir.directories.where(id: self.directories.map{ |d| d.id }).order(:name)
+    dir.directories.where(id: self.directories.map{ |d| d.id }) #.order(:name)
 	end
 
 	# Like #ls, but returns only items
   def ls_items(dir = Directory.root)
 		# self.items & dir.items
-    dir.items.where(id: self.items.map{ |i| i.id }).order(:username)
+    dir.items.where(id: self.items.map{ |i| i.id }) #.order(:username)
 	end
 
   # True, if the given Directory or Item is on the User shortlist. 

@@ -1,20 +1,22 @@
-<div class="row item highlightable" data-type="item" data-id="<%=item.id%>">
+<div id="item_<%=item.id%>" data-sortby="<%=item.username%>">
+  <div class="row item highlightable" data-type="item" data-id="<%=item.id%>">
 
-  <div class="large-11 medium-10 small-10 columns">
-    <div id="item-row-content-holder_<%=item.id%>" class="row">
-      <%= render partial: 'items/item_row_content', locals: {item: item} %>
+    <div class="large-11 medium-10 small-10 columns">
+      <div id="item-row-content-holder_<%=item.id%>" class="row">
+        <%= render partial: 'items/item_row_content', locals: {item: item} %>
+      </div>
     </div>
-  </div>
 
-  <div class="large-1 medium-2 small-2 columns text-right">
-    <div class="switch tiny round favorite-switch">
-      <input id="switch_<%=item.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? item%> data-type="item" data-id="<%=item.id%>">
-      <label for="switch_<%=item.id%>"></label>
-    </div> 
-    <%= form_tag edit_item_path(item.id), method: :get, remote: true, action: :edit, html: {role: :form, 'data-model' => 'item', "data-abide" => true} do %>
-      <%= button_tag type: :submit, class: 'button tiny round edit-button hidden', "data-type"=>"item", "data-id"=>item.id do %>
-        <i class="fi-page-edit"></i>edit
+    <div class="large-1 medium-2 small-2 columns text-right">
+      <div class="switch tiny round favorite-switch">
+        <input id="switch_<%=item.id%>" type="checkbox" class="favorite-switch" <%="checked" if current_user.favorite? item%> data-type="item" data-id="<%=item.id%>">
+        <label for="switch_<%=item.id%>"></label>
+      </div> 
+      <%= form_tag edit_item_path(item.id), method: :get, remote: true, action: :edit, html: {role: :form, 'data-model' => 'item', "data-abide" => true} do %>
+        <%= button_tag type: :submit, class: 'button tiny round edit-button hidden', "data-type"=>"item", "data-id"=>item.id do %>
+          <i class="fi-page-edit"></i>edit
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 </div>

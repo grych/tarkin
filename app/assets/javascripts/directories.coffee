@@ -1,5 +1,4 @@
 passwords = {} # cache for passwords retrieved by AJAX
-# edit_mode = false
 
 @ready = () ->
   $('.hidden').hide()
@@ -18,12 +17,19 @@ passwords = {} # cache for passwords retrieved by AJAX
   setup_alert_box()
   $.ajaxSetup
     timeout: 10000
-  # $(document).ajaxError (event, jqxhr, settings, thrownError) ->
-  #   console.log thrownError
+  Sorter.sort '.sortable'
 
 @ready_with_foundation = () ->
   $(document).foundation() # must be re-initialized because of turbolinks
   ready()
+
+@Sorter = {}
+@Sorter.sort = (what, direction) ->
+  Sorter.direction = if direction == "desc" then -1 else 1
+  $(what).each ->
+    sorted = $(this).find("> div[data-sortby]").sort (a, b) ->
+      if $(a).data('sortby').toString().toLowerCase() > $(b).data('sortby').toString().toLowerCase() then Sorter.direction else -Sorter.direction
+    $(this).append(sorted)
 
 capitalize = (word) -> 
   word.charAt(0).toUpperCase() + word.slice 1

@@ -16,15 +16,13 @@
     </div>
   <% end %>
 
-  <div id="dirs">
-    <% current_user.ls_dirs(@directory).each do |directory| %>
-      <div id="dir_<%=directory.id%>">
-        <%= render partial: 'directory_row', locals: {directory: directory} %>
-      </div>
+  <div id="dirs" class="sortable">
+    <% current_user.ls_dirs(@directory).each do |directory| %>      
+      <%= render partial: 'directory_row', locals: {directory: directory} %>
     <% end %>
   </div>
 
-  <div id="items">
+  <div id="items" class="sortable">
     <% current_user.ls_items(@directory).each do |item| %>
       <%= render partial: 'items/item_row', locals: {item: item} %>
     <% end %>
