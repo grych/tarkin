@@ -156,17 +156,19 @@ class User < ActiveRecord::Base
   # (to which everyone has access). Directory must belong to one of the users group. Returns all
   # items and only the directories to which user has access.
   def ls(dir = Directory.root)
-  	(self.directories & dir.directories) + dir.items
+  	ls_dirs(dir) + ls_items(dir)
 	end
 
 	# Like #ls, but returns only directories
   def ls_dirs(dir = Directory.root)
-		self.directories & dir.directories
+		# self.directories & dir.directories
+    dir.directories.where(id: self.directories.map{ |d| d.id }).order(:name)
 	end
 
 	# Like #ls, but returns only items
   def ls_items(dir = Directory.root)
-		self.items & dir.items
+		# self.items & dir.items
+    dir.items.where(id: self.items.map{ |i| i.id }).order(:username)
 	end
 
   # True, if the given Directory or Item is on the User shortlist. 
