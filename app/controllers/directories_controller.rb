@@ -75,6 +75,17 @@ class DirectoriesController < ApplicationController
     end
   end
 
+  def destroy
+    @directory = Directory.find(params[:id])
+    respond_to do |format|
+      if @directory && @directory.destroy
+        format.js
+      else
+        format.js { render json: @directory.errors , status: :unprocessable_entity }
+      end
+    end
+  end
+
   # AJAX
   def ok_with_cookies
     session[:ok_with_cookies] = true

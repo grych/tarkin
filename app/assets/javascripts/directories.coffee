@@ -12,6 +12,7 @@ passwords = {} # cache for passwords retrieved by AJAX
   $('#edit-mode-button').click ->
     switch_edit_mode($(this))
   $(document).bind('ajaxError', 'form#new_directory', (event, jqxhr, settings, exception) -> 
+    $('.reveal-modal.open.confirm-deletion').foundation('reveal', 'close') # close the confirm reveal
     render_form_errors($.parseJSON(jqxhr.responseText)))   # show errors which cames back from rails
   $('#edit-modal').on 'opened', -> $(this).find('form :input:enabled:visible:first').focus() 
   setup_alert_box()
