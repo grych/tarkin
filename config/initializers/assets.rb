@@ -10,7 +10,7 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 
-config.assets.precompile << Proc.new do |path|
+Rails.application.config.assets.precompile << Proc.new do |path|
   if path =~ /\.(css|js)\z/
     full_path = Rails.application.assets.resolve(path).to_path
     app_assets_path = Rails.root.join('app', 'assets').to_path
