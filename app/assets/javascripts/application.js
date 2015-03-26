@@ -18,7 +18,6 @@
 //= require foundation
 //= require confirm_with_reveal.min
 //= require turbolinks
-//= require_tree .
 
 $(function(){ 
   $(document).foundation({
