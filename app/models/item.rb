@@ -8,9 +8,10 @@ class Item < ActiveRecord::Base
 
   # validates :password_crypted, presence: true
   validates :password, presence: true
-  validates :username, presence: true
+  validates :username, presence: true, length: {maximum: 256}
+  before_validation :update_path
+  validates :path, presence: true, length: {maximum: 4096}, uniqueness: true
   validate  :have_groups
-
   after_save :reload_groups
 
   # default_scope { order('username ASC') }
@@ -161,5 +162,9 @@ class Item < ActiveRecord::Base
       @must_reload = false
     end
     true
+  end
+
+  def update_path
+    self.path = "#{self.directory.path}#{self.username}"
   end
 end

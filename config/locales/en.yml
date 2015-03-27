@@ -21,3 +21,18 @@
 
 en:
   hello: "Hello world"
+
+en:
+  activerecord:
+    attributes:
+      item:
+        path: "User name"
+        username: "User name"
+    errors:
+      models:
+        item:
+          attributes:
+            path:
+              taken: "must be unique"
+              blank: "or path can't be empty"
+              too_long: "or path is too long"

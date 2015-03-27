@@ -29,7 +29,7 @@ class DirectoriesController < ApplicationController
       if @directory.new_record? && @directory.save           
         format.js 
       else
-        format.js { render json: @directory.errors , status: :unprocessable_entity }
+        format.js { render json: @directory.errors.full_messages.uniq , status: :unprocessable_entity }
       end
     end
   end
@@ -64,13 +64,13 @@ class DirectoriesController < ApplicationController
           raise ActiveRecord::Rollback 
         end
       end
-      @directory.errors[:groups] << errors if errors
-      respond_to do |format|
-        if errors.blank? && @directory.save           
-          format.js
-        else
-          format.js { render json: @directory.errors , status: :unprocessable_entity }
-        end
+    end
+    @directory.errors[:groups] << errors if errors
+    respond_to do |format|
+      if errors.blank? && @directory.save           
+        format.js
+      else
+        format.js { render json: @directory.errors.full_messages.uniq , status: :unprocessable_entity }
       end
     end
   end
@@ -81,7 +81,7 @@ class DirectoriesController < ApplicationController
       if @directory && @directory.destroy
         format.js
       else
-        format.js { render json: @directory.errors , status: :unprocessable_entity }
+        format.js { render json: @directory.errors.full_messages.uniq, status: :unprocessable_entity }
       end
     end
   end

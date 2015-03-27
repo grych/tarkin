@@ -21,7 +21,7 @@ class ItemsController < ApplicationController
       if @item.new_record? && @item.save
         format.js
       else
-        format.js { render json: @item.errors , status: :unprocessable_entity }
+        format.js { render json: @item.errors.full_messages.uniq , status: :unprocessable_entity }
       end
     end    
   end
@@ -47,7 +47,7 @@ class ItemsController < ApplicationController
     # end
 
     item_groups_previous = @item.groups.to_a
-    errors = nil
+    errors = nil; error = false
     Item.transaction do 
       if groups.empty?
         errors = "can't be empty"
@@ -59,24 +59,29 @@ class ItemsController < ApplicationController
           @item.add group
         end
         logger.debug "***** afer add: #{@item.groups.to_a}"
-        @item.save!
-        groups_to_destroy = (item_groups_previous - groups) & current_user.groups
-        logger.debug "***** to destroy: #{groups_to_destroy}"
-        @item.groups.destroy groups_to_destroy
-        logger.debug "***** afer destroy: #{@item.groups.to_a}"
-        if @item.groups.empty?
-          errors = "can't be empty"
+        unless @item.save
+          error = true
+          logger.debug "INSIDE *********** -------------------- #{errors}, error: #{error}"
           raise ActiveRecord::Rollback 
+        else
+          groups_to_destroy = (item_groups_previous - groups) & current_user.groups
+          logger.debug "***** to destroy: #{groups_to_destroy}"
+          @item.groups.destroy groups_to_destroy
+          logger.debug "***** afer destroy: #{@item.groups.to_a}"
+          if @item.groups.empty?
+            errors = "can't be empty"
+            raise ActiveRecord::Rollback 
+          end
         end
       end
-      @item.errors[:groups] << errors if errors
-      logger.debug "-------------------- #{errors}"
-      respond_to do |format|
-        if errors.blank? && @item.save 
-          format.js
-        else
-          format.js { render json: @item.errors , status: :unprocessable_entity }
-        end
+    end
+    @item.errors[:groups] << errors if errors
+    logger.debug "*********** -------------------- #{errors}, error: #{error}"
+    respond_to do |format|
+      if !error && errors.blank? && @item.save 
+        format.js
+      else
+        format.js { render json: @item.errors.full_messages.uniq , status: :unprocessable_entity }
       end
     end
   end
@@ -87,7 +92,7 @@ class ItemsController < ApplicationController
       if @item && @item.destroy
         format.js
       else
-        format.js { render json: @item.errors , status: :unprocessable_entity }
+        format.js { render json: @item.errors.full_messages.uniq , status: :unprocessable_entity }
       end
     end
   end

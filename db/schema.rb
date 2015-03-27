@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319111856) do
+ActiveRecord::Schema.define(version: 20150326201644) do
 
   create_table "directories", force: :cascade do |t|
     t.string   "name",         limit: 256,  null: false
@@ -62,11 +62,13 @@ ActiveRecord::Schema.define(version: 20150319111856) do
     t.binary   "password_crypted"
     t.integer  "directory_id"
     t.text     "description"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "path",             limit: 4096
   end
 
   add_index "items", ["directory_id"], name: "index_items_on_directory_id"
+  add_index "items", ["path"], name: "index_items_on_path", unique: true
   add_index "items", ["username"], name: "index_items_on_username"
 
   create_table "meta_keys", force: :cascade do |t|
