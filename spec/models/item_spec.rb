@@ -8,7 +8,8 @@ RSpec.describe Item, type: :model do
   before do
     @user = User.create(name: 'name', email: 'email@email.com', password: 'password')
     @group = @user.add Group.new(name: 'group')
-    @item = @group.add Item.new(username: 'x', password: PASSWORD), authorization_user: @user
+    @root = Directory.create(name: "root")
+    @item = @group.add Item.new(username: 'x', password: PASSWORD, directory: @root), authorization_user: @user
     @item.save!
   end
   it "should have the crypted password" do
@@ -44,7 +45,8 @@ RSpec.describe Item, type: :model do
     @users = 3.times.map{|i| User.create(name: "name#{i}", email: "email#{i}@example.com", password: "password#{i}")}
     @groups = @users.map{|user| user << Group.new(name: "group #{user.name}")}
     @groups.each_with_index {|group, i| group.authorize(@users[i])}
-    @items = @groups.map {|group| group << Item.new(username: 'x', password: "password for #{group.name}")}
+    @root = Directory.create(name: 'root')
+    @items = @groups.map {|group| group << Item.new(username: "user form #{group.name}", password: "password for #{group.name}", directory: @root)}
     @items.each {|item| item.save!}
   end
   3.times.each do |i|
@@ -71,7 +73,8 @@ RSpec.describe Item, type: :model do
   before do 
     @users = 3.times.map{|i| User.create(name: "name#{i}", email: "email#{i}@example.com", password: "password#{i}")}
     @groups = @users.map{|user| user << Group.new(name: "group #{user.name}")}
-    @items = 3.times.map{|i| Item.create(username: "item#{i}", password: "password for name#{i}")}
+    @root = Directory.create(name: 'root')
+    @items = 3.times.map{|i| Item.create(username: "item#{i}", password: "password for name#{i}", directory: @root)}
     @items.each_with_index do |item, i| 
       item.authorize(@users[i])
       item << @groups[i]

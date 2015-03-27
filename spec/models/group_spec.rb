@@ -91,10 +91,11 @@ RSpec.describe Group, type: :model do
         @g1.authorize @u1
         @g2.authorize @u2
 
-        @i1 = Item.new(username:'u1', password: 'i1')
+        root = Directory.create(name: "root")
+        @i1 = Item.new(username:'u1', password: 'i1', directory: root)
         @i1.authorize @u1
         @i1 << @g1
-        @i2 = Item.new(username:'u2', password: 'i2')
+        @i2 = Item.new(username:'u2', password: 'i2', directory: root)
         @i2.authorize @u2
         @i2 << @g2
 

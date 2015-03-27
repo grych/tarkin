@@ -165,6 +165,11 @@ class Item < ActiveRecord::Base
   end
 
   def update_path
-    self.path = "#{self.directory.path}#{self.username}"
+    if self.directory    
+      self.path = "#{self.directory.path}#{self.username}"
+    else
+      # TODO: rethink
+      self.path = self.username 
+    end
   end
 end

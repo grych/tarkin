@@ -121,7 +121,8 @@ RSpec.describe User, type: :model do
           @group.authorize @user
           @group2 = @user << Group.new(name: 'group2')
           @group2.authorize @user
-          @items = [@group << Item.create(username: 'x', password:'item1'), @group2 << Item.new(username: 'x', password:'item2')]
+          @root = Directory.create(name: 'root')
+          @items = [@group << Item.create(username: 'x', password:'item1', directory: @root), @group2 << Item.new(username: 'x2', password:'item2', directory: @root)]
         end
         it { expect(@user.items.count).to eq 2 }
         it { expect(@user.items).to eq @items }

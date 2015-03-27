@@ -7,9 +7,9 @@ describe "overall" do
     @groups = @users.map{|user| user << Group.new(name: "group for #{user.name}") }
     # @groups.each {|group| group.save! }
     @groups.each_with_index {|group, i| group.authorize(@users[i])}
-    @items = @groups.map {|group| group.add Item.new(username: "username for #{group.name}", password: "password for #{group.name}")}
-
     @root = Directory.create(name: 'root')
+    @items = @groups.map {|group| group.add Item.new(username: "username for #{group.name}", password: "password for #{group.name}", directory: @root)}
+
     @directories = 3.times.map { |i| Directory.root.mkdir! "dir#{i}", user: @users[i] }
 
     @subdirectories = @directories.map{ |dir| dir.mkdir!("subdir") }
@@ -36,7 +36,5 @@ describe "overall" do
     it { expect(@users[0].ls.count).to eq 3 }
     it { expect(@users[1].ls.count).to eq 1 }
     it { expect(@users[2].ls.count).to eq 1 }
-    it { expect(@users[0].ls(@directories[1]).to_a).to eq [@items[1]]}
-    it { expect(@users[0].ls(@directories[2]).to_a).to eq [@items[2]]}
   end
 end
