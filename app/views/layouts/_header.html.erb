@@ -1,35 +1,19 @@
-<div class="contain-to-grid sticky">
-  <nav class="top-bar" data-topbar>
+<div class="contain-to-grid fixed">
+  <nav class="top-bar" data-topbar role="navigation">
     <section class="top-bar-section">
-      <ul class="left">
-      </ul>
-      <ul class="title-area hide-for-medium hide-for-small">
-        <li class="name" data-tooltip title="Page Root">
-          <h1>
-            <a href="<%= root_url %>"> <%= full_title(yield(:title)) %> </a>
-          </h1>
+      <ul class="hide-for-small">
+        <li class="has-form hide-for-small medium-4 large-6 columns">
+          <div>
+            <input id="search" autocomplete="off" class="ui-widget" type="text" placeholder="search">
+          </div>
         </li>
       </ul>
 
       <% if current_user %>
         <ul class="right">
-          <li id='user-li' class="has-dropdown">
-            <a>
-              <i class='fi-torso'></i> <%= current_user.email %>
-            </a>
-            <ul class="dropdown">
-              <li class="text-right">
-                <%= link_to "Sign out", signout_path, method: "delete", 
-                    data: {confirm: {title: "Are you sure?", body: "This will log you out.", ok: "OK", cancel: "Cancel"}}
-                 %>
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-        <ul class="right">
+          <li class="divider hide-for-small"></li>
           <% if @directory && current_user.favorite_directories.exists? %>
-            <li id='fav-li' class="has-dropdown">
+            <li id='fav-li' class="has-dropdown hide-for-small">
               <a>
                 <i class="fi-heart"></i> Favorites
               </a>
@@ -44,12 +28,23 @@
               </ul>
             </li>
           <% end %>
-        </ul>
-
-        <ul class="right">
-            <li id='edit-mode-button' data-tooltip title="Edit mode on/off" class="">
-              <a>Enable edition</a>
-            </li>
+          <li class="divider hide-for-small"></li>
+          <li id='edit-mode-button' data-tooltip title="Edit mode on/off" class="hide-for-small">
+            <a>Enable edition</a>
+          </li>
+          <li class="divider hide-for-small"></li>
+          <li id='user-li' class="has-dropdown">
+            <a>
+              <i class='fi-torso'></i> <%= current_user.email %>
+            </a>
+            <ul class="dropdown">
+              <li class="text-right">
+                <%= link_to "Sign out", signout_path, method: "delete", 
+                    data: {confirm: {title: "Are you sure?", body: "This will log you out.", ok: "OK", cancel: "Cancel"}}
+                 %>
+              </li>
+            </ul>
+          </li>
         </ul>
 
       <% end %>

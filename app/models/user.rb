@@ -155,20 +155,30 @@ class User < ActiveRecord::Base
   # Returns the content (directory and items) of the given directory. Default is a root directory
   # (to which everyone has access). Directory must belong to one of the users group. Returns all
   # items and only the directories to which user has access.
-  def ls(dir = Directory.root)
-  	ls_dirs(dir) + ls_items(dir)
+  def ls(dir = Directory.root, **options)
+  	ls_dirs(dir, **options) + ls_items(dir, **options)
 	end
 
 	# Like #ls, but returns only directories
-  def ls_dirs(dir = Directory.root)
-		# self.directories & dir.directories
-    dir.directories.where(id: self.directories.map{ |d| d.id }) #.order(:name)
+  def ls_dirs(dir = Directory.root, **options)
+    dirs = dir.directories.where(id: self.directories.map{ |d| d.id })
+    if options[:pattern]
+      pattern = options[:pattern].gsub('*', '%')
+      dirs.where('path like ?', pattern)
+    else
+      dirs
+    end
 	end
 
 	# Like #ls, but returns only items
-  def ls_items(dir = Directory.root)
-		# self.items & dir.items
-    dir.items.where(id: self.items.map{ |i| i.id }) #.order(:username)
+  def ls_items(dir = Directory.root, **options)
+    items = dir.items.where(id: self.items.map{ |i| i.id })
+    if options[:pattern]
+      pattern = options[:pattern].gsub('*', '%')
+      items.where('path like ?', pattern)
+    else
+      items
+    end
 	end
 
   # True, if the given Directory or Item is on the User shortlist. 

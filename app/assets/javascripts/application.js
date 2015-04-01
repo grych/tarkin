@@ -15,6 +15,7 @@
 //= require jquery-ui/effect
 //= require jquery-ui/effect-highlight
 //= require jquery-ui/effect-pulsate
+//= require jquery-ui/autocomplete
 //= require foundation
 //= require confirm_with_reveal.min
 //= require turbolinks
@@ -22,7 +23,8 @@
 $(function(){ 
   $(document).foundation({
     reveal : {
-      animation_speed: 200,
+      animation: 'fade',
+      animation_speed: 100,
       // not working with 5.5.1.0, waiting for an update
       multiple_opened: true,
       close_on_background_click: true

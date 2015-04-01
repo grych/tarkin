@@ -85,3 +85,39 @@ div.highlight {
   font-size: 10pt;
 }
 
+.ui-autocomplete {
+  font-family: $font-family-monospace;
+  font-size: 11pt;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+// .ui-autocomplete-suggestions {
+//   border: 1px solid #e7e7e7;
+//   background: #FFF;
+//   overflow: auto; }
+
+// .ui-autocomplete-suggestion {
+//   padding: 6px;
+//   font-size: 0.8rem;
+//   white-space: nowrap;
+//   overflow: hidden; }
+
+// .ui-autocomplete-selected {
+//   background-color: #009fd3;
+//   transition: all 100ms ease-in-out;
+//   color: #fff; }
+//   .autocomplete-selected strong {
+//     color: #fff !important; }
+
+// .ui-autocomplete-suggestions strong {
+//   font-weight: bold;
+//   color: #008CBA; }
+
+
+#search {
+  font-family: $font-family-monospace;
+  font-size: 11pt;
+}
+

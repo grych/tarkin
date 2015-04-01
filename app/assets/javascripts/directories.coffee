@@ -1,4 +1,27 @@
 passwords = {} # cache for passwords retrieved by AJAX
+availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"]
 
 @ready = () ->
   $('.hidden').hide()
@@ -19,10 +42,25 @@ passwords = {} # cache for passwords retrieved by AJAX
   $.ajaxSetup
     timeout: 10000
   Sorter.sort '.sortable'
+  setup_autocomplete()
 
 @ready_with_foundation = () ->
   $(document).foundation() # must be re-initialized because of turbolinks
   ready()
+
+setup_autocomplete = ->
+  $('#search').autocomplete
+    # appendTo: "#search-container"
+    source: availableTags
+    autoFocus: true
+  $('#search').focus()
+  $(window).scroll ->
+    # TODO: decide if autocomplete should disappear while scroll
+    # $('#search').blur()
+    $('.ui-autocomplete.ui-menu').position
+      my: 'left top'
+      at: 'left bottom'
+      of: '#search'
 
 @Sorter = {}
 @Sorter.sort = (what, direction) ->
