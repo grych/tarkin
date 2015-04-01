@@ -26,6 +26,8 @@ gem 'foundation-rails', '5.5.1.0'
 #gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
 
+gem 'coffee_routes'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

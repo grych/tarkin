@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     #post 'dir',           to: 'directories#create'
     resources :directories, only: [:create, :update, :edit, :new, :destroy]
     resources :items,       only: [:create, :update, :edit, :new, :destroy]
+    match 'autocomplete', to: 'directories#autocomplete', defaults: {format: :json}, via: ['get']
   end
   namespace :api, path: "_api", defaults: {format: :json} do
     namespace :v1 do

@@ -86,7 +86,14 @@ class DirectoriesController < ApplicationController
     end
   end
 
+  def search
+  end
+
   # AJAX
+  def autocomplete
+    render json: ['aaa', 'abb', 'acc']
+  end
+
   def ok_with_cookies
     session[:ok_with_cookies] = true
     render json: {ok: true}

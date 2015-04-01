@@ -1,27 +1,4 @@
 passwords = {} # cache for passwords retrieved by AJAX
-availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"]
 
 @ready = () ->
   $('.hidden').hide()
@@ -51,12 +28,12 @@ availableTags = [
 setup_autocomplete = ->
   $('#search').autocomplete
     # appendTo: "#search-container"
-    source: availableTags
+    source: autocomplete_path()
     autoFocus: true
   $('#search').focus()
   $(window).scroll ->
     # TODO: decide if autocomplete should disappear while scroll
-    # $('#search').blur()
+    # $('#search').autocomplete('close')
     $('.ui-autocomplete.ui-menu').position
       my: 'left top'
       at: 'left bottom'

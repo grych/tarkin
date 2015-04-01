@@ -19,6 +19,7 @@
 //= require foundation
 //= require confirm_with_reveal.min
 //= require turbolinks
+//= require coffee_routes
 
 $(function(){ 
   $(document).foundation({
