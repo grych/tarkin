@@ -130,9 +130,8 @@ hide_password_in_row = (row) ->
 
 get_password = (item) ->
   $.ajax
-    url: "/_api/v1/_password.json"
+    url: api_v1__password_path(format: 'json', id: item.data('id'))
     type: 'get'
-    data: {id: item.data('id')}
     context: item
     success: (data) ->
       passwords[item.data('id')] = data.password
@@ -145,7 +144,7 @@ get_password = (item) ->
 
 ok_with_cookies = () ->
   $.ajax
-    url: '/_aj/ok_with_cookies'
+    url: ok_with_cookies_path()
     type: 'post'
     data: true
     error: ->

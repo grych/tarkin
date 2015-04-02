@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       #resources :sessions, only: [:new]
       #resources :items, only: [:show], defaults: {format: :text}, via: ['get', 'post']  #/items/item_id
       match '_authorize',    to: 'sessions#create',  defaults: {format: :text}, via: ['get', 'post']
-      match '_password/:id', to: 'items#show',       defaults: {format: :text}, via: ['get', 'post']
+      match '_password/:id', to: 'items#show', as: '_password', defaults: {format: :text}, via: ['get', 'post']
       match '_dir',          to: 'directories#index',defaults: {format: :text}, via: ['get', 'post']
       match '_dir/*path',    to: 'directories#index',defaults: {format: :text}, via: ['get', 'post']
       match '*path',         to: 'items#show',       defaults: {format: :text}, via: ['get', 'post']
