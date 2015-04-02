@@ -95,6 +95,9 @@ favorite_switch = (sw) ->
     url: "/_aj/switch_favorite"
     type: 'post'
     data: { type: sw.data('type'), id: sw.data('id') }
+    success: (data) ->
+      $('#favorites-holder').html(data.html)
+      $(document).foundation()
     error: ->
       alert "Server not responding"
 

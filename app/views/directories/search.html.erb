@@ -2,19 +2,22 @@
   <div class="tarkin-panel radius">
 
     <div class="tarkin-panel white">
-      <h4> Search results for <em>"<%=params[:term]%>"</em>:</h4>
-      <div id="dirs" class="sortable">
-        <% @directories.each do |directory| %>      
-          <%= render partial: 'directory_row', locals: {directory: directory} %>
-        <% end %>
-      </div>
+      <% if @directories.empty? && @items.empty? %>
+        <h4> Nothing found for <em>"<%=params[:term]%>"</em>.</h4>
+      <% else %>
+        <h4> Search results for <em>"<%=params[:term]%>"</em>:</h4>
+        <div id="dirs" class="sortable">
+          <% @directories.each do |directory| %>      
+            <%= render partial: 'directory_row', locals: {directory: directory} %>
+          <% end %>
+        </div>
 
-      <div id="items" class="sortable">
-        <% @items.each do |item| %>
-          <%= render partial: 'items/item_row', locals: {item: item} %>
-        <% end %>
-      </div>
-
+        <div id="items" class="sortable">
+          <% @items.each do |item| %>
+            <%= render partial: 'items/item_row', locals: {item: item} %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
 
 

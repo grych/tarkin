@@ -1,0 +1,10 @@
+<li id='fav-li' class="has-dropdown hide-for-small">
+  <a>
+    <i class="fi-heart"></i> Favorites
+  </a>
+  <ul id="favorites" class="dropdown">
+    <% current_user.favorite_directories.order(:path).each do |dir| %>
+      <%= render partial: 'directories/favorite', locals: {dir: dir} %>
+    <% end %>
+  </ul>
+</li>

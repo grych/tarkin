@@ -1,32 +1,21 @@
 <div class="contain-to-grid fixed">
   <nav class="top-bar" data-topbar>
     <section class="top-bar-section">
-      <ul class="hide-for-small">
-        <li class="has-form hide-for-small medium-4 large-6 columns">
-          <%= form_tag search_path, method: :post do %>
-            <input id="search" name="term" autocomplete="off" class="ui-widget" type="text" placeholder="search (use * for pattern)">
-          <% end %>
-        </li>
-      </ul>
-
       <% if current_user %>
+        <ul class="hide-for-small">
+          <li class="has-form hide-for-small medium-4 large-6 columns">
+            <%= form_tag search_path, method: :post do %>
+              <input id="search" name="term" autocomplete="off" class="ui-widget" type="text" placeholder="search (use * for pattern)">
+            <% end %>
+          </li>
+        </ul>
+
         <ul class="right">
           <li class="divider hide-for-small"></li>
-          <% if @directory && current_user.favorite_directories.exists? %>
-            <li id='fav-li' class="has-dropdown hide-for-small">
-              <a>
-                <i class="fi-heart"></i> Favorites
-              </a>
-              <ul class="dropdown">
-                <% current_user.favorite_directories.each do |dir| %>
-                  <li class="text-left">
-                    <a href="<%=dir.path%>" id="fav_<%=dir.id%>">
-                      <%=dir.path%>
-                    </a>
-                  </li>
-                <% end %>
-              </ul>
-            </li>
+          <% if (@directory || @directories) && current_user.favorite_directories.exists? %>
+            <span id='favorites-holder'>
+              <%= render partial: 'directories/favorites' %>
+            </span>
           <% end %>
           <li class="divider hide-for-small"></li>
           <li id='edit-mode-button' data-tooltip title="Edit mode on/off" class="hide-for-small">

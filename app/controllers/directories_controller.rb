@@ -114,6 +114,7 @@ class DirectoriesController < ApplicationController
       else
         current_user.favorite_items << i
       end
+      render json: {ok: true}
     when 'dir'
       d = Directory.find(params[:id])
       if current_user.favorite? d
@@ -121,8 +122,10 @@ class DirectoriesController < ApplicationController
       else
         current_user.favorite_directories << d
       end
+      render json: {ok: true, html: render_to_string(partial: 'favorites')}
+    else
+      render json: {ok: false}
     end
-    render json: {ok: true}
   end
 
   private
