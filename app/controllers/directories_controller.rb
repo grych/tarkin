@@ -87,11 +87,16 @@ class DirectoriesController < ApplicationController
   end
 
   def search
+    @items = current_user.search_items(params[:term]).order(:username)
+    @directories = current_user.search_dirs_names(params[:term]).order(:name)
   end
 
   # AJAX
   def autocomplete
-    render json: ['aaa', 'abb', 'acc']
+    # items = current_user.search_items(params[:term]).order(:username).map{ |item| {category: 'Items', label: item.path, id: item.id, redirect_to: item.directory.path} }
+    items = current_user.search_items(params[:term]).order(:username).map{ |item| {label: item.path, redirect_to: urlsafe_path(item.directory.path)} }
+    dirs = current_user.search_dirs(params[:term]).order(:path).map{ |dir| {label: dir.path, redirect_to: urlsafe_path(dir.path)} }
+    render json: items + dirs
   end
 
   def ok_with_cookies

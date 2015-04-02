@@ -1,4 +1,4 @@
-passwords = {} # cache for passwords retrieved by AJAX
+@passwords = {} # cache for passwords retrieved by AJAX
 
 @ready = () ->
   $('.hidden').hide()
@@ -20,16 +20,21 @@ passwords = {} # cache for passwords retrieved by AJAX
     timeout: 10000
   Sorter.sort '.sortable'
   setup_autocomplete()
+  Turbolinks.enableTransitionCache()
 
-@ready_with_foundation = () ->
-  $(document).foundation() # must be re-initialized because of turbolinks
-  ready()
+# @ready_with_foundation = () ->
+  # TODO: check if all is OK after adding jquery.turbolinks
+  # $(document).foundation() # must be re-initialized because of turbolinks
+  # ready()
 
 setup_autocomplete = ->
   $('#search').autocomplete
     # appendTo: "#search-container"
     source: autocomplete_path()
-    autoFocus: true
+    autoFocus: false # autoFocus to first found element
+    minLength: 2
+    select: (event, ui) ->
+      Turbolinks.visit(ui.item.redirect_to)
   $('#search').focus()
   $(window).scroll ->
     # TODO: decide if autocomplete should disappear while scroll
@@ -144,4 +149,4 @@ ok_with_cookies = () ->
       alert "Server not responding"
 
 $(document).ready(@ready)
-$(document).on('page:load', @ready_with_foundation)
+# $(document).on('page:load', @ready_with_foundation)

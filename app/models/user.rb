@@ -149,7 +149,8 @@ class User < ActiveRecord::Base
 
   # Returns array of items which belongs to this user, with intersection by Group
   def items
-  	self.groups.map{|group| group.items}.flatten.uniq
+  	# self.groups.map{|group| group.items}.flatten.uniq
+    Item.joins(:groups).where(groups: { id: self.groups.select(:id) }).uniq
   end
 
   # Returns the content (directory and items) of the given directory. Default is a root directory
@@ -163,8 +164,7 @@ class User < ActiveRecord::Base
   def ls_dirs(dir = Directory.root, **options)
     dirs = dir.directories.where(id: self.directories.map{ |d| d.id })
     if options[:pattern]
-      pattern = options[:pattern].gsub('*', '%')
-      dirs.where('path like ?', pattern)
+      dirs.where('path like ?', pattern_like(options[:pattern]))
     else
       dirs
     end
@@ -174,12 +174,28 @@ class User < ActiveRecord::Base
   def ls_items(dir = Directory.root, **options)
     items = dir.items.where(id: self.items.map{ |i| i.id })
     if options[:pattern]
-      pattern = options[:pattern].gsub('*', '%')
-      items.where('path like ?', pattern)
+      items.where('path like ?', pattern_like(options[:pattern]))
     else
       items
     end
 	end
+
+  # Search all the user directories for the path pattern
+  # You may use asterisk (*) in the pattern to replace any characters
+  def search_dirs(pattern)
+    self.directories.where('path like ?', pattern_like(pattern))
+  end
+
+  # Like #search_dirs, but search for the directory name
+  def search_dirs_names(pattern)
+    self.directories.where('directories.name like ?', pattern_like(pattern))
+  end
+
+  # Search all the user items for the given username pattern
+  # You may use asterisk (*) in the pattern to replace any characters
+  def search_items(pattern)
+    self.items.where('username like ?', pattern_like(pattern))
+  end
 
   # True, if the given Directory or Item is on the User shortlist. 
   def favorite?(thing)
@@ -220,5 +236,9 @@ class User < ActiveRecord::Base
     end 
     @to_save = nil
     true
+  end
+
+  def pattern_like(pattern)
+    "%#{pattern.gsub('*', '%')}%"
   end
 end

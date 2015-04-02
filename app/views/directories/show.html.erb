@@ -1,11 +1,6 @@
 <div class="row">
   <div class="tarkin-panel radius">
-    <ul class="breadcrumbs">
-      <li><%= link_to_directory Directory.root%></li>
-      <% @directory.pwd_r.each do |d| %>
-        <%= link_to_directory d, class: if d==@directory then "current" else "" end  %>
-      <% end %>
-    </ul>
+    <%= render 'path' %>
     <%= render 'directory_content' %>
   </div>
 </div>

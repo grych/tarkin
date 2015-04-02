@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     resources :items,       only: [:create, :update, :edit, :new, :destroy]
     match 'autocomplete', to: 'directories#autocomplete', defaults: {format: :json}, via: ['get']
   end
+  scope '_dir' do
+    match 'search', to: 'directories#search', via: ['post']
+  end
   namespace :api, path: "_api", defaults: {format: :json} do
     namespace :v1 do
       #resources :sessions, only: [:new]

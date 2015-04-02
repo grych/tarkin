@@ -1,0 +1,6 @@
+<ul class="breadcrumbs">
+  <li><%= link_to_directory Directory.root%></li>
+  <% @directory.pwd_r.each do |d| %>
+    <%= link_to_directory d, class: if d==@directory then "current" else "" end  %>
+  <% end %>
+</ul>
