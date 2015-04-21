@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   end
   namespace :api, path: "_api", defaults: {format: :json} do
     namespace :v1 do
-      match '_autocomplete', to: 'directories#autocomplete', defaults: {format: :json}, via: ['get']
+      match '_find',         to: 'directories#find', defaults: {format: :json}, via: ['get']
       match '_authorize',    to: 'sessions#create',  defaults: {format: :text}, via: ['get', 'post']
       match '_password/:id', to: 'items#show', as: '_password', defaults: {format: :text}, via: ['get', 'post']
       match '_dir',          to: 'directories#index',defaults: {format: :text}, via: ['get', 'post']

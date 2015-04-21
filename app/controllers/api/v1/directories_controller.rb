@@ -40,19 +40,20 @@ class API::V1::DirectoriesController < Api::ApiController
     end
   end
 
-  # Search for Items and Dirs for the given +term+ in params
-  # Return JSON array of hashes: [{label: string to display, redirect_to: url}]
+  # Search for Items and Directories for the given +term+ in params. Used to autocomplete in the search input box.
+  # Returns JSON array of hashes: [{label: found username or directory name, redirect_to: url}], 
+  # where url for Item is the name of Directory which contains it.
   #
-  # <tt>GET /_api/v1/_autocomplete[.xml|.json]</tt>
+  # <tt>GET /_api/v1/_find[.xml|.json]</tt>
   #
   # parameters::
   # * term: string to search, use asterisk * as a wildcard
   #
   # = Examples
-  #   resp = conn.get("http://localhost:3000//_api/v1/_autocomplete?term=data*bases", email: "email0@example.com", password="password0")
+  #   resp = conn.get("http://localhost:3000//_api/v1/_find?term=data*bases", email: "email0@example.com", password="password0")
   #   resp.body
   #   #=> [{"label":"/databases/","redirect_to":"/databases/"}]
-  def autocomplete
+  def find
     # items = current_user.search_items(params[:term]).order(:username).map{ |item| {category: 'Items', label: item.path, id: item.id, redirect_to: item.directory.path} }
     items = current_user.search_items(params[:term]).order(:username).map{ |item| {label: item.path, redirect_to: urlsafe_path(item.directory.path)} }
     dirs = current_user.search_dirs(params[:term]).order(:path).map{ |dir| {label: dir.path, redirect_to: urlsafe_path(dir.path)} }

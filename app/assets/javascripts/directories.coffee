@@ -30,7 +30,7 @@
 setup_autocomplete = ->
   $('#search').autocomplete
     # appendTo: "#search-container"
-    source: api_v1__autocomplete_path()
+    source: api_v1__find_path()
     autoFocus: false # autoFocus to first found element
     minLength: 2
     select: (event, ui) ->
