@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       match '*path',         to: 'items#show',       defaults: {format: :text}, via: ['get', 'post']
     end
   end
+  scope '_admin', module: :admin do
+    resources :groups
+  end
 
   get '*path' => 'directories#show'
   root 'directories#show'

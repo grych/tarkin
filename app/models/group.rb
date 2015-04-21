@@ -175,6 +175,11 @@ class Group < ActiveRecord::Base
     "#<Group> '#{self.name}'  [id: #{self.id}]"
   end
 
+  # List user names of the group
+  def user_names
+    self.users.select(:name).collect(&:name)
+  end
+
   private
   def generate_keys
     if new_record? 

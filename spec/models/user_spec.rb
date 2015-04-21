@@ -37,7 +37,7 @@ RSpec.describe User, type: :model do
         expect(@user.authenticated?).to eq true 
       end
       it "without password" do
-        expect(@loaded_user.password).to be_nil
+        expect(@loaded_user.password).to eq '*' * 8
         expect(@loaded_user.public_key.class).to eq OpenSSL::PKey::RSA
         expect{@loaded_user.private_key}.to raise_error(Tarkin::WrongPasswordException)
         expect(@loaded_user.authenticated?).to eq false

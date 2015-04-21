@@ -41,7 +41,11 @@ class User < ActiveRecord::Base
 
   # This is only for validators, password should never be readable
   def password
-    '*' * @password.length if @password 
+    if @password
+      '*' * @password.length  
+    else
+      '*' * 8 unless new_record?
+    end
   end
 
   # User authentication requires password
