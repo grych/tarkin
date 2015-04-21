@@ -57,10 +57,8 @@ capitalize = (word) ->
 
 @show_hide_passwords = () ->
   $('.item.highlightable').hover(
-    -> 
-      show_password_in_row ($(this))
-    -> 
-      hide_password_in_row($(this))
+    -> show_password_in_row ($(this))
+    -> hide_password_in_row($(this))
   )
 
 @setup_alert_box = () ->
