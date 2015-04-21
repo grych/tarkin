@@ -11,12 +11,6 @@ class API::V1::ItemsController < Api::ApiController
   # * item_id
   # * path to the password (all directories separated by slash, followed by username)
   #
-  # authorization::
-  # * auth token in header: <tt>Authorization: Token token=$TOKEN</tt> or
-  # * cookie "auth_token" set, or
-  # * User email and password as GET/POST parameters, or
-  # * basic http authentication in header
-  #
   # = Examples
   #   resp = conn.get("http://localhost:3000/_api/v1/_password/1", email: "email0@example.com", password="password0")
   #   password = resp.body if resp.status == 200

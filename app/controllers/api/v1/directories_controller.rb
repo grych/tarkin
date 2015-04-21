@@ -45,14 +45,8 @@ class API::V1::DirectoriesController < Api::ApiController
   #
   # <tt>GET /_api/v1/_autocomplete[.xml|.json]</tt>
   #
-  # parameters:
+  # parameters::
   # * term: string to search, use asterisk * as a wildcard
-  #
-  # authorization:
-  # * auth token in header: <tt>Authorization: Token token=$TOKEN</tt> or
-  # * cookie "auth_token" set, or
-  # * User email and password as GET/POST parameters, or
-  # * basic http authentication in header
   #
   # = Examples
   #   resp = conn.get("http://localhost:3000//_api/v1/_autocomplete?term=data*bases", email: "email0@example.com", password="password0")

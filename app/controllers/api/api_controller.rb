@@ -1,8 +1,8 @@
 # API for external applications and for the webpage. All API calls are restricted and must
 # be authorized by username/password combination or authorization token. See API::V1::SessionsController#create
-# to find out how to retrieve the token
+# to find out how to retrieve the token.
 #
-# authorization::
+# authorization methods::
 # * auth token in header: <tt>Authorization: Token token=$TOKEN</tt> or
 # * cookie "auth_token" set, or
 # * User email and password as GET/POST parameters, or
