@@ -23,8 +23,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'foundation-rails', '5.5.1.0'
-#gem 'foundation-rails'
+gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
 
 gem 'coffee_routes'
@@ -59,5 +58,5 @@ end
 
 group :production do
   gem 'puma'
-  gem 'pg', '0.17.1'   #### 0.18.1 is incompatible with rails 4.2, to be fixed in 4.2.1
+  gem 'pg'#, '0.17.1'   #### 0.18.1 is incompatible with rails 4.2, to be fixed in 4.2.1
 end

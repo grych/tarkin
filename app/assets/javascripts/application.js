@@ -27,7 +27,6 @@ $(function(){
     reveal : {
       animation: 'fade',
       animation_speed: 100,
-      // not working with 5.5.1.0, waiting for an update
       multiple_opened: true,
       close_on_background_click: true
     }

@@ -1,4 +1,5 @@
 class API::V1::DirectoriesController < Api::ApiController
+  include DirectoriesHelper
   # List directory structure. Returns all subdirectories and items (usernames) for the given path.
   # By default returns newline-separated text, but it could be modified by .json or .xml extension. 
   # For text output, subdirectories are followed by slash, eg. "subdir1/".
@@ -7,12 +8,6 @@ class API::V1::DirectoriesController < Api::ApiController
   #
   # parameters::
   # * path to directory
-  #
-  # authorization::
-  # * auth token in header: <tt>Authorization: Token token=$TOKEN</tt> or
-  # * cookie "auth_token" set, or
-  # * User email and password as GET/POST parameters, or
-  # * basic http authentication in header
   #
   # = Examples
   #   resp = conn.get("http://localhost:3000/_dir/databases", email: "email0@example.com", password="password0")
@@ -42,6 +37,35 @@ class API::V1::DirectoriesController < Api::ApiController
       format.json { render json: directory_children(d)}
       format.xml  { render xml:  directory_children(d)}
       format.text { render text: directory_children_text(d)}
+    end
+  end
+
+  # Search for Items and Dirs for the given +term+ in params
+  # Return JSON array of hashes: [{label: string to display, redirect_to: url}]
+  #
+  # <tt>GET /_api/v1/_autocomplete[.xml|.json]</tt>
+  #
+  # parameters:
+  # * term: string to search, use asterisk * as a wildcard
+  #
+  # authorization:
+  # * auth token in header: <tt>Authorization: Token token=$TOKEN</tt> or
+  # * cookie "auth_token" set, or
+  # * User email and password as GET/POST parameters, or
+  # * basic http authentication in header
+  #
+  # = Examples
+  #   resp = conn.get("http://localhost:3000//_api/v1/_autocomplete?term=data*bases", email: "email0@example.com", password="password0")
+  #   resp.body
+  #   #=> [{"label":"/databases/","redirect_to":"/databases/"}]
+  def autocomplete
+    # items = current_user.search_items(params[:term]).order(:username).map{ |item| {category: 'Items', label: item.path, id: item.id, redirect_to: item.directory.path} }
+    items = current_user.search_items(params[:term]).order(:username).map{ |item| {label: item.path, redirect_to: urlsafe_path(item.directory.path)} }
+    dirs = current_user.search_dirs(params[:term]).order(:path).map{ |dir| {label: dir.path, redirect_to: urlsafe_path(dir.path)} }
+    respond_to do |format|
+      format.json { render json: items + dirs}
+      format.xml  { render xml:  items + dirs}
+      format.text { render text: items + dirs}
     end
   end
 
