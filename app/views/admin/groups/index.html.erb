@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="tarkin-panel radius">
+
+
+<table width="100%">
+  <caption>Groups</caption>
+  <tr>
+    <th id="group_name">Group name</th>
+    <th id="users">Users</th>
+    <th id="created">Created at</th>
+    <th id="updated">Updated at</th>
+  </tr>
+
+  <% @groups.each do |group| %>
+    <%= render partial: 'group_row', locals: {group: group} %>
+  <% end %>
+
+</table>
+
+  </div>
+</div>
