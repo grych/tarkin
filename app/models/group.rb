@@ -177,7 +177,7 @@ class Group < ActiveRecord::Base
 
   # List user names of the group
   def user_names
-    self.users.select(:name).collect(&:name)
+    self.users.select(:name).collect(&:name).sort
   end
 
   private
