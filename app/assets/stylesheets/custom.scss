@@ -121,3 +121,48 @@ div.highlight {
   font-size: 11pt;
 }
 
+
+th {
+  background-repeat: no-repeat; 
+  background-position: 90% 50%; 
+}
+th.tablesorter-headerAsc { 
+  background-image: image-url('jquery-tablesorter/dropbox-asc-hovered.png');
+  background-color: scale-color($primary-color, $lightness: 20%); 
+} 
+th.tablesorter-headerDesc { 
+  background-image: image-url('jquery-tablesorter/dropbox-desc-hovered.png');
+  background-color: scale-color($primary-color, $lightness: 20%);
+}
+th.tablesorter-header { 
+  cursor: pointer; 
+} 
+.tablesorter-filter-row .disabled {
+  visibility: hidden;
+  width: 0px;
+  heigth: 0px;
+} 
+.tablesorter-filter {
+  width: 100%;
+  height: inherit;
+  margin: 2px;
+  padding: 2px;
+  background-color: #fff;
+  border: 1px solid #bbb;
+  color: #333;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: height 0.1s ease;
+  -moz-transition: height 0.1s ease;
+  -o-transition: height 0.1s ease;
+  transition: height 0.1s ease;
+}
+.tablesorter-filter-row td {
+  line-height: normal;
+  -webkit-transition: line-height 0.1s ease;
+  -moz-transition: line-height 0.1s ease;
+  -o-transition: line-height 0.1s ease;
+  transition: line-height 0.1s ease;
+}
+

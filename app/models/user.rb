@@ -218,6 +218,17 @@ class User < ActiveRecord::Base
     "#<User> '#{self.name}'  [id: #{self.id}, email: #{self.email}]"
   end
 
+  # Name is a combination of first name and a last name
+  def name
+    "#{(first_name || '').split(/\s+/).map(&:capitalize).join(' ')} #{(last_name || '').capitalize}".strip
+  end
+
+  def name=(n)
+    fullname = n.split(/\s+/)
+    self.last_name = fullname.last.capitalize
+    self.first_name = fullname.first(fullname.size - 1).map(&:capitalize).join(' ')
+  end
+
   private
   def generate_keys
     cipher = OpenSSL::Cipher::AES256.new(:CBC)

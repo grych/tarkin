@@ -3,6 +3,6 @@
     <td headers="users group_<%=group.id%>">
       <%= group.user_names.join(', ') %>
     </td>
-    <td headers="created_at group_<%=group.id%>"><%=time_ago_in_words(group.created_at)%> ago</td>
-    <td headers="updated_at group_<%=group.id%>"><%=time_ago_in_words(group.updated_at)%> ago</td>
+    <td headers="created_at group_<%=group.id%>" class="hide-for-small"><%=time_ago_in_words(group.created_at)%> ago</td>
+    <td headers="updated_at group_<%=group.id%>" class="hide-for-small"><%=time_ago_in_words(group.updated_at)%> ago</td>
   </tr>

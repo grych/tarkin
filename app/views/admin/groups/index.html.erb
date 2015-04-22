@@ -6,10 +6,10 @@
         <caption>Groups</caption>
         <thead>
           <tr>
-            <th id="group_name">Group name</th>
-            <th id="users">Users</th>
-            <th id="created">Created at</th>
-            <th id="updated">Updated at</th>
+            <th id="group_name" data-placeholder="filter...">Group name</th>
+            <th id="users" data-placeholder="filter...">Users</th>
+            <th id="created" data-placeholder="" class="{sorter: false} filter-false hide-for-small">Created at</th>
+            <th id="updated" data-placeholder="" class="{sorter: false} filter-false hide-for-small">Updated at</th>
           </tr>
         </thead>
         <%= render partial: 'group', collection: @groups, as: :group %>

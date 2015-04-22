@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150326201644) do
+ActiveRecord::Schema.define(version: 20150422115439) do
 
   create_table "directories", force: :cascade do |t|
     t.string   "name",         limit: 256,  null: false
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20150326201644) do
     t.binary   "private_key_pem_crypted",              null: false
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
+    t.text     "description"
   end
 
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true
@@ -88,7 +89,6 @@ ActiveRecord::Schema.define(version: 20150326201644) do
   add_index "meta_keys", ["user_id"], name: "index_meta_keys_on_user_id"
 
   create_table "users", force: :cascade do |t|
-    t.string   "name",                    limit: 256,                  null: false
     t.string   "email",                   limit: 256,                  null: false
     t.string   "public_key_pem",          limit: 4096,                 null: false
     t.binary   "private_key_pem_crypted",                              null: false
@@ -96,9 +96,13 @@ ActiveRecord::Schema.define(version: 20150326201644) do
     t.datetime "updated_at",                                           null: false
     t.integer  "token_expires_in",                     default: 30
     t.boolean  "admin",                                default: false
+    t.string   "username",                limit: 256
+    t.string   "first_name",              limit: 256
+    t.string   "last_name",               limit: 256
   end
 
   add_index "users", ["admin"], name: "index_users_on_admin"
   add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["last_name"], name: "index_users_on_last_name"
 
 end
