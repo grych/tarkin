@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   end
   scope '_admin', module: :admin do
     resources :groups
+    resources :users
   end
 
   get '*path' => 'directories#show'

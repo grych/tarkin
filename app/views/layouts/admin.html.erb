@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Tarkin Administration</title>
+
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "vendor/modernizr" %>
+    <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag params[:controller] %>
+    
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+
+  <div class="contain-to-grid fixed">
+    <nav class="top-bar" data-topbar>
+      <section class="top-bar-section">
+        <ul class="">
+          <li class="">
+            <%=link_to root_path do %>
+              <i class='fi-arrow-left'></i> Back
+            <% end %>
+          </li>
+        </ul>
+
+        <ul class="right">
+          <li class="divider hide-for-small"></li>
+          <li>
+            <%=link_to groups_path do %>
+              <i class='fi-torsos'></i> Groups
+            <% end %>
+          </li>
+          <li class="divider hide-for-small"></li>
+          <li>
+            <%=link_to users_path do %>
+              <i class='fi-torso'></i> Users
+            <% end %>
+          </li>
+          <li class="divider hide-for-small"></li>
+        </ul>
+
+
+      </section>
+    </nav>
+  </div>
+
+
+    <% flash.each do |key, value| %>
+      <div class="row">
+        <div class="large-12 medium-12 columns">
+          <div data-alert class="alert-box <%= key == 'error' ? 'alert' : key %> radius">
+          <%= value %>
+          <a href="#" class="close">&times;</a>
+        </div>  
+      </div>
+    <% end %>
+    <%= yield %>
+
+  </body>
+</html>
