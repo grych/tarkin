@@ -175,7 +175,7 @@ class Group < ActiveRecord::Base
     "#<Group> '#{self.name}'  [id: #{self.id}]"
   end
 
-  # List user names of the group
+  # List user names of the group, ordered by the last name
   def user_names
     self.users.order(:last_name).collect(&:name)
   end
