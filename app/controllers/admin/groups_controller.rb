@@ -1,5 +1,5 @@
 class Admin::GroupsController < Admin::AdminController
-  before_action :belongs_to_me, except: :index
+  before_action :belongs_to_me, except: [:index, :new, :create]
 
   def index
     @groups = current_user.groups
@@ -27,6 +27,21 @@ class Admin::GroupsController < Admin::AdminController
     else
       flash.now[:error] = "Group can't be deleted, because #{@group.errors.full_messages.join(' and ')}."
       render 'edit'
+    end
+  end
+
+  def new
+    @group = Group.new
+  end
+
+  def create
+    @group = Group.new(group_params)
+    current_user.add @group
+    if @group.save
+      redirect_to groups_path, notice: 'Group created'
+    else
+      flash.now[:error] = "Group can't be saved, because #{@group.errors.full_messages.join(' and ')}"
+      render 'new'
     end
   end
 

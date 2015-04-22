@@ -1,8 +1,6 @@
-  <tr>
+  <tr class="highlightable">
     <th id="group_<%=group.id%>" headers="group_name"><%=link_to group.name, edit_group_path(group) %></th>
-    <td headers="users group_<%=group.id%>">
-      <%= group.user_names.join(', ') %>
-    </td>
+    <td headers="description description_<%=group.id%>"><%= group.description %></td>
     <td headers="created_at group_<%=group.id%>" class="hide-for-small"><%=time_ago_in_words(group.created_at)%> ago</td>
     <td headers="updated_at group_<%=group.id%>" class="hide-for-small"><%=time_ago_in_words(group.updated_at)%> ago</td>
   </tr>

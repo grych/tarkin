@@ -21,11 +21,6 @@
                 <i class="fi-prohibited"></i> Cancel</a>
               <% end %>
             </li>
-            <li>
-              <%= link_to @group, method: :delete, remote: false, class: "button alert", data: {confirm: {title: "Are you sure?", body: "Delete can't be undone!", ok: "Yes", cancel: "No", modal_class: "confirm-deletion"}} do %>
-                <i class="fi-x"></i> Delete
-              <% end %>
-            </li>
           </ul>
 
         </div>

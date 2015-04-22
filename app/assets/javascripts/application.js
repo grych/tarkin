@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery-tablesorter
+//= require jquery-tablesorter/addons/pager/jquery.tablesorter.pager
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery-ui/effect
