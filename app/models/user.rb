@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 256 }
   validates :email, presence: true, length: { maximum: 256 }
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :password, presence: true, length: { minimum: 8, maximum: 32}
+  validates :password, presence: { :on => :create }, length: { minimum: 8, maximum: 32} #, confirmation: true
 
   before_save { email.downcase! }
   before_save :save_groups

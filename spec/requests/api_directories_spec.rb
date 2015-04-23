@@ -26,7 +26,7 @@ describe "API Passwords" do
     e = env.merge({"AUTHORIZATION" => "Token token=#{token}"})
     post "/_api/v1/_dir/dir0", {}, e
     expect(response).to be_success
-    expect(response.body).to eq "subdir/\nusername for group for name0"
+    expect(response.body).to eq "subdir/\nusername for group for Name0"
   end
 
   private

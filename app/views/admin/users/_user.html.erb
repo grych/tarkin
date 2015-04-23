@@ -1,0 +1,7 @@
+  <tr class="highlightable">
+    <th id="group_<%=user.id%>" headers="user_name"><%=link_to user.name, edit_user_path(user) %></th>
+    <td headers="email email<%=user.id%>"><%= user.email %></td>
+    <td headers="admin admin<%=user.id%>"><%= if user.admin then raw("<i class='fi-check'></i>") else raw("&nbsp;") end %></td>
+    <td headers="created_at user_<%=user.id%>" class="hide-for-small"><%=time_ago_in_words(user.created_at)%> ago</td>
+    <td headers="updated_at user_<%=user.id%>" class="hide-for-small"><%=time_ago_in_words(user.updated_at)%> ago</td>
+  </tr>

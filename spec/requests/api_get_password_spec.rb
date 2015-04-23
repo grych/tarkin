@@ -22,7 +22,7 @@ describe "API Passwords" do
   it "get a password with username and password with GET" do
     get "/_api/v1/_password/1?email=email0@example.com&password=password0"
     expect(response).to be_success
-    expect(response.body).to eq 'password for group for name0'
+    expect(response.body).to eq 'password for group for Name0'
   end
   it "not get the password of other with username and password with GET" do
     get "/_api/v1/_password/2?email=email0@example.com&password=password0"
@@ -31,13 +31,13 @@ describe "API Passwords" do
   it "get a password with username and password with POST" do
     post "/_api/v1/_password/1", email: 'email0@example.com', password: 'password0'
     expect(response).to be_success
-    expect(response.body).to eq 'password for group for name0'
+    expect(response.body).to eq 'password for group for Name0'
   end
   it "get a password with http authentication" do
     e = env.merge({'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("email0@example.com", "password0") })
     get "/_api/v1/_password/1", {}, e
     expect(response).to be_success
-    expect(response.body).to eq 'password for group for name0'
+    expect(response.body).to eq 'password for group for Name0'
   end
   it "get a password with token" do
     get '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
@@ -45,7 +45,7 @@ describe "API Passwords" do
     e = env.merge({"AUTHORIZATION" => "Token token=#{token}"})
     get "/_api/v1/_password/1", {}, e
     expect(response).to be_success
-    expect(response.body).to eq 'password for group for name0'
+    expect(response.body).to eq 'password for group for Name0'
   end
   it "get a password with token in cookie" do
     get '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
@@ -54,7 +54,7 @@ describe "API Passwords" do
     #request.cookies[:auth_token] = token
     get "/_api/v1/_password/1", {}, e
     expect(response).to be_success
-    expect(response.body).to eq 'password for group for name0'
+    expect(response.body).to eq 'password for group for Name0'
   end
   it "but not with a bad token" do
     e = env.merge({"AUTHORIZATION" => "Token token=badtoken"})
@@ -65,9 +65,9 @@ describe "API Passwords" do
     get '/_api/v1/_authorize', email: "email0@example.com", password: "password0"
     token = response.body
     e = env.merge({"AUTHORIZATION" => "Token token=#{token}"})
-    get "/_api/v1/dir0/#{URI::escape('username for group for name0')}", {}, e
+    get "/_api/v1/dir0/#{URI::escape('username for group for Name0')}", {}, e
     expect(response).to be_success
-    expect(response.body).to eq 'password for group for name0'
+    expect(response.body).to eq 'password for group for Name0'
   end
 
   private

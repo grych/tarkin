@@ -13,7 +13,7 @@ class Admin::GroupsController < Admin::AdminController
     @group = Group.find(params[:id])
     @group.update_attributes group_params
     if @group.save
-      redirect_to groups_path, notice: 'Group saved'
+      redirect_to groups_path #, notice: 'Group saved'
     else
       flash.now[:error] = "Group can't be saved, because #{@group.errors.full_messages.join(' and ')}"
       render 'edit'
@@ -23,7 +23,7 @@ class Admin::GroupsController < Admin::AdminController
   def destroy
     @group = Group.find(params[:id])
     if @group.destroy
-      redirect_to groups_path, notice: 'Group deleted'
+      redirect_to groups_path #, notice: 'Group deleted'
     else
       flash.now[:error] = "Group can't be deleted, because #{@group.errors.full_messages.join(' and ')}."
       render 'edit'
@@ -39,7 +39,7 @@ class Admin::GroupsController < Admin::AdminController
     current_user.add @group
     if @group.save
       redirect_to groups_path, notice: 'Group created'
-    else
+    else #
       flash.now[:error] = "Group can't be saved, because #{@group.errors.full_messages.join(' and ')}"
       render 'new'
     end

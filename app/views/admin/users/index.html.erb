@@ -2,23 +2,24 @@
   <div class="large-12 columns">
     <div class="tarkin-panel radius">
 
-      <table id="groups_table" width="100%" class="tablesorter">
-        <caption>Groups</caption>
+      <table id="users_table" width="100%" class="tablesorter">
+        <caption>Users</caption>
         <thead>
           <tr>
-            <th id="group_name" data-placeholder="filter...">Group name</th>
-            <th id="description" data-placeholder="filter...">Description</th>
+            <th id="group_name" data-placeholder="filter...">User name</th>
+            <th id="email" data-placeholder="filter...">Email</th>
+            <th id="admin" data-placeholder="" class="{sorter: false} filter-false hide-for-small">Admin</th>
             <th id="created" data-placeholder="" class="{sorter: false} filter-false hide-for-small">Created at</th>
             <th id="updated" data-placeholder="" class="{sorter: false} filter-false hide-for-small">Updated at</th>
           </tr>
         </thead>
-        <%= render partial: 'group', collection: @groups, as: :group %>
+        <%= render partial: 'user', collection: @users, as: :user %>
       </table>
 
       <div class="row">
         <div class="large-6 columns">
-          <%= link_to new_group_path, class: 'button small' do %>
-            <i class="fi-folder-add"></i> New Group
+          <%= link_to new_user_path, class: 'button small' do %>
+            <i class="fi-folder-add"></i> New User
           <% end %>
         </div>
 

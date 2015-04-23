@@ -61,10 +61,10 @@ RSpec.describe Item, type: :model do
     it { expect(@users[0].items.count).to eq 2 }
     it { expect(@users[0].items.last).to eq @items[1] }
     it "user[0] should be now able to read item[1] password" do
-      expect(@items[1].password(authorization_user: @users[0])).to eq "password for group name1"
+      expect(@items[1].password(authorization_user: @users[0])).to eq "password for group Name1"
     end
     it "but not item[2] password" do
-      expect(@items[2].password(authorization_user: @users[0])).not_to eq "password for group name2"
+      expect(@items[2].password(authorization_user: @users[0])).not_to eq "password for group Name2"
     end
   end
 end
@@ -74,7 +74,7 @@ RSpec.describe Item, type: :model do
     @users = 3.times.map{|i| User.create(name: "name#{i}", email: "email#{i}@example.com", password: "password#{i}")}
     @groups = @users.map{|user| user << Group.new(name: "group #{user.name}")}
     @root = Directory.create(name: 'root')
-    @items = 3.times.map{|i| Item.create(username: "item#{i}", password: "password for name#{i}", directory: @root)}
+    @items = 3.times.map{|i| Item.create(username: "item#{i}", password: "password for Name#{i}", directory: @root)}
     @items.each_with_index do |item, i| 
       item.authorize(@users[i])
       item << @groups[i]
@@ -95,10 +95,10 @@ RSpec.describe Item, type: :model do
     it { expect(@users[0].items.count).to eq 2 }
     it { expect(@users[0].items.last).to eq @items[1] }
     it "user[0] should be now able to read item[1] password" do
-      expect(@items[1].password(authorization_user: @users[0])).to eq "password for name1"
+      expect(@items[1].password(authorization_user: @users[0])).to eq "password for Name1"
     end
     it "but not item[2] password" do
-      expect(@items[2].password(authorization_user: @users[0])).not_to eq "password for name2"
+      expect(@items[2].password(authorization_user: @users[0])).not_to eq "password for Name2"
     end
   end
 end

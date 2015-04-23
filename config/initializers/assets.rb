@@ -11,6 +11,7 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w( sessions.js directories.js )
 Rails.application.config.assets.precompile += %w( admin/groups.js )
 Rails.application.config.assets.precompile += %w( jquery-tablesorter/dropbox-asc.png jquery-tablesorter/dropbox-desc.png jquery-tablesorter/dropbox-asc-hovered.png jquery-tablesorter/dropbox-desc-hovered.png ) 
+Rails.application.config.assets.precompile += %w( admin/users.js )
 # Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|ttf)$/
 
 # Rails.application.config.assets.precompile << Proc.new do |path|
