@@ -21,7 +21,7 @@
       <section class="top-bar-section">
         <ul class="">
           <li class="">
-            <%=link_to root_path do %>
+            <%=link_to root_path, "data-no-turbolink" => true do %>
               <i class='fi-arrow-left'></i> Back to browsing
             <% end %>
           </li>
@@ -30,13 +30,13 @@
         <ul class="right">
           <li class="divider hide-for-small"></li>
           <li>
-            <%=link_to groups_path do %>
+            <%=link_to groups_path, "data-no-turbolink" => true do %>
               <i class='fi-torsos'></i> Groups
             <% end %>
           </li>
           <li class="divider hide-for-small"></li>
           <li>
-            <%=link_to users_path do %>
+            <%=link_to users_path, "data-no-turbolink" => true do %>
               <i class='fi-torso'></i> Users
             <% end %>
           </li>

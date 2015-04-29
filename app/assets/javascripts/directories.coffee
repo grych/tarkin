@@ -21,6 +21,8 @@
   Sorter.sort '.sortable'
   setup_autocomplete()
   Turbolinks.enableTransitionCache()
+  # $('#about').click ->
+  #   alert 'about'
 
 # @ready_with_foundation = () ->
   # TODO: check if all is OK after adding jquery.turbolinks
@@ -43,6 +45,7 @@ setup_autocomplete = ->
       my: 'left top'
       at: 'left bottom'
       of: '#search'
+
 
 @Sorter = {}
 @Sorter.sort = (what, direction) ->

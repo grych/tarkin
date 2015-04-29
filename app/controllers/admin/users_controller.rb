@@ -41,7 +41,7 @@ class Admin::UsersController < Admin::AdminController
   def destroy
     @user = User.find(params[:id])
     if @user == current_user
-      flash.now[:error] = "Suicide denied"
+      flash.now[:error] = "Suicide's bad, mkey?"
       render 'edit'
     else
       if @user.destroy

@@ -22,13 +22,42 @@
           <li class="divider hide-for-small"></li>
           <li id='user-li' class="has-dropdown">
             <a>
-              <i class='fi-torso'></i> <%= current_user.email %>
+              <i class='fi-torso'></i> <%= current_user.name %>
             </a>
             <ul class="dropdown">
               <li class="text-right">
-                <%= link_to "Sign out", signout_path, method: "delete", 
-                    data: {confirm: {title: "Are you sure?", body: "This will log you out.", ok: "OK", cancel: "Cancel"}}
+                <%= link_to edit_user_path(current_user), "data-no-turbolink" => true do %>
+                  <i class='fi-home'></i> My profile
+                <% end %>
+              </li>
+              <li class="text-right">
+                <%= link_to edit_user_path(current_user), "data-no-turbolink" => true do %>
+                  <i class='fi-key'></i> Change password
+                <% end %>
+              </li>
+              <% if current_user.admin? %>
+                <li class="text-right">
+                  <%= link_to users_path, "data-no-turbolink" => true do %>
+                    <i class='fi-torso'></i> Users
+                  <% end %>
+                </li>
+                <li class="text-right">
+                  <%= link_to  groups_path, "data-no-turbolink" => true  do %>
+                    <i class='fi-torsos'></i> Groups
+                  <% end %>
+                </li>
+              <% end %>
+              <li class="text-right">
+                <a id='about' data-reveal-id="about-modal">
+                  <i class='fi-info'></i> About
+                </a>
+              </li>
+              <li class="text-right">
+                <%= link_to signout_path, method: "delete", 
+                    data: {confirm: {title: "Are you sure?", body: "This will log you out.", ok: "OK", cancel: "Cancel"}} do
                  %>
+                   <i class='fi-power'></i> Sign out
+                  <% end %>
               </li>
             </ul>
           </li>

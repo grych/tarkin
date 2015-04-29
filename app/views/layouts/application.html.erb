@@ -3,13 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Secure and fast tool to share passwords between the people, with API to use it in your scripts, and with external command-line client."> 
 
     <title><%= full_title(yield(:title)) %></title>
 
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "vendor/modernizr" %>
     <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag params[:controller] %>
+    <%= javascript_include_tag controller_name %>
     
     <%= csrf_meta_tags %>
   </head>
