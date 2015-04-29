@@ -1,0 +1,13 @@
+<p>
+  <ul class="no-bullet">
+    <li>
+      <ul class="circle">
+        <% group.users.order(:last_name).each do |user| %>
+          <li>
+            <%= link_to user.name, edit_user_path(user) %>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+  </ul>
+</p>

@@ -121,7 +121,6 @@ div.highlight {
   font-size: 11pt;
 }
 
-
 th {
   background-repeat: no-repeat; 
   background-position: 90% 50%; 
@@ -168,4 +167,8 @@ th.tablesorter-header {
 
 label.page-buttons {
   font-size: 20pt;
+}
+
+.separated {
+  border: 2px solid $gainsboro;
 }
