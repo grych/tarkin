@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
     cipher = OpenSSL::Cipher::AES256.new(:CBC)
     old_private_key = self.private_key
     @password = new_password
-    self.private_key_pem_crypted = old_private_key.to_pem cipher, @password
+    self.private_key_pem_crypted = old_private_key.to_pem cipher, @password if new_password.length >= 4 # because OpenSSL requires at least 4 characters
   end
 
   # Returns true when user is authenticated (correct password given)
