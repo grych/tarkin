@@ -25,25 +25,26 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="large-2 medium-4 columns hide-for-small">
-    <%= f.label :token_expires_in, class: "right inline", "data-tooltip" => true, title: 'Set token expiration time in days or zero for never expire' %>
+<% unless controller_name == 'directories' %>
+  <div class="row">
+    <div class="large-2 medium-4 columns hide-for-small">
+      <%= f.label :token_expires_in, class: "right inline", "data-tooltip" => true, title: 'Set token expiration time in days or zero for never expire' %>
+    </div>
+    <div class="large-10 medium-8 small-12 columns">
+      <%= f.text_field :token_expires_in %>
+    </div>
   </div>
-  <div class="large-10 medium-8 small-12 columns">
-    <%= f.text_field :token_expires_in %>
-  </div>
-</div>
 
-<div class="row">
-  <div class="large-2 medium-4 columns hide-for-small">
-    <%= f.label :admin, class: "right inline" %>
+  <div class="row">
+    <div class="large-2 medium-4 columns hide-for-small">
+      <%= f.label :admin, class: "right inline" %>
+    </div>
+    <div class="large-10 medium-8 small-12 columns">
+      <div class="switch round">
+        <%= f.check_box :admin %>
+        <label for="user_admin"></label>
+      </div> 
+    </div>
   </div>
-  <div class="large-10 medium-8 small-12 columns">
-    <div class="switch round">
-      <%= f.check_box :admin %>
-      <label for="user_admin"></label>
-    </div> 
-  </div>
-</div>
-
+<% end %>
 <%= render partial: 'password', locals: {f: f} if ['new', 'create'].include? action_name %>

@@ -91,6 +91,24 @@ class DirectoriesController < ApplicationController
     @directories = current_user.search_dirs_names(params[:term]).order(:name)
   end
 
+  # User profile (name, email, etc)
+  def profile
+    @user = current_user
+    # render 'admin/users/edit'
+  end
+  def update_profile
+    @user = current_user
+    @user.update_attributes user_params
+    respond_to do |format|
+      if @user.save
+        # format.js { render partial: 'updated_profile'}
+        format.js {render inline: "location.reload();" }
+      else
+        format.js { render json: @user.errors.full_messages.uniq, status: :unprocessable_entity }
+      end    
+    end
+  end
+
   # AJAX
   def ok_with_cookies
     session[:ok_with_cookies] = true
@@ -124,6 +142,10 @@ class DirectoriesController < ApplicationController
   private
   def directory_params
     params.require(:directory).permit(:name, :description)
+  end
+
+  def user_params
+    params.require(:user).permit(:first_name, :last_name, :email)
   end
 
   def groups
