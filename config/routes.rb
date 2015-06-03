@@ -10,8 +10,10 @@ Rails.application.routes.draw do
     #post 'dir',           to: 'directories#create'
     resources :directories, only: [:create, :update, :edit, :new, :destroy]
     resources :items,       only: [:create, :update, :edit, :new, :destroy]
-    get 'profile', to: 'directories#profile'
-    post 'update_profile', to: 'directories#update_profile'
+    get  'profile',         to: 'directories#profile'
+    post 'update_profile',  to: 'directories#update_profile'
+    get  'password',        to: 'directories#password'
+    post 'update_password', to: 'directories#update_password'
   end
   scope '_dir' do
     match 'search', to: 'directories#search', via: ['post']

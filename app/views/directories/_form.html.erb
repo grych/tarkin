@@ -3,7 +3,7 @@
 <% parent_directory ||= @directory %>
 <% editing_directory ||= @new_directory %>
 
-<%= form_for(editing_directory, remote: remote, action: action, "data-abide" => true) do |f| %>
+<%= form_for(editing_directory, remote: remote, action: action, html: {"data-abide" => true}) do |f| %>
   <div class="row panel radius">
     <div class="large-7 columns white-panel radius">
 

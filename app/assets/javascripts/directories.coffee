@@ -78,8 +78,6 @@ alert_box_text = (text) ->
 
 render_form_errors = (errors) ->
   s = ""
-  # for key, value of errors
-  #   s += capitalize "#{key} #{value.join(' and ')}. <br>"
   for x, err of errors
     s += "#{err}. <br>"
   alert_box_text(s)

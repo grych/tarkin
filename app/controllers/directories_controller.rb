@@ -94,7 +94,6 @@ class DirectoriesController < ApplicationController
   # User profile (name, email, etc)
   def profile
     @user = current_user
-    # render 'admin/users/edit'
   end
   def update_profile
     @user = current_user
@@ -106,6 +105,36 @@ class DirectoriesController < ApplicationController
       else
         format.js { render json: @user.errors.full_messages.uniq, status: :unprocessable_entity }
       end    
+    end
+  end
+
+  # Current user password
+  def password
+    @user = current_user
+  end
+  def update_password
+    if user_params[:password] == user_params[:password_confirmation]
+      @user = current_user
+      @user.change_password user_params[:password]
+      respond_to do |format|
+        if @user.save
+          if @user.authenticate(user_params[:password])
+            sign_in @user
+            if Rails.env == 'production'
+              cookies[:auth_token] = { value: token_from_password(user_params[:password]), secure: true }
+            else
+              cookies[:auth_token] = { value: token_from_password(user_params[:password]) }
+            end
+            format.js { render inline: "$('#edit-modal').foundation('reveal', 'close')" }
+          else
+            format.js { render json: ["Password has been changed, but something went wrong. Please login again"], status: :unprocessable_entity }
+          end
+        else
+          format.js { render json: @user.errors.full_messages.uniq, status: :unprocessable_entity }
+        end    
+      end
+    else
+      respond_to {|format| format.js {render json: ["Passwords don't match"], status: :unprocessable_entity }}
     end
   end
 
@@ -145,7 +174,7 @@ class DirectoriesController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)
   end
 
   def groups
