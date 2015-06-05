@@ -2,35 +2,43 @@
   <div class="row tarkin-panel radius">
     <div class="large-12 columns">
 
-      <%= render partial: 'form', locals: {f: f} %>
+      <div class="row panel radius">
+        <div class="large-7 columns ">
+          <%= render partial: 'form', locals: {f: f} %>
 
-      <div class="row">
-        <div class="large-2 medium-4 columns hide-for-small">
-          &nbsp;
+          <div class="row">
+            <div class="large-2 medium-4 columns hide-for-small">
+              &nbsp;
+            </div>
+            <div class="large-10 medium-8 small-12 columns">
+
+              <ul class="button-group ">
+                <li>
+                  <%= button_tag type: :submit, class: 'button success' do %>
+                    <i class="fi-check"></i> OK
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to users_path, class: "button secondary" do %>
+                    <i class="fi-prohibited"></i> Cancel</a>
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to @user, method: :delete, remote: false, class: "button alert", data: {confirm: {title: "Are you sure?", body: "Delete can't be undone!", ok: "Yes", cancel: "No", modal_class: "confirm-deletion"}} do %>
+                    <i class="fi-x"></i> Delete
+                  <% end %>
+                </li>
+              </ul>
+
+            </div>
+          </div>
         </div>
-        <div class="large-10 medium-8 small-12 columns">
 
-          <ul class="button-group ">
-            <li>
-              <%= button_tag type: :submit, class: 'button success' do %>
-                <i class="fi-check"></i> OK
-              <% end %>
-            </li>
-            <li>
-              <%= link_to users_path, class: "button secondary" do %>
-                <i class="fi-prohibited"></i> Cancel</a>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to @user, method: :delete, remote: false, class: "button alert", data: {confirm: {title: "Are you sure?", body: "Delete can't be undone!", ok: "Yes", cancel: "No", modal_class: "confirm-deletion"}} do %>
-                <i class="fi-x"></i> Delete
-              <% end %>
-            </li>
-          </ul>
-
+        <div class="large-5 columns ">
+          <%= render partial: 'directories/groups', locals: {groups: @groups} %>
         </div>
+
       </div>
-
     </div>
   </div>
 <% end %>

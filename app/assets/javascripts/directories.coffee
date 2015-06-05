@@ -21,8 +21,6 @@
   Sorter.sort '.sortable'
   setup_autocomplete()
   Turbolinks.enableTransitionCache()
-  # $('#about').click ->
-  #   alert 'about'
 
 # @ready_with_foundation = () ->
   # TODO: check if all is OK after adding jquery.turbolinks
