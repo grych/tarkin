@@ -5,6 +5,4 @@
   <div id="item_<%=item.id%>" class="password font-terminal" data-id="<%=item.id%>" data-favorite="<%=current_user.favorite? item %>">
   </div>
 </div>
-<div class="large-6 columns hide-for-medium hide-for-small tarkin-groups">
-  <%= groups_for_item item %>
-</div>
+<div class="large-6 columns hide-for-medium hide-for-small tarkin-groups tarkin-description" style="white-space: pre-wrap;"><%= item.description %></div>

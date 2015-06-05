@@ -23,6 +23,7 @@
 //= require confirm_with_reveal.min
 //= require turbolinks
 //= require coffee_routes
+//= require jquery.shorten
 
 $(function(){ 
   $(document).foundation({

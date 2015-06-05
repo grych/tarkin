@@ -21,6 +21,7 @@
   Sorter.sort '.sortable'
   setup_autocomplete()
   Turbolinks.enableTransitionCache()
+  $('.tarkin-description').shorten()
 
 # @ready_with_foundation = () ->
   # TODO: check if all is OK after adding jquery.turbolinks

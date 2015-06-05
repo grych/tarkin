@@ -99,7 +99,7 @@ class ItemsController < ApplicationController
 
   private
   def item_params
-    params.require(:item).permit(:username, :password, :directory_id).symbolize_keys
+    params.require(:item).permit(:username, :password, :directory_id, :description).symbolize_keys
   end
 
   def groups
