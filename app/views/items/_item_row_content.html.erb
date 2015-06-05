@@ -5,4 +5,7 @@
   <div id="item_<%=item.id%>" class="password font-terminal" data-id="<%=item.id%>" data-favorite="<%=current_user.favorite? item %>">
   </div>
 </div>
-<div class="large-6 columns hide-for-medium hide-for-small tarkin-groups tarkin-description" style="white-space: pre-wrap;"><%= item.description %></div>
+<div class="large-6 columns hide-for-medium hide-for-small tarkin-groups tarkin-description" data-dropdown="drop_<%=item.id%>" data-options="align:bottom"><%= item.description %></div>
+<div id="drop_<%=item.id%>" data-dropdown-content class="medium content f-dropdown" aria-hidden="true" tabindex="-1">
+  <%= simple_format item.description %>
+</div>
