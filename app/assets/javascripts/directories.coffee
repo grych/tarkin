@@ -22,7 +22,8 @@
   setup_autocomplete()
   Turbolinks.enableTransitionCache()
   $('.tarkin-description').shorten()
-
+  $("#item_" + $(location).attr('hash').split('#')[1]).effect("highlight", {color: "#4499ff"}, 5000)
+  
 # @ready_with_foundation = () ->
   # TODO: check if all is OK after adding jquery.turbolinks
   # $(document).foundation() # must be re-initialized because of turbolinks
