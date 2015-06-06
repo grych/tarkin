@@ -31,6 +31,17 @@ See demo on http://tarkin.tg.pl to find out more
 *TODO*
 
 == API
+Tarkin API allows you to use it with your own scripts, so you don't need to store passwords with plain-text anymore and you have one centralized system for all passwords, so you need to change it only in one place.
+
+To not store a password to tarkin in the script, you should generate a token, then you can use this token to authorize
+
+    resp = conn.get("http://localhost:3000/_api/v1/_authorize", email: "email0@example.com", password="password0")
+    token = resp.body if resp.status == 200
+    #=> "vwbtYjEtZl4IY31HBfJbXD31EUdTLv4stnzVQG8AiiZDagQ3s2IIKcRp..." 
+
+
+
+See all API documentation on http://www.tg.pl/tarkin/doc
 
 == Author
 This software is written by Tomek 'Grych' Gryszkiewicz. Do not hestitate to contact me at mailto:grych@tg.pl or visit {my web page}[http://www.tg.pl].
