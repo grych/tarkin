@@ -81,13 +81,17 @@ Get Rails 4.2.1 from http://rubyonrails.com
     bundle install
 
 === Create first user, group and required root directory
+    vi config/database.yml
+    bundle exec rake db:migrate
     rails console
     u = User.create first_name: "John", last_name: "Doe", email: 'email@examaple.com', password: 'password'
     u.add Group.new(name: 'Admins')
     Directory.create(name: 'root')
 
-=== Compile assets and start server
+=== Compile assets, generate key and start server
     RAILS_ENV=production bin/rake assets:precompile
+    bundle exec rake secret
+    export TARKIN_SECRET_KEY_BASE=<generated secret>
     bundle exec rails server -d -e production --binding 127.0.0.1 -p 5000
 
 == Author

@@ -1,16 +1,50 @@
 <% provide(:title, "Sign in") %>
 
-<p>
   <div class="row">
-    <div class="small-12 columns">
-     
+    <div class="small-12 columns tarkin-panel radius">
+      <p>
+        <h3>
+          Welcome to Tarkin Team Password Manager demo. 
+        </h3>
+      </p>
+      <p>
+        Tarking is not Just Another Password Manager. It has some unique features
+        <div class="row">
+          <div class="medium-4 columns">
+            <h5>Security</h5>
+            Your passwords are save. Not even the Sysadmin or DBA can read it, as they are crypted with strong AES-256 encryption standard.
+          </div>
+          <div class="medium-4 columns">
+            <h5>Scriptability</h5>
+            You can use Tarkin API to get the passwords in your scripts. No more plain-text passwords in the scripts, when change you can keep it only in one place.
+          </div>
+          <div class="medium-4 columns">
+            <h5>Command-line Friendly</h5>
+            Tarkin has a command-line client - no need to open the browser to find out the password. Just type in <kbd>tarkin /db/*/sysadm</kbd> in Shell to list all your sysadm passwords.
+          </div>
+        </div>
+      </p>
+      <p>
+        <h5>Find out source on <a href=https://github.com/grych/tarkin>Github</a> and API documentation <a href="http://www.tg.pl/tarkin">here</a>. Or contact the author: <a href="mailto:grych@tg.pl?Subject=tarkin">Tomek Gryszkiewicz</a>.</h5>
+      </p>
     </div>
   </div>
-</p>
 
-<p>
+  <div class="row">
+    <div class="large-2 medium-2 columns">&nbsp;</div>
+    <div class="large-8 medium-8 columns">
+      <div class="panel radius">
+        <p>
+          Feel free to test this application. You may login as an ordinary user - <kbd>user@example.com</kbd> / <kbd>password0</kbd> or as an administrator - <kbd>admin@example/com</kbd> / <kbd>password1</kbd>. Please do not change this passwords to allow others to login. But do not store any passwords here - <i>this webpage is just a demo</i>.
+        </p>
+      </div>
+    </div>
+    <div class="large-2 medium-2 columns">&nbsp;</div>
+  </div>
+
   <%= form_for(:session, url: sessions_path, html: {"data-abide" => true}) do |f| %>
     <div class="row">
+
       <div class="large-2 medium-2 columns">&nbsp;</div>
 
       <div class="large-8 medium-8 columns">
@@ -47,4 +81,4 @@
       <div class="large-2 medium-2 colums">&nbsp;</div>  
     </div>
   <% end %>
-</p>
+

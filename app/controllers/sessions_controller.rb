@@ -7,9 +7,11 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       sign_in user
       if Rails.env == 'production'
-        # TODO: it is temporary disabled, as Demo is running not on SSL
-        # cookies[:auth_token] = { value: token_from_password(params[:session][:password]), secure: true }
-        cookies[:auth_token] = { value: token_from_password(params[:session][:password]) }
+        if ENV['TARKIN_DEMO']
+          cookies[:auth_token] = { value: token_from_password(params[:session][:password]) }
+        else
+          cookies[:auth_token] = { value: token_from_password(params[:session][:password]), secure: true }
+        end
       else
         cookies[:auth_token] = { value: token_from_password(params[:session][:password]) }
       end
