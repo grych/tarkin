@@ -2,7 +2,7 @@
 
 Tarkin is just another team password manager. 
 
-View online demo on http://tarkin.tg.pl
+= View online demo on http://tarkin.tg.pl
 
 == Security
 All passwords are crypted with *AES-256* with the group public key. Group private key is ciphered by the user public key. User private key is crypte with user password. Thus, to decrypt the password, you must have user password - this password decrypts the user private key, with which system decrypts the groups private key, which is used to decrypt the password... Sounds complicated? Well, it is completely transparent for the user - you just need to remember your password. 
