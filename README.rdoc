@@ -5,7 +5,7 @@ Tarkin is just another team password manager. Key features:
 == Security
 All passwords are crypted with *AES-256* with the group public key. Group private key is ciphered by the user public key. User private key is crypte with user password. Thus, to decrypt the password, you must have user password - this password decrypts the user private key, with which system decrypts the groups private key, which is used to decrypt the password... Sounds complicated? Well, it is completely transparent for the user - you just need to remember your password. 
 
-This means that the only group members can read the stored passwords. There is no way to read it even if you have an access to the whole database. This also means that *you can't loose you password to the system*. There is no way to retrieve lost password.
+This means that the only group members can read the stored passwords. There is no way to read it even if you have an access to the whole database. This also means that ((*you can't loose you password to the system*)). There is no way to retrieve lost password.
 
 == Modern UI compatible with mobile
 
