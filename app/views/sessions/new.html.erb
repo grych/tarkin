@@ -1,5 +1,6 @@
 <% provide(:title, "Sign in") %>
 
+<% if ENV['TARKIN_DEMO'] %>
   <div class="row">
     <div class="small-12 columns tarkin-panel radius">
       <p>
@@ -35,13 +36,15 @@
     <div class="large-8 medium-8 columns">
       <div class="panel radius">
         <p>
-          Feel free to test this application. You may login as an ordinary user - <kbd>user@example.com</kbd> / <kbd>password0</kbd> or as an administrator - <kbd>admin@example/com</kbd> / <kbd>password1</kbd>. Please do not change this passwords to allow others to login. But do not store any passwords here - <i>this webpage is just a demo</i>.
+          Feel free to test this application. You may login as an ordinary user - <kbd>user@example.com</kbd> / <kbd>password0</kbd> or as an administrator - <kbd>admin@example/com</kbd> / <kbd>password1</kbd>. Please do not change this passwords to allow others to login. And do not store any passwords here - <i>this webpage is just a demo</i>.
         </p>
       </div>
     </div>
     <div class="large-2 medium-2 columns">&nbsp;</div>
   </div>
+<% end %>
 
+<p>
   <%= form_for(:session, url: sessions_path, html: {"data-abide" => true}) do |f| %>
     <div class="row">
 
@@ -81,4 +84,4 @@
       <div class="large-2 medium-2 colums">&nbsp;</div>  
     </div>
   <% end %>
-
+</p>
