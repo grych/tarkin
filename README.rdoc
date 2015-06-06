@@ -8,9 +8,11 @@ All passwords are crypted with *AES-256* with the group public key. Group privat
 This means that the only group members can read the stored passwords. There is no way to read it even if you have an access to the whole database. This also means that <b>you can't loose you password to the system</b>. There is no way to retrieve lost password.
 
 == Modern UI compatible with mobile
-UI is based on
+UI is based on {Zurb Foundation}[http://foundation.zurb.com] and it is compatible with mobiles.
 
-<img src="http://www.tg.pl/tarkin/tarkin1.png"/>
+=== Security
+Passwords are shown only when highlighted. System downloads it on demand via Ajax, so they are not stored in HTML.
+http://www.tg.pl/tarkin/tarkin1.png
 
 == Command-line tools
 *TODO*
