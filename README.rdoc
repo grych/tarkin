@@ -43,9 +43,13 @@ in Shell:
     
     OS_TOKEN=`curl "http://localhost:3000/_api/v1/_authorize?email=email0@example.com&password=password0"`
 
-in Shell, using http authentication:
+or, using http authentication:
 
     OS_TOKEN=`curl --user email0@example.com:password0 "http://localhost:3000/_api/v1/_authorize"`
+
+then to get specified password
+
+    PASSWORD=`curl -H "Authorization: Token token=$OS_TOKEN" "http://localhost:3000/_api/v1/db/postgres/root"`
 
 See all API documentation on http://www.tg.pl/tarkin/doc
 

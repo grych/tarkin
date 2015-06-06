@@ -16,11 +16,11 @@ class API::V1::ItemsController < Api::ApiController
   #   password = resp.body if resp.status == 200
   #   #=> "secret"
   #
-  #   resp = conn.get("http://localhost:3000/_api/databases/C84PCPY/scott", email: "email0@example.com", password="password0")
+  #   resp = conn.get("http://localhost:3000/_api/v1/databases/C84PCPY/scott", email: "email0@example.com", password="password0")
   #   password = resp.body if resp.status == 200
   #   #=> "tiger"
   #
-  #   resp = conn.get("http://localhost:3000/_api/databases/C84PCPY/scott.json", email: "email0@example.com", password="password0")
+  #   resp = conn.get("http://localhost:3000/_api/v1/databases/C84PCPY/scott.json", email: "email0@example.com", password="password0")
   #   resp.body
   #   #=> "{"username":"scott","password":"tiger"}"
   #
@@ -31,9 +31,9 @@ class API::V1::ItemsController < Api::ApiController
   #    <tt>OS_TOKEN=`curl "http://localhost:3000/_api/v1/_authorize?email=email0@example.com&password=password0"`</tt>
   #
   #    <tt>PASSWORD=`curl -H "Authorization: Token token=$OS_TOKEN" "http://localhost:3000/_api/v1/password/1"`</tt>
-  # [using path instead of id] <tt>PASSWORD=`curl "http://localhost:3000/_api/databases/C84PCPY/sysadm?email=email0@example.com&password=password0"`</tt>
+  # [using path instead of id] <tt>PASSWORD=`curl "http://localhost:3000/_api/v1/databases/C84PCPY/sysadm?email=email0@example.com&password=password0"`</tt>
   def show
-    logger.debug " ---------- params: #{params}"
+    # logger.debug " ---------- params: #{params}"
     if params[:id]
       item = Item.find(params[:id])
     elsif params[:path]
