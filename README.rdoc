@@ -14,6 +14,19 @@ UI is based on {Zurb Foundation}[http://foundation.zurb.com] and it is compatibl
 Passwords are shown only when highlighted. System downloads it on demand via Ajax, so they are not stored in HTML.
 http://www.tg.pl/tarkin/tarkin1.png
 
+=== Quick search
+Search for items and directories using Unix-like wildcard
+http://www.tg.pl/tarkin/tarkin2.png
+
+=== Unix-style directories
+You can group your passwords in Unix-like directories and use this folders in URLs to go directly to specified path.
+
+=== Online edition
+http://www.tg.pl/tarkin/tarkin3.png
+
+=== Online administration
+See demo on http://tarkin.tg.pl to find out more
+
 == Command-line tools
 *TODO*
 

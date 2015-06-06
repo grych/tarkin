@@ -187,18 +187,18 @@ class User < ActiveRecord::Base
   # Search all the user directories for the path pattern
   # You may use asterisk (*) in the pattern to replace any characters
   def search_dirs(pattern)
-    self.directories.where('path like ?', pattern_like(pattern))
+    self.directories.where('path like ?', pattern_like(pattern)).distinct
   end
 
   # Like #search_dirs, but search for the directory name
   def search_dirs_names(pattern)
-    self.directories.where('directories.name like ?', pattern_like(pattern))
+    self.directories.where('directories.name like ?', pattern_like(pattern)).distinct
   end
 
   # Search all the user items for the given username pattern
   # You may use asterisk (*) in the pattern to replace any characters
   def search_items(pattern)
-    self.items.where('username like ?', pattern_like(pattern))
+    self.items.where('username like ?', pattern_like(pattern)).distinct
   end
 
   # True, if the given Directory or Item is on the User shortlist. 
