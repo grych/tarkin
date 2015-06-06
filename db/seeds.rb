@@ -27,3 +27,8 @@ items[1].directory = directories[1]
 items[2].directory = directories[2]
 items.each {|i| i.save!}
 
+
+# to create blank environment:
+# u = User.create email: 'email@.com', password: 'password'
+# u.add Group.new(name: 'Admins')
+# Directory.create(name: 'root')

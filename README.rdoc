@@ -51,7 +51,42 @@ then to get specified password use URL: host/_api/v1/*Unix-like-path*
 
     PASSWORD=`curl -H "Authorization: Token token=$OS_TOKEN" "http://localhost:3000/_api/v1/db/postgres/root"`
 
-See all API documentation on http://www.tg.pl/tarkin/doc
+See all API documentation on http://www.tg.pl/tarkin
+
+* Sessions API (authentication) - http://www.tg.pl/tarkin/API/V1/SessionsController.html
+
+* Directories API (search, list) - http://www.tg.pl/tarkin/API/V1/DirectoriesController.html
+
+* Passwords API (get password) - http://www.tg.pl/tarkin/API/V1/ItemsController.html
+
+
+== Installation
+
+=== Ruby
+
+Install Ruby version 2.2 or higher, as described in {Ruby for Admins}(http://rubyforadmins.com/installation)
+
+=== Rails
+
+Get Rails 4.2.1 from http://rubyonrails.com
+
+=== Get Tarking from Github
+    git clone git@github.com:grych/tarkin.git
+
+=== Bundler
+    gem install bundler
+    cd tarkin
+    bundle install
+
+=== Create first user, group and required root directory
+    rails console
+    u = User.create first_name: "John", last_name: "Doe", email: 'email@examaple.com', password: 'password'
+    u.add Group.new(name: 'Admins')
+    Directory.create(name: 'root')
+
+=== Compile assets and start server
+    RAILS_ENV=production bin/rake assets:precompile
+    bundle exec rails server -d -e production --binding 127.0.0.1 -p 5000
 
 == Author
 This software is written by Tomek 'Grych' Gryszkiewicz. Do not hestitate to contact me at mailto:grych@tg.pl or visit {my web page}[http://www.tg.pl].
