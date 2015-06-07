@@ -33,6 +33,6 @@ Rails.application.routes.draw do
     resources :users
   end
 
-  get '*path' => 'directories#show'
+  get '*path' => 'directories#show', format: false 
   root 'directories#show'
 end
