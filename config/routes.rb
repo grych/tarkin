@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       match '_password/:id', to: 'items#show', as: '_password', defaults: {format: :text}, via: ['get', 'post']
       match '_dir',          to: 'directories#index',defaults: {format: :text}, via: ['get', 'post']
       match '_dir/*path',    to: 'directories#index',defaults: {format: :text}, via: ['get', 'post']
-      match '*path',         to: 'items#show',       defaults: {format: :text}, via: ['get', 'post']
+      match '*path',         to: 'items#show',       defaults: {format: :text}, via: ['get', 'post'], format: false 
     end
   end
   scope '_admin', module: :admin do

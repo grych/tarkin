@@ -190,7 +190,7 @@ class User < ActiveRecord::Base
     self.directories.where('path like ?', pattern_like(pattern)).distinct
   end
 
-  # Like #search_dirs, but search for the directory name
+  # Like #search_dirs, but search for the directory name only
   def search_dirs_names(pattern)
     self.directories.where('directories.name like ?', pattern_like(pattern)).distinct
   end
