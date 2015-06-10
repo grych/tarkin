@@ -13,13 +13,16 @@ class Api::ApiController < ActionController::Base
 
   private
   def restrict_access
+    puts "***** RESTRIC #{restrict_access_by_header || restrict_access_by_cookie || restrict_access_by_http_authentication || restrict_access_by_params}"
     unless  restrict_access_by_header || restrict_access_by_cookie || restrict_access_by_http_authentication || restrict_access_by_params
-      render json: 'Unathorized', status: :unathorized
+      # render json: 'Unathorized', status: :unathorized
+      head 401
     end
   end
 
   def restrict_access_by_header
     return true if @token
+    # puts "header"
     authenticate_with_http_token do |token, options|
       t = get_token(token)
       logger.debug " ************* HEADER #{t[:user_id]} #{t[:password]}" if t
@@ -29,6 +32,7 @@ class Api::ApiController < ActionController::Base
   end
 
   def restrict_access_by_cookie
+    # puts "cookie"
     return true if @token
     if cookies[:auth_token]
       t = get_token(cookies[:auth_token])
@@ -41,15 +45,18 @@ class Api::ApiController < ActionController::Base
   end
 
   def restrict_access_by_params
+    # puts "params"
     return true if @token
     if params[:email] && params[:password]
       email, password = [params[:email], params[:password]]
       logger.debug " ***** PARAMS #{email} #{password}"
+      # puts " ***** PARAMS #{email} #{password}"
       sign_in_with_email_and_password(email, password)
     end
   end
 
   def restrict_access_by_http_authentication
+    # puts "http"
     return true if @token
     authenticate_with_http_basic do |email, password|
       logger.debug " ***** HTTP #{email} #{password}"
