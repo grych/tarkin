@@ -4,7 +4,7 @@ class API::V1::DirectoriesController < Api::ApiController
   # By default returns newline-separated text, but it could be modified by .json or .xml extension. 
   # For text output, subdirectories are followed by slash, eg. "subdir1/".
   #
-  # <tt>GET|POST /_api/v1/_dir/path_to_directory*[.xml|.json]</tt>
+  # <tt>GET|POST /_api/v1/_dir/path_to_directory*</tt>
   #
   # parameters::
   # * path to directory
@@ -12,13 +12,9 @@ class API::V1::DirectoriesController < Api::ApiController
   # = Examples
   #   resp = conn.get("http://localhost:3000/_dir/databases", email: "email0@example.com", password="password0")
   #   resp.body
-  #   #=> "C84PCPY/\nC84TRN/"
-  #
-  #   resp = conn.get("http://localhost:3000/_dir/databases.json", email: "email0@example.com", password="password0")
-  #   resp.body
   #   #=> "{"directories":[{"name":"C84PCPY","id":5},{"name":"C84PTRN","id":6}],"items":[]}"
   #
-  #   resp = conn.get("http://localhost:3000/_dir/databases/C84PCPY.json", email: "email0@example.com", password="password0")
+  #   resp = conn.get("http://localhost:3000/_api/v1/_dir/databases/C84PCPY", email: "email0@example.com", password="password0")
   #   resp.body
   #   #=> "{"directories":[],"items":[{"id":1,"username":"sysadm"},{"id":2,"username":"sysman"}}"
   #
@@ -29,10 +25,19 @@ class API::V1::DirectoriesController < Api::ApiController
   #   C84PTRN/
   def index
     if params[:path]
-      d = Directory.cd(params[:path])
+      # setting the format manually, as paths may contain dots
+      case File.extname(params[:path])
+      when '.xml', '.text', '.json'
+        request.format = File.extname(params[:path]).gsub('.', '').to_sym
+        path = File.basename params[:path], File.extname(params[:path])
+      else
+        path = params[:path]
+      end
+      d = Directory.cd(path)
     else
       d = Directory.root
     end
+
     respond_to do |format|
       format.json { render json: directory_children(d)}
       format.xml  { render xml:  directory_children(d)}
@@ -72,4 +77,5 @@ class API::V1::DirectoriesController < Api::ApiController
   def directory_children(d)    
     {directories: current_user.ls_dirs(d).map {|dir| {name: dir.name, id: dir.id}}, items: current_user.ls_items(d).map {|item| {id: item.id, username: item.username}}}
   end
+
 end

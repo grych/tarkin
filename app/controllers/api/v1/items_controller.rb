@@ -30,7 +30,7 @@ class API::V1::ItemsController < Api::ApiController
   # [with token] 
   #    <tt>OS_TOKEN=`curl "http://localhost:3000/_api/v1/_authorize?email=email0@example.com&password=password0"`</tt>
   #
-  #    <tt>PASSWORD=`curl -H "Authorization: Token token=$OS_TOKEN" "http://localhost:3000/_api/v1/password/1"`</tt>
+  #    <tt>PASSWORD=`curl -H "Authorization: Token token=$OS_TOKEN" "http://localhost:3000/_api/v1/_password/1"`</tt>
   # [using path instead of id] <tt>PASSWORD=`curl "http://localhost:3000/_api/v1/databases/C84PCPY/sysadm?email=email0@example.com&password=password0"`</tt>
   def show
     # logger.debug " ---------- params: #{params}"
@@ -44,9 +44,14 @@ class API::V1::ItemsController < Api::ApiController
         d = Directory.cd(dir)
       end
       b = File.basename(params[:path])
+      case File.extname(b)
+      when '.xml', '.text', '.json'
+        request.format = File.extname(b).gsub('.', '').to_sym
+        b = File.basename b, File.extname(b)
+      end
       item = d.items.find_by(username: b)
     end
-    if item.password(authorization_user: current_user)
+    if item && item.password(authorization_user: current_user)
       respond_to do |format|
         format.json { render json: item_data(item)}
         format.xml  { render xml:  item_data(item)}
@@ -60,6 +65,7 @@ class API::V1::ItemsController < Api::ApiController
       end
     end
   end
+
   private
   def item_data(item)
     {id: item.id, username: item.username, password: item.password(authorization_user: current_user)}
