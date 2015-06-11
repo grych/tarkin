@@ -6,9 +6,10 @@ class Item < ActiveRecord::Base
   has_many :groups, through: :meta_keys
   belongs_to :directory
 
+  VALID_ITEM_REGEX = /\A[^_][^\/\*\n]+(?<!\.xml|\.text|\.json)\z/
   # validates :password_crypted, presence: true
   validates :password, presence: true
-  validates :username, presence: true, length: {maximum: 256}
+  validates :username, presence: true, format: { with: VALID_ITEM_REGEX }, length: {maximum: 256}
   before_validation :update_path
   validates :path, presence: true, length: {maximum: 4096}, uniqueness: true
   validate  :have_groups

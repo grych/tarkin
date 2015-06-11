@@ -6,7 +6,8 @@ require 'validators/directory_validator'
 class Directory < ActiveRecord::Base
   include ActiveModel::Validations
 
-  VALID_DIRECTORY_REGEX = /\A[^\/\*\n]+\z/    # directory name can't contain slash and asterisk and newline
+  # VALID_DIRECTORY_REGEX = /\A[^\/\*\n]+\z/    # directory name can't contain slash and asterisk and newline
+  VALID_DIRECTORY_REGEX = /\A[^_][^\/\*\n]+(?<!\.xml|\.text|\.json)\z/
   has_many   :items
   has_many   :directories
   # has_many   :users, through: :favorites
@@ -16,8 +17,8 @@ class Directory < ActiveRecord::Base
   after_initialize -> { self.name.strip! if name }
   before_validation :update_path
   validates_with DirectoryValidator
-  validates :name, presence: true, format: { with: VALID_DIRECTORY_REGEX }, length: {maximum: 256}
-  validates :path, presence: true, length: {maximum: 4096}, uniqueness: true
+  validates :name, presence: true, format: { with: VALID_DIRECTORY_REGEX }, length: { maximum: 256 }
+  validates :path, presence: true, length: { maximum: 4096 }, uniqueness: true
   before_destroy :check_children
 
   # default_scope { order('name ASC') }
