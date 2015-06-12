@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   end
   namespace :api, path: "_api", defaults: {format: :json} do
     namespace :v1 do
+      match '_ping',         to: 'directories#ping', defaults: {format: :json}, via: ['get', 'post']
       match '_find',         to: 'directories#find', defaults: {format: :json}, via: ['get']
       match '_authorize',    to: 'sessions#create',  defaults: {format: :text}, via: ['get', 'post']
       match '_password/:id', to: 'items#show', as: '_password', defaults: {format: :text}, via: ['get', 'post']

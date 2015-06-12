@@ -45,6 +45,13 @@ class API::V1::DirectoriesController < Api::ApiController
     end
   end
 
+  # Returns true if the server is available and user is autorized
+  #
+  #   curl -H "Authorization: Token token=$OS_TOKEN" "http://localhost:3000/_api/v1/_ping"
+  def ping
+    render json: true
+  end
+
   # Search for Items and Directories for the given +term+ in params. Used to autocomplete in the search input box.
   # Returns JSON array of hashes: [{label: found username or directory name, redirect_to: url}], 
   # where url for Item is the name of Directory which contains it.
