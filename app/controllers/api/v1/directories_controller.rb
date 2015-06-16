@@ -29,11 +29,16 @@ class API::V1::DirectoriesController < Api::ApiController
       case File.extname(params[:path])
       when '.xml', '.text', '.json'
         request.format = File.extname(params[:path]).gsub('.', '').to_sym
-        path = File.basename params[:path], File.extname(params[:path])
+        path = params[:path].sub(/#{Regexp.escape(File.extname(params[:path]))}$/, '')
       else
         path = params[:path]
       end
-      d = Directory.cd(path)
+      logger.debug "**** PATH: #{path}"
+      begin
+        d = Directory.cd(path)
+      rescue Tarkin::DirectoryNotFound => e
+        raise ActionController::RoutingError.new('Not Found')
+      end
     else
       d = Directory.root
     end
@@ -82,7 +87,10 @@ class API::V1::DirectoriesController < Api::ApiController
   end
 
   def directory_children(d)    
-    {directories: current_user.ls_dirs(d).map {|dir| {name: dir.name, id: dir.id}}, items: current_user.ls_items(d).map {|item| {id: item.id, username: item.username}}}
+    {
+      directories: current_user.ls_dirs(d).map {|dir| {name: dir.name, id: dir.id, created_at: dir.created_at, updated_at: dir.updated_at}}, 
+      items: current_user.ls_items(d).map {|item| {id: item.id, username: item.username, created_at: item.created_at, updated_at: item.updated_at}}
+    }
   end
 
 end
