@@ -7,7 +7,7 @@ class Directory < ActiveRecord::Base
   include ActiveModel::Validations
 
   # VALID_DIRECTORY_REGEX = /\A[^\/\*\n]+\z/    # directory name can't contain slash and asterisk and newline
-  VALID_DIRECTORY_REGEX = /\A[^_][^\/\*\n]+(?<!\.xml|\.text|\.json)\z/
+  VALID_DIRECTORY_REGEX = /\A[^_#][^\/\*\n]*(?<!\.xml|\.text|\.json)\z/
   has_many   :items
   has_many   :directories
   # has_many   :users, through: :favorites

@@ -33,7 +33,6 @@ class API::V1::DirectoriesController < Api::ApiController
       else
         path = params[:path]
       end
-      logger.debug "**** PATH: #{path}"
       begin
         d = Directory.cd(path)
       rescue Tarkin::DirectoryNotFound => e
@@ -88,8 +87,8 @@ class API::V1::DirectoriesController < Api::ApiController
 
   def directory_children(d)    
     {
-      directories: current_user.ls_dirs(d).map {|dir| {name: dir.name, id: dir.id, created_at: dir.created_at, updated_at: dir.updated_at}}, 
-      items: current_user.ls_items(d).map {|item| {id: item.id, username: item.username, created_at: item.created_at, updated_at: item.updated_at}}
+      directories: current_user.ls_dirs(d).map {|dir| {name: dir.name, id: dir.id, created_at: dir.created_at, updated_at: dir.updated_at, description: dir.description}}, 
+      items: current_user.ls_items(d).map {|item| {id: item.id, username: item.username, created_at: item.created_at, updated_at: item.updated_at, description: item.description}}
     }
   end
 
