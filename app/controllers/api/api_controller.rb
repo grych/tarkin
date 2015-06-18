@@ -61,7 +61,7 @@ class Api::ApiController < ActionController::Base
 
   def sign_in_with_email_and_password(email, password)
     user = User.find_by(email: email)
-    logger.debug " ***** SIGN IN: #{email} #{password}"
+    # logger.debug " ***** SIGN IN: #{email} #{password}"
     if user && user.authenticate(password)
       sign_in user
       # logger.debug " ============ #{current_user.authenticated?}"
