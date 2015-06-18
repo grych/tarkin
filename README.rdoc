@@ -32,7 +32,7 @@ http://www.tg.pl/tarkin/tarkin3.png
 See demo on http://tarkin.tg.pl to find out more
 
 == Command-line tool
-Command-line client is included into {Tarkin Gem}(https://rubygems.org/gems/tarkin) - a Ruby Client for Tarkin Server. Find out more on https://github.com/grych/tarkin-client
+Command-line client is included into Tarkin Gem - https://rubygems.org/gems/tarkin - a Ruby Client for Tarkin Server. Find out more on https://github.com/grych/tarkin-client
 
     $ gem install tarkin
 
