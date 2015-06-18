@@ -36,7 +36,7 @@ Command-line client is included into Tarkin Gem - https://rubygems.org/gems/tark
 
     $ gem install tarkin
 
-http://tg.pl/tarkin/client_preview.png
+http://tg.pl/tarkin/client_preview.gif
 
 == API
 Tarkin API allows you to use it with your own scripts, so you don't need to store passwords with plain-text anymore and you have one centralized system for all passwords, so you need to change it only in one place.
