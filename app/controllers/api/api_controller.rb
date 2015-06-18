@@ -25,8 +25,8 @@ class Api::ApiController < ActionController::Base
     puts "header"
     authenticate_with_http_token do |token, options|
       t = get_token(token)
-      puts token
-      logger.debug " ************* HEADER #{t[:user_id]} #{t[:password]}" if t
+      # puts token
+      # logger.debug " ************* HEADER #{t[:user_id]} #{t[:password]}" if t
       sign_in_with_email_and_password(User.find(t[:user_id]).email, t[:password]) if t
       # logger.debug " **** password: #{t[:password]}"
     end
@@ -37,7 +37,7 @@ class Api::ApiController < ActionController::Base
     return true if @token
     if cookies[:auth_token]
       t = get_token(cookies[:auth_token])
-      logger.debug " ************* COOKIE #{t[:user_id]} #{t[:password]}" if t
+      # logger.debug " ************* COOKIE #{t[:user_id]} #{t[:password]}" if t
       sign_in_with_email_and_password(User.find(t[:user_id]).email, t[:password]) if t
       # logger.debug " **** password: #{t[:password]}"
     else
@@ -50,7 +50,7 @@ class Api::ApiController < ActionController::Base
     return true if @token
     if params[:email] && params[:password]
       email, password = [params[:email], params[:password]]
-      logger.debug " ***** PARAMS #{email} #{password}"
+      # logger.debug " ***** PARAMS #{email} #{password}"
       # puts " ***** PARAMS #{email} #{password}"
       sign_in_with_email_and_password(email, password)
     end
@@ -60,7 +60,7 @@ class Api::ApiController < ActionController::Base
     # puts "http"
     return true if @token
     authenticate_with_http_basic do |email, password|
-      logger.debug " ***** HTTP #{email} #{password}"
+      # logger.debug " ***** HTTP #{email} #{password}"
       sign_in_with_email_and_password(email, password)
     end
   end
@@ -70,7 +70,7 @@ class Api::ApiController < ActionController::Base
     logger.debug " ***** SIGN IN: #{email} #{password}"
     if user && user.authenticate(password)
       sign_in user
-      logger.debug " ============ #{current_user.authenticated?}"
+      # logger.debug " ============ #{current_user.authenticated?}"
       @token = token_from_password(password)
       true
     else
