@@ -72,7 +72,7 @@ See all API documentation on http://www.tg.pl/tarkin
 
 === Ruby
 
-Install Ruby version 2.2 or higher, as described in {Ruby for Admins}(http://rubyforadmins.com/installation)
+Install Ruby version 2.2 or higher, as described in {Ruby for Admins}[http://rubyforadmins.com/installation]
 
 === Rails
 
