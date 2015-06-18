@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   scope '_aj' do
     post 'ok_with_cookies', to: 'directories#ok_with_cookies'
     post 'switch_favorite', to: 'directories#switch_favorite'
-    #post 'dir',           to: 'directories#create'
     resources :directories, only: [:create, :update, :edit, :new, :destroy]
     resources :items,       only: [:create, :update, :edit, :new, :destroy]
     get  'profile',         to: 'directories#profile'

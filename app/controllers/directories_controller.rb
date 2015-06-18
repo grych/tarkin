@@ -108,10 +108,11 @@ class DirectoriesController < ApplicationController
     end
   end
 
-  # Current user password
+  # TODO: wtf???
   def password
     @user = current_user
   end
+
   def update_password
     if user_params[:password] == user_params[:password_confirmation]
       @user = current_user

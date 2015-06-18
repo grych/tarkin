@@ -61,5 +61,5 @@ end
 
 group :production do
   gem 'puma'
-  gem 'pg'#, '0.17.1'   #### 0.18.1 is incompatible with rails 4.2, to be fixed in 4.2.1
+  gem 'pg'
 end

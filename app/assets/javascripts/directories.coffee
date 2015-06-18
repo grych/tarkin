@@ -83,7 +83,6 @@ render_form_errors = (errors) ->
   alert_box_text(s)
 
 switch_edit_mode = (button) ->
-  # edit_mode = not edit_mode
   button.toggleClass('active')
   $('.favorite-switch').toggle()
   $('.edit-button').toggle()

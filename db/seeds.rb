@@ -1,3 +1,5 @@
+# TODO: create good seeds
+
 User.destroy_all
 Item.destroy_all
 Group.destroy_all

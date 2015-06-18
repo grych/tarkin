@@ -1,1 +1,6 @@
-Expire tokens for user
+* Close all modals after delete
+* Expire tokens for user
+* Read only users (for scripting)
+* API for everything
+* Seeds.rb
+* RSpec

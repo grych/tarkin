@@ -13,7 +13,6 @@ class Api::ApiController < ActionController::Base
 
   private
   def restrict_access
-    # puts "***** RESTRIC #{restrict_access_by_header || restrict_access_by_cookie || restrict_access_by_http_authentication || restrict_access_by_params}"
     unless  restrict_access_by_header || restrict_access_by_cookie || restrict_access_by_http_authentication || restrict_access_by_params
       # render json: 'Unathorized', status: :unathorized
       head 401
@@ -22,13 +21,10 @@ class Api::ApiController < ActionController::Base
 
   def restrict_access_by_header
     return true if @token
-    puts "header"
     authenticate_with_http_token do |token, options|
       t = get_token(token)
-      # puts token
       # logger.debug " ************* HEADER #{t[:user_id]} #{t[:password]}" if t
       sign_in_with_email_and_password(User.find(t[:user_id]).email, t[:password]) if t
-      # logger.debug " **** password: #{t[:password]}"
     end
   end
 
@@ -39,7 +35,6 @@ class Api::ApiController < ActionController::Base
       t = get_token(cookies[:auth_token])
       # logger.debug " ************* COOKIE #{t[:user_id]} #{t[:password]}" if t
       sign_in_with_email_and_password(User.find(t[:user_id]).email, t[:password]) if t
-      # logger.debug " **** password: #{t[:password]}"
     else
       false
     end
@@ -51,7 +46,6 @@ class Api::ApiController < ActionController::Base
     if params[:email] && params[:password]
       email, password = [params[:email], params[:password]]
       # logger.debug " ***** PARAMS #{email} #{password}"
-      # puts " ***** PARAMS #{email} #{password}"
       sign_in_with_email_and_password(email, password)
     end
   end
