@@ -1,6 +1,16 @@
 = TARKIN
 
-Tarkin is just another team password manager. 
+Yet Another Team Password manager? Yes, but there are some unique features:
+
+* <b>scriptability:</b> API to get passwords from Tarkin in your scripts (using authentication token, no need to store username and password in a script)
+
+* <b>unixability:</b> command-line client and interactive shell (no need to run browser if you need some of your passwords!) as well as Ruby Gem with easy-to-use client class
+
+* <b>high security:</b> asynch AES-256 used to store passwords: password is encrypted with group public key, and group private key is ciphered by your public key, so to decrypt the stored password you need your own password to get your private key, which can decrypt the group private key, which is able to decipher the stored password.
+
+* <b>manageability:</b> standard users/groups model, web-based management (so far)
+
+* <b>accessibility:</b> mobile-friendly web (see demo on http://tarkin.tg.pl)
 
 = View online demo on http://tarkin.tg.pl
 
