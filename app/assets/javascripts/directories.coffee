@@ -23,7 +23,22 @@
   Turbolinks.enableTransitionCache()
   $('.tarkin-description').shorten()
   $("#item_" + $(location).attr('hash').split('#')[1]).effect("highlight", {color: "#4499ff"}, 5000)
-  
+  spin_options = 
+    lines: 16
+    length: 46
+    width: 20
+    scale: 2.0
+    radius: 50
+    color: '#000'
+    speed: 1.5
+    trail: 60
+    shadow: true
+    hwaccel: true
+  $(document).on "page:fetch", ->
+    $("body").spin(spin_options)
+  $(document).on "page:receive", ->
+    $("body").spin(false)
+
 # @ready_with_foundation = () ->
   # TODO: check if all is OK after adding jquery.turbolinks
   # $(document).foundation() # must be re-initialized because of turbolinks

@@ -24,6 +24,8 @@
 //= require turbolinks
 //= require coffee_routes
 //= require jquery.shorten
+//= require spin
+//= require jquery.spin
 
 $(function(){ 
   $(document).foundation({

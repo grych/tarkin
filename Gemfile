@@ -9,7 +9,7 @@ gem 'coffee-rails', '~> 4.1.0'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'turbolinks', git: 'https://github.com/rails/turbolinks'  # because of turbolinks 3.0
+gem 'turbolinks' #, git: 'https://github.com/rails/turbolinks'  # because of turbolinks 3.0
 gem 'jquery-turbolinks'
 gem 'jquery-tablesorter'
 gem 'jbuilder', '~> 2.0'
@@ -26,7 +26,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
-
+gem 'spinjs-rails'
 gem 'coffee_routes'
 
 #gem 'zeroclipboard-rails'
