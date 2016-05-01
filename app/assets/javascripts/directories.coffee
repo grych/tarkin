@@ -1,3 +1,7 @@
+# $(document).ready(@ready)
+$(document).on 'page:change', -> 
+  ready()
+
 @passwords = {} # cache for passwords retrieved by AJAX
 
 @ready = () ->
@@ -163,5 +167,3 @@ ok_with_cookies = () ->
     error: ->
       alert "Server not responding"
 
-$(document).ready(@ready)
-# $(document).on('page:load', @ready_with_foundation)
