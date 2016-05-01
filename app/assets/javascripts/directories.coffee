@@ -24,7 +24,7 @@ $(document).on 'page:change', ->
     timeout: 10000
   Sorter.sort '.sortable'
   setup_autocomplete()
-  Turbolinks.enableTransitionCache()
+  # Turbolinks.enableTransitionCache() ### this does not work very well
   $('.tarkin-description').shorten()
   $("#item_" + $(location).attr('hash').split('#')[1]).effect("highlight", {color: "#4499ff"}, 5000)
   spin_options = 
