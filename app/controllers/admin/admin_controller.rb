@@ -5,7 +5,7 @@ class Admin::AdminController < ActionController::Base
   
   private
   def restrict_access
-    signed_in_user
+    # signed_in_user
     # unless controller_name = 'users' && action_name = 'edit' && current_user.id == params[:id].to_i
     admin_user 
     # end
