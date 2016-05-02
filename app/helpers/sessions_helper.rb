@@ -52,7 +52,7 @@ module SessionsHelper
   end
 
   def admin_user
-    redirect_to(root_url, alert: "You must have admin rights to do this.") unless current_user.admin?
+    redirect_to(root_url, alert: "You must have admin rights to do this.") unless current_user.try(:admin?)
   end
 
   def salt
