@@ -8,6 +8,8 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 
 gem 'loofah',  '~> 2.2.3'
+# gem 'nokogiri', '1.8.1'
+# gem 'sprockets', ' ~> 3.7.2'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'turbolinks' #, git: 'https://github.com/rails/turbolinks'  # because of turbolinks 3.0
