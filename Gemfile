@@ -7,6 +7,7 @@ gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
+gem 'loofah',  '~> 2.2.3'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'turbolinks' #, git: 'https://github.com/rails/turbolinks'  # because of turbolinks 3.0
@@ -30,6 +31,11 @@ gem 'spinjs-rails'
 gem 'coffee_routes'
 
 #gem 'zeroclipboard-rails'
+
+group :development do
+  # bundle exec erd --exclude DuplicateDb,CheckProcessScheduler,TestTask --inheritance --polymorphism --notation=uml
+  gem "rails-erd"
+end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
